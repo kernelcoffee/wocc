@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cd ../src/lib/ && git submodule init && git submodule update
+cd ../src/lib/qml-material-qrc/ && git submodule init && git submodule update
