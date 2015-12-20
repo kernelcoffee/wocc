@@ -22,9 +22,13 @@ CONFIG(nox_mode) {
 } else {
     QT += qml quick widgets
 
-    RESOURCES += qml.qrc
+    RESOURCES += \
+            qml.qrc
+
     # Additional import path used to resolve QML modules in Qt Creator's code model
-    QML_IMPORT_PATH = "third/qml-material/modules"
+    include(lib/qml-material-qrc/qml-material-qrc.pri)
+    QML_IMPORT_PATH += $$PWD/lib/qml-material-qrc/qml-material/modules
+
     # Default rules for deployment.
     include(deployment.pri)
     message(ui mode enabled)
@@ -55,7 +59,3 @@ HEADERS += \
 SOURCES += \
     Ui/uicore.cpp \
 }
-
-RESOURCES += \
-    qml-material.qrc \
-    qml.qrc

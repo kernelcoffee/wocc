@@ -1,0 +1,11 @@
+*.pro.u*
+src/*.pro.user
+*/**/.DS_Store
+*-build-desktop*
+*-build-Qt*
+*build-*-Qt5-*
+build-*
+docs/html
+docs/latex
+*~
+*.DS_Store

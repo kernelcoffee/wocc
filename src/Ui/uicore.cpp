@@ -8,8 +8,8 @@ UiCore::UiCore(QObject *parent) :
 
 void UiCore::init()
 {
+    m_engine.addImportPath("qrc:/qml-material/modules");
     m_engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-    m_engine.addImportPath("third/qml-material/modules/");
 }
 
 void UiCore::initSettings()
