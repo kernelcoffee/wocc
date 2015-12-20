@@ -1,0 +1,3 @@
+[submodule "src/lib/qml-material-qrc"]
+	path = src/lib/qml-material-qrc
+	url = https://github.com/maply/qml-material-qrc
