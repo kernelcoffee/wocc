@@ -29,9 +29,9 @@ int main(int argc, char *argv[])
     qInstallMessageHandler(Logger::instance()->log);
     qsrand((uint)QTime::currentTime().msec());
 
-    QCoreApplication::setOrganizationName("Kernelcoffee");
-    QCoreApplication::setOrganizationDomain("kernelcoffee.org");
-    QCoreApplication::setApplicationName("ErgoMusic");
+//    QCoreApplication::setOrganizationName("Wocc");
+//    QCoreApplication::setOrganizationDomain("Wocc.org");
+    QCoreApplication::setApplicationName("Wocc");
 
     auto cores = CoreManager::instance();
 
