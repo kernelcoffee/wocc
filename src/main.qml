@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.5
 import Material 0.1
 import Material.ListItems 0.1 as ListItem
 
@@ -14,114 +14,19 @@ ApplicationWindow {
         tabHighlightColor: "white"
     }
 
-    property var styles: [
-            "Icons", "Custom Icons", "Color Palette", "Typography"
-    ]
+    property var sections: [ installed, available ]
+    property var sectionTitles: [ "Installed", "Available" ]
 
-    property var basicComponents: [
-            "Button", "CheckBox", "Progress Bar", "Radio Button",
-            "Slider", "Switch", "TextField"
-    ]
-
-    property var compoundComponents: [
-            "Bottom Sheet", "Dialog", "Forms", "List Items", "Page Stack", "Time Picker", "Date Picker"
-    ]
-
-    property var sections: [ styles, basicComponents, compoundComponents ]
-
-    property var sectionTitles: [ "Style", "Basic Components", "Compound Components" ]
-
-    property string selectedComponent: styles[0]
+    property var installed: [ "test " ]
+    property var available: [ "test " ]
 
     initialPage: TabbedPage {
         id: page
 
-        title: "Demo"
-
-        actionBar.maxActionCount: navDrawer.enabled ? 3 : 4
-
-        actions: [
-            Action {
-                iconName: "alert/warning"
-                name: "Dummy error"
-                onTriggered: demo.showError("Something went wrong", "Do you want to retry?", "Close", true)
-            },
-
-            Action {
-                iconName: "image/color_lens"
-                name: "Colors"
-                onTriggered: colorPicker.show()
-            },
-
-            Action {
-                iconName: "action/settings"
-                name: "Settings"
-                hoverAnimation: true
-            },
-
-            Action {
-                iconName: "alert/warning"
-                name: "THIS SHOULD BE HIDDEN!"
-                visible: false
-            },
-
-            Action {
-                iconName: "action/language"
-                name: "Language"
-                enabled: false
-            },
-
-            Action {
-                iconName: "action/account_circle"
-                name: "Accounts"
-            }
-        ]
-
-        backAction: navDrawer.action
-
-        NavigationDrawer {
-            id: navDrawer
-
-            enabled: page.width < Units.dp(500)
-
-            Flickable {
-                anchors.fill: parent
-
-                contentHeight: Math.max(content.implicitHeight, height)
-
-                Column {
-                    id: content
-                    anchors.fill: parent
-
-                    Repeater {
-                        model: sections
-
-                        delegate: Column {
-                            width: parent.width
-
-                            ListItem.Subheader {
-                                text: sectionTitles[index]
-                            }
-
-                            Repeater {
-                                model: modelData
-                                delegate: ListItem.Standard {
-                                    text: modelData
-                                    selected: modelData == demo.selectedComponent
-                                    onClicked: {
-                                        demo.selectedComponent = modelData
-                                        navDrawer.close()
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        title: "Wocc"
 
         Repeater {
-            model: !navDrawer.enabled ? sections : 0
+            model: sections
 
             delegate: Tab {
                 title: sectionTitles[index]
@@ -132,73 +37,6 @@ ApplicationWindow {
                 sourceComponent: tabDelegate
             }
         }
-
-        Loader {
-            anchors.fill: parent
-            sourceComponent: tabDelegate
-
-            property var section: []
-            visible: navDrawer.enabled
-        }
-    }
-
-    Dialog {
-        id: colorPicker
-        title: "Pick color"
-
-        positiveButtonText: "Done"
-
-        MenuField {
-            id: selection
-            model: ["Primary color", "Accent color", "Background color"]
-            width: Units.dp(160)
-        }
-
-        Grid {
-            columns: 7
-            spacing: Units.dp(8)
-
-            Repeater {
-                model: [
-                    "red", "pink", "purple", "deepPurple", "indigo",
-                    "blue", "lightBlue", "cyan", "teal", "green",
-                    "lightGreen", "lime", "yellow", "amber", "orange",
-                    "deepOrange", "grey", "blueGrey", "brown", "black",
-                    "white"
-                ]
-
-                Rectangle {
-                    width: Units.dp(30)
-                    height: Units.dp(30)
-                    radius: Units.dp(2)
-                    color: Palette.colors[modelData]["500"]
-                    border.width: modelData === "white" ? Units.dp(2) : 0
-                    border.color: Theme.alpha("#000", 0.26)
-
-                    Ink {
-                        anchors.fill: parent
-
-                        onPressed: {
-                            switch(selection.selectedIndex) {
-                                case 0:
-                                    theme.primaryColor = parent.color
-                                    break;
-                                case 1:
-                                    theme.accentColor = parent.color
-                                    break;
-                                case 2:
-                                    theme.backgroundColor = parent.color
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        onRejected: {
-            // TODO set default colors again but we currently don't know what that is
-        }
     }
 
     Component {
@@ -207,8 +45,6 @@ ApplicationWindow {
         Item {
             Sidebar {
                 id: sidebar
-
-                expanded: !navDrawer.enabled
 
                 Column {
                     width: parent.width
@@ -223,6 +59,7 @@ ApplicationWindow {
                     }
                 }
             }
+
             Flickable {
                 id: flickable
                 anchors {
@@ -231,8 +68,10 @@ ApplicationWindow {
                     top: parent.top
                     bottom: parent.bottom
                 }
+
                 clip: true
                 contentHeight: Math.max(example.implicitHeight + 40, height)
+
                 Loader {
                     id: example
                     anchors.fill: parent
@@ -253,6 +92,7 @@ ApplicationWindow {
                     visible: example.status == Loader.Loading
                 }
             }
+
             Scrollbar {
                 flickableItem: flickable
             }
