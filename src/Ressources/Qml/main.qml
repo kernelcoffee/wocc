@@ -1,24 +1,32 @@
 import QtQuick 2.5
 import Material 0.1
-import Material.ListItems 0.1 as ListItem
+import Qt.labs.settings 1.0
+
+import "Components/Tabs"
 
 ApplicationWindow {
-    id: demo
+    id: root
     title: "Material for QtQuick Demo"
     visible: true
+    minimumHeight: Units.dp(600)
+    minimumWidth: Units.dp(800)
+
+    Settings {
+        property alias x: root.x
+        property alias y: root.y
+        property alias width: root.width
+        property alias height: root.height
+    }
 
     theme {
         primaryColor: Palette.colors["blue"]["500"]
         primaryDarkColor: Palette.colors["blue"]["700"]
         accentColor: Palette.colors["red"]["A200"]
         tabHighlightColor: "white"
+        backgroundColor: "white"
     }
 
-    property var sections: [ installed, available ]
-    property var sectionTitles: [ "Installed", "Available" ]
-
-    property var installed: [ "test " ]
-    property var available: [ "test " ]
+    property var sections: [ "Installed", "Available" ]
 
     initialPage: TabbedPage {
         id: page
@@ -29,72 +37,8 @@ ApplicationWindow {
             model: sections
 
             delegate: Tab {
-                title: sectionTitles[index]
-
-                property string selectedComponent: modelData[0]
-                property var section: modelData
-
-                sourceComponent: tabDelegate
-            }
-        }
-    }
-
-    Component {
-        id: tabDelegate
-
-        Item {
-            Sidebar {
-                id: sidebar
-
-                Column {
-                    width: parent.width
-
-                    Repeater {
-                        model: section
-                        delegate: ListItem.Standard {
-                            text: modelData
-                            selected: modelData == selectedComponent
-                            onClicked: selectedComponent = modelData
-                        }
-                    }
-                }
-            }
-
-            Flickable {
-                id: flickable
-                anchors {
-                    left: sidebar.right
-                    right: parent.right
-                    top: parent.top
-                    bottom: parent.bottom
-                }
-
-                clip: true
-                contentHeight: Math.max(example.implicitHeight + 40, height)
-
-                Loader {
-                    id: example
-                    anchors.fill: parent
-                    asynchronous: true
-                    visible: status == Loader.Ready
-                    // selectedComponent will always be valid, as it defaults to the first component
-                    source: {
-                        if (navDrawer.enabled) {
-                            return Qt.resolvedUrl("%1Demo.qml").arg(demo.selectedComponent.replace(" ", ""))
-                        } else {
-                            return Qt.resolvedUrl("%1Demo.qml").arg(selectedComponent.replace(" ", ""))
-                        }
-                    }
-                }
-
-                ProgressCircle {
-                    anchors.centerIn: parent
-                    visible: example.status == Loader.Loading
-                }
-            }
-
-            Scrollbar {
-                flickableItem: flickable
+                title: sections[index]
+                TabContentLoader { source:  Qt.resolvedUrl("Views/%.qml").arg(title) }
             }
         }
     }

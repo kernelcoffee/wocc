@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>Views/Installed.qml</file>
+        <file>Components/Tabs/TabContentLoader.qml</file>
+        <file>Views/Available.qml</file>
     </qresource>
 </RCC>
