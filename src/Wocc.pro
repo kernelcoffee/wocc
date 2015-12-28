@@ -23,7 +23,7 @@ CONFIG(nox_mode) {
     QT += qml quick widgets
 
     RESOURCES += \
-            qml.qrc
+            Ressources/Qml/qml.qrc
 
     # Additional import path used to resolve QML modules in Qt Creator's code model
     include(lib/qml-material-qrc/qml-material-qrc.pri)
