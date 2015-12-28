@@ -7,7 +7,7 @@ Relies on [qml-material-qrc](https://github.com/maply/qml-material-qrc)
 ## Init
 
 Init the submodules
-`cd script && ./init.sh`
+`cd scripts && ./init.sh`
 
 ## Usage
 
