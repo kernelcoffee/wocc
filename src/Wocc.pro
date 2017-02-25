@@ -25,10 +25,6 @@ CONFIG(nox_mode) {
     RESOURCES += \
             Ressources/Qml/qml.qrc
 
-    # Additional import path used to resolve QML modules in Qt Creator's code model
-    include(lib/qml-material-qrc/qml-material-qrc.pri)
-    QML_IMPORT_PATH += $$PWD/lib/qml-material-qrc/qml-material/modules
-
     # Default rules for deployment.
     include(deployment.pri)
     message(ui mode enabled)
@@ -40,11 +36,13 @@ HEADERS += \
     Utilities/logger.h \
     Utilities/singleton.h \
     Abstracts/abstractcore.h \
+    woccapplication.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
     Utilities/logger.cpp \
     Abstracts/abstractcore.cpp \
+    woccapplication.cpp
 
 CONFIG(nox_mode) {
 HEADERS += \

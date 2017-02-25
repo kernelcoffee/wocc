@@ -1,5 +1,9 @@
 #include "coremanager.h"
 
+#ifndef nox_mode
+#include <QTimer>
+#endif
+
 CoreManager::CoreManager(QObject *parent) :
     AbstractCore(parent)
 #ifndef nox_mode
@@ -11,6 +15,7 @@ CoreManager::CoreManager(QObject *parent) :
 
 #ifndef nox_mode
     m_cores["ui"] = m_ui;
+    QTimer::singleShot(0, this, &CoreManager::delayedInit);
 #else
     m_cores["console"] = m_console;
 #endif

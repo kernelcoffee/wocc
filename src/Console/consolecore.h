@@ -14,8 +14,6 @@ public:
     void initArguments(QCommandLineParser &cmd);
     void processArguments(QCommandLineParser &cmd);
 
-signals:
-
 public slots:
     void aboutToQuit();
 };

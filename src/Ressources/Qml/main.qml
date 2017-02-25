@@ -1,15 +1,15 @@
-import QtQuick 2.5
-import Material 0.1
+import QtQuick 2.7
+import QtQuick.Controls 2.0
 import Qt.labs.settings 1.0
 
 import "Components/Tabs"
 
 ApplicationWindow {
     id: root
-    title: "Material for QtQuick Demo"
+    title: "Wocc"
     visible: true
-    minimumHeight: Units.dp(600)
-    minimumWidth: Units.dp(800)
+    minimumHeight: 600
+    minimumWidth: 800
 
     Settings {
         property alias x: root.x
@@ -18,28 +18,4 @@ ApplicationWindow {
         property alias height: root.height
     }
 
-    theme {
-        primaryColor: Palette.colors["blue"]["500"]
-        primaryDarkColor: Palette.colors["blue"]["700"]
-        accentColor: Palette.colors["red"]["A200"]
-        tabHighlightColor: "white"
-        backgroundColor: "white"
-    }
-
-    property var sections: [ "Installed", "Available" ]
-
-    initialPage: TabbedPage {
-        id: page
-
-        title: "Wocc"
-
-        Repeater {
-            model: sections
-
-            delegate: Tab {
-                title: sections[index]
-                TabContentLoader { source:  Qt.resolvedUrl("Views/%.qml").arg(title) }
-            }
-        }
-    }
 }
