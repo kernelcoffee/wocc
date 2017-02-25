@@ -2,17 +2,18 @@
 #define CONSOLECORE_H
 
 #include "Abstracts/abstractcore.h"
+#include <QCommandLineOption>
 
 class ConsoleCore : public AbstractCore
 {
     Q_OBJECT
 public:
-    explicit ConsoleCore(QObject *parent = 0);
+    explicit ConsoleCore(QObject *parent = nullptr);
 
     void init();
     void initSettings();
-    void initArguments(QCommandLineParser &cmd);
-    void processArguments(QCommandLineParser &cmd);
+    void initArguments(QCommandLineParser &parser);
+    void processArguments(QCommandLineParser &parser);
 
 public slots:
     void aboutToQuit();

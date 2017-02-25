@@ -25,5 +25,4 @@ WoccApplication::WoccApplication(int &argc, char **argv) :
 
     qInstallMessageHandler(Logger::instance()->log);
     qsrand(static_cast<uint>(QTime::currentTime().msec()));
-
 }

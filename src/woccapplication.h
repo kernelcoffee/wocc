@@ -7,17 +7,18 @@
 #include <QCoreApplication>
 #endif
 
+#include <QCommandLineParser>
+
+
 #ifndef nox_mode
 class WoccApplication : public QApplication
 #else
-class WoccApplication : public QApplication
+class WoccApplication : public QCoreApplication
 #endif
 {
     Q_OBJECT
 public:
     explicit WoccApplication(int &argc, char **argv);
-
-
 };
 
 #endif // WOCCAPPLICATION_H

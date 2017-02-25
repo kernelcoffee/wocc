@@ -1,4 +1,4 @@
-QT += core
+QT += core network
 
 CONFIG += c++11
 
@@ -36,13 +36,19 @@ HEADERS += \
     Utilities/logger.h \
     Utilities/singleton.h \
     Abstracts/abstractcore.h \
-    woccapplication.h
+    woccapplication.h \
+    Network/networkcore.h \
+    Network/filedownloader.h \
+    Database/databasecore.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
     Utilities/logger.cpp \
     Abstracts/abstractcore.cpp \
-    woccapplication.cpp
+    woccapplication.cpp \
+    Network/networkcore.cpp \
+    Network/filedownloader.cpp \
+    Database/databasecore.cpp
 
 CONFIG(nox_mode) {
 HEADERS += \

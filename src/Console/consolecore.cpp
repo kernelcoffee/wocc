@@ -1,5 +1,7 @@
 #include "consolecore.h"
 
+#include <QDebug>
+
 ConsoleCore::ConsoleCore(QObject *parent) :
     AbstractCore(parent)
 {
@@ -16,14 +18,16 @@ void ConsoleCore::initSettings()
 
 }
 
-void ConsoleCore::initArguments(QCommandLineParser &cmd)
+void ConsoleCore::initArguments(QCommandLineParser &parser)
 {
-    Q_UNUSED(cmd)
+    parser.addPositionalArgument("command", tr("command to run"));
 }
 
-void ConsoleCore::processArguments(QCommandLineParser &cmd)
+void ConsoleCore::processArguments(QCommandLineParser &parser)
 {
-    Q_UNUSED(cmd)
+    const QStringList args = parser.positionalArguments();
+
+    qDebug() << args;
 }
 
 void ConsoleCore::aboutToQuit()

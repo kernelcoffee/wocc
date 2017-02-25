@@ -1,25 +1,22 @@
 #include "coremanager.h"
-
-#ifndef nox_mode
 #include <QTimer>
-#endif
 
 CoreManager::CoreManager(QObject *parent) :
     AbstractCore(parent)
 #ifndef nox_mode
   , m_ui(new UiCore(this))
-#else
-  , m_console(new ConsoleCore(this))
 #endif
+  , m_network(new NetworkCore(this))
+  , m_database(new DatabaseCore(this))
+  , m_console(new ConsoleCore(this))
 {
 
 #ifndef nox_mode
-    m_cores["ui"] = m_ui;
-    QTimer::singleShot(0, this, &CoreManager::delayedInit);
-#else
-    m_cores["console"] = m_console;
+    m_cores <<  = m_ui;
 #endif
 
+    QTimer::singleShot(0, this, &CoreManager::delayedInit);
+    m_cores << m_network << m_database << m_console;
 }
 
 CoreManager::~CoreManager()
@@ -41,21 +38,29 @@ void CoreManager::initSettings()
     }
 }
 
-void CoreManager::initArguments(QCommandLineParser &cmd)
+void CoreManager::initArguments(QCommandLineParser &parser)
 {
-    cmd.addHelpOption();
-    cmd.addVersionOption();
+    parser.addHelpOption();
+    parser.addVersionOption();
 
     for (auto core : m_cores) {
-        core->initArguments(cmd);
+        core->initArguments(parser);
     }
 }
 
-void CoreManager::processArguments(QCommandLineParser &cmd)
+void CoreManager::processArguments(QCommandLineParser &parser)
 {
     for (auto core : m_cores) {
-        core->processArguments(cmd);
+        core->processArguments(parser);
     }
+#ifdef nox_mode
+    qApp->quit();
+#endif
+}
+
+NetworkCore *CoreManager::network() const
+{
+    return m_network;
 }
 
 void CoreManager::delayedInit()
@@ -63,6 +68,7 @@ void CoreManager::delayedInit()
     for (auto core : m_cores) {
         core->delayedInit();
     }
+    emit initDone();
 }
 
 void CoreManager::aboutToQuit()

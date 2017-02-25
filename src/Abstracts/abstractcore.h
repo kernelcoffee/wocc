@@ -8,15 +8,15 @@ class AbstractCore : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractCore(QObject *parent = 0);
+    explicit AbstractCore(QObject *parent = nullptr);
 
     virtual void init() = 0;
     // If we need some processing to be done right after the UI shows
     virtual void initSettings() = 0;
     // If the core as arguments to take into account
-    virtual void initArguments(QCommandLineParser &cmd) { Q_UNUSED(cmd); }
+    virtual void initArguments(QCommandLineParser &/*parser*/) { }
     // process the arguments
-    virtual void processArguments(QCommandLineParser &cmd) { Q_UNUSED(cmd) }
+    virtual void processArguments(QCommandLineParser &/*parser*/) { }
 
 signals:
 

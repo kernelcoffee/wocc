@@ -4,10 +4,18 @@
 int main(int argc, char *argv[])
 {
     WoccApplication app(argc, argv);
-    auto cores = CoreManager::instance();
+    CoreManager cores;
 
-    cores->init();
-    cores->initSettings();
+    QCommandLineParser parser;
+
+    QObject::connect(&cores, &CoreManager::initDone, [&app, &cores, &parser]() {
+        parser.process(app);
+        cores.processArguments(parser);
+    });
+
+    cores.init();
+    cores.initSettings();
+    cores.initArguments(parser);
 
     return app.exec();
 }

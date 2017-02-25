@@ -1,22 +1,21 @@
 #ifndef COREMANAGER_H
 #define COREMANAGER_H
 
-#include "Utilities/singleton.h"
 #include "Abstracts/abstractcore.h"
 
 #ifndef nox_mode
 #include "Ui/uicore.h"
-#else
-#include "Console/consolecore.h"
 #endif
 
+#include "Console/consolecore.h"
+#include "Network/networkcore.h"
+#include "Database/databasecore.h"
+
 #include <QObject>
-#include <QMap>
+#include <QList>
 
-class CoreManager : public AbstractCore, public Singleton<CoreManager>
+class CoreManager : public AbstractCore
 {
-    friend class Singleton<CoreManager>;
-
     Q_OBJECT
 public:
     explicit CoreManager(QObject *parent = 0);
@@ -24,23 +23,31 @@ public:
 
     void    init();
     void    initSettings();
-    void    initArguments(QCommandLineParser &cmd);
-    void    processArguments(QCommandLineParser &cmd);
+    void    initArguments(QCommandLineParser &parser);
+    void    processArguments(QCommandLineParser &parser);
+
+    NetworkCore* network() const;
 
 signals:
+    void initDone();
 
 public slots:
     void    delayedInit();
     void    aboutToQuit();
 
+
 private:
-    QMap<QString, AbstractCore*>   m_cores;
+    Q_DISABLE_COPY(CoreManager)
+
+    QList<AbstractCore*>   m_cores;
+
 #ifndef nox_mode
     UiCore  *m_ui;
-#else
-    ConsoleCore *m_console;
 #endif
 
+    NetworkCore *m_network;
+    DatabaseCore *m_database;
+    ConsoleCore *m_console;
 };
 
 #endif // COREMANAGER_H
