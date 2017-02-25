@@ -10,7 +10,7 @@ class NetworkCore : public AbstractCore
 {
     Q_OBJECT
 public:
-    explicit NetworkCore(QObject *parent = 0);
+    explicit NetworkCore(QObject *parent = nullptr);
 
     void init();
     void initSettings();

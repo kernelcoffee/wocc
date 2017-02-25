@@ -10,7 +10,7 @@ class DatabaseCore : public AbstractCore
 {
     Q_OBJECT
 public:
-    explicit DatabaseCore(CoreManager *parent = 0);
+    explicit DatabaseCore(CoreManager *parent = nullptr);
 
     void init();
     void initSettings();

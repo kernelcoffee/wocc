@@ -3,7 +3,7 @@
 
 CoreManager::CoreManager(QObject *parent) :
     AbstractCore(parent)
-#ifndef nox_mode
+#ifndef console_mode
   , m_ui(new UiCore(this))
 #endif
   , m_network(new NetworkCore(this))
@@ -11,8 +11,8 @@ CoreManager::CoreManager(QObject *parent) :
   , m_console(new ConsoleCore(this))
 {
 
-#ifndef nox_mode
-    m_cores <<  = m_ui;
+#ifndef console_mode
+    m_cores <<  m_ui;
 #endif
 
     QTimer::singleShot(0, this, &CoreManager::delayedInit);
@@ -53,7 +53,7 @@ void CoreManager::processArguments(QCommandLineParser &parser)
     for (auto core : m_cores) {
         core->processArguments(parser);
     }
-#ifdef nox_mode
+#ifdef console_mode
     qApp->quit();
 #endif
 }

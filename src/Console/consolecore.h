@@ -8,7 +8,7 @@ class ConsoleCore : public AbstractCore
 {
     Q_OBJECT
 public:
-    explicit ConsoleCore(QObject *parent = nullptr);
+    explicit ConsoleCore(AbstractCore *parent = nullptr);
 
     void init();
     void initSettings();

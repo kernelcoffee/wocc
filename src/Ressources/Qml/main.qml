@@ -2,8 +2,6 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import Qt.labs.settings 1.0
 
-import "Components/Tabs"
-
 ApplicationWindow {
     id: root
     title: "Wocc"
@@ -17,5 +15,4 @@ ApplicationWindow {
         property alias width: root.width
         property alias height: root.height
     }
-
 }

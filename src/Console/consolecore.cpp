@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-ConsoleCore::ConsoleCore(QObject *parent) :
+ConsoleCore::ConsoleCore(AbstractCore *parent) :
     AbstractCore(parent)
 {
 

@@ -1,7 +1,7 @@
 #ifndef WOCCAPPLICATION_H
 #define WOCCAPPLICATION_H
 
-#ifndef nox_mode
+#ifndef console_mode
 #include <QApplication>
 #else
 #include <QCoreApplication>
@@ -10,7 +10,7 @@
 #include <QCommandLineParser>
 
 
-#ifndef nox_mode
+#ifndef console_mode
 class WoccApplication : public QApplication
 #else
 class WoccApplication : public QCoreApplication

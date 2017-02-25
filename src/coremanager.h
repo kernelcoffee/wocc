@@ -3,7 +3,7 @@
 
 #include "Abstracts/abstractcore.h"
 
-#ifndef nox_mode
+#ifndef console_mode
 #include "Ui/uicore.h"
 #endif
 
@@ -41,7 +41,7 @@ private:
 
     QList<AbstractCore*>   m_cores;
 
-#ifndef nox_mode
+#ifndef console_mode
     UiCore  *m_ui;
 #endif
 

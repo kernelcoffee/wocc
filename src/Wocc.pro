@@ -2,23 +2,23 @@ QT += core network
 
 CONFIG += c++11
 
-lessThan(QT_VERSION, 5.5) {
-    error("requires at least Qt 5.5")
+lessThan(QT_VERSION, 5.7) {
+    error("requires at least Qt 5.7")
 }
 
 TEMPLATE = app
+TARGET = wocc
 
-CONFIG(nox_mode) {
+CONFIG(console_mode) {
     QT -= gui
 
     CONFIG += console
     CONFIG -= app_bundle
 
-    TARGET = wocc
 
-    DEFINES += nox_mode
+    DEFINES += console_mode
 
-    message(nox_mode enabled)
+    message(console_mode enabled)
 } else {
     QT += qml quick widgets
 
@@ -28,6 +28,12 @@ CONFIG(nox_mode) {
     # Default rules for deployment.
     include(deployment.pri)
     message(ui mode enabled)
+
+HEADERS += \
+    Ui/uicore.h \
+
+SOURCES += \
+    Ui/uicore.cpp \
 }
 
 HEADERS += \
@@ -39,7 +45,8 @@ HEADERS += \
     woccapplication.h \
     Network/networkcore.h \
     Network/filedownloader.h \
-    Database/databasecore.h
+    Database/databasecore.h \
+    Console/consolecore.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
@@ -48,18 +55,5 @@ SOURCES += main.cpp \
     woccapplication.cpp \
     Network/networkcore.cpp \
     Network/filedownloader.cpp \
-    Database/databasecore.cpp
-
-CONFIG(nox_mode) {
-HEADERS += \
-    Console/consolecore.h
-
-SOURCES += \
+    Database/databasecore.cpp \
     Console/consolecore.cpp
-} else {
-HEADERS += \
-    Ui/uicore.h \
-
-SOURCES += \
-    Ui/uicore.cpp \
-}

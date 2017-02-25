@@ -7,7 +7,7 @@
 #include <QTime>
 
 WoccApplication::WoccApplication(int &argc, char **argv) :
-  #ifndef nox_mode
+  #ifndef console_mode
     QApplication(argc, argv)
   #else
     QCoreApplication(argc, argv)
