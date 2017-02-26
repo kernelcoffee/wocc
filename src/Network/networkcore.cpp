@@ -7,22 +7,7 @@ NetworkCore::NetworkCore(QObject *parent) :
 
 }
 
-void NetworkCore::init()
+FileDownloader* NetworkCore::createFileDownloader()
 {
-
-}
-
-void NetworkCore::initSettings()
-{
-
-}
-
-FileDownloader *NetworkCore::createFileDownloader()
-{
-    return new FileDownloader(m_manager);
-}
-
-void NetworkCore::aboutToQuit()
-{
-
+    return new FileDownloader(&m_manager);
 }

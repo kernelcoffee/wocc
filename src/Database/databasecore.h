@@ -12,15 +12,12 @@ class DatabaseCore : public AbstractCore
 public:
     explicit DatabaseCore(CoreManager *parent = nullptr);
 
-    void init();
-    void initSettings();
-
 public slots:
-    void aboutToQuit();
-
-    void update();
+    void update(bool isAsync = true);
 
 private:
+    Q_DISABLE_COPY(DatabaseCore)
+
     NetworkCore *m_network = nullptr;
 };
 

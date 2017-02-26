@@ -1,4 +1,5 @@
 #include "uicore.h"
+#include <QDebug>
 
 UiCore::UiCore(QObject *parent) :
     AbstractCore(parent)
@@ -6,18 +7,7 @@ UiCore::UiCore(QObject *parent) :
 
 }
 
-void UiCore::init()
+void UiCore::startX()
 {
-    m_engine.addImportPath("qrc:/qml-material/modules");
     m_engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-}
-
-void UiCore::initSettings()
-{
-
-}
-
-void UiCore::aboutToQuit()
-{
-
 }

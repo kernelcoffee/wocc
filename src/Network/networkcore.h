@@ -12,14 +12,7 @@ class NetworkCore : public AbstractCore
 public:
     explicit NetworkCore(QObject *parent = nullptr);
 
-    void init();
-    void initSettings();
-
     FileDownloader* createFileDownloader();
-
-public slots:
-    void aboutToQuit();
-
 private:
     Q_DISABLE_COPY(NetworkCore)
 

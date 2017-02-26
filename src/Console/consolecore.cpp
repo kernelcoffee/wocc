@@ -1,19 +1,11 @@
 #include "consolecore.h"
+#include "coremanager.h"
 
 #include <QDebug>
 
-ConsoleCore::ConsoleCore(AbstractCore *parent) :
+ConsoleCore::ConsoleCore(CoreManager *parent) :
     AbstractCore(parent)
-{
-
-}
-
-void ConsoleCore::init()
-{
-
-}
-
-void ConsoleCore::initSettings()
+  , m_database(parent->database())
 {
 
 }
@@ -25,13 +17,23 @@ void ConsoleCore::initArguments(QCommandLineParser &parser)
 
 void ConsoleCore::processArguments(QCommandLineParser &parser)
 {
-    const QStringList args = parser.positionalArguments();
+    m_args = parser.positionalArguments();
 
-    qDebug() << args;
+    qDebug() << m_args;
+
+    if (m_args.count() == 0) {
+        emit noCommandToProcess();
+        return;
+    }
 }
 
 void ConsoleCore::aboutToQuit()
 {
-
+    qDebug() << "About to quit";
 }
 
+void ConsoleCore::delayedInit()
+{
+    m_database->update(false);
+    qApp->exit();
+}

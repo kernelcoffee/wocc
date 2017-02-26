@@ -9,13 +9,9 @@ class UiCore : public AbstractCore
     Q_OBJECT
 public:
     explicit UiCore(QObject *parent = 0);
-    void init();
-    void initSettings();
-
-signals:
 
 public slots:
-    void aboutToQuit();
+    void startX();
 
 private:
     QQmlApplicationEngine m_engine;

@@ -8,14 +8,11 @@ int main(int argc, char *argv[])
 
     QCommandLineParser parser;
 
-    QObject::connect(&cores, &CoreManager::initDone, [&app, &cores, &parser]() {
-        parser.process(app);
-        cores.processArguments(parser);
-    });
-
     cores.init();
     cores.initSettings();
     cores.initArguments(parser);
+    parser.process(app);
+    cores.processArguments(parser);
 
     return app.exec();
 }

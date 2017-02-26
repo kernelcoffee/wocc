@@ -31,7 +31,9 @@ static const QString	logLevel_str[] = {
     "Debug",
     "Warning",
     "Critical",
-    "Fatal"
+    "Fatal",
+    "Info",
+    "System"
 };
 
 Logger::Logger(QObject *parent) :

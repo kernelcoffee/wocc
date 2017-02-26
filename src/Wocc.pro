@@ -46,7 +46,7 @@ HEADERS += \
     Network/networkcore.h \
     Network/filedownloader.h \
     Database/databasecore.h \
-    Console/consolecore.h
+    Console/consolecore.h \
 
 SOURCES += main.cpp \
     coremanager.cpp \
@@ -56,4 +56,4 @@ SOURCES += main.cpp \
     Network/networkcore.cpp \
     Network/filedownloader.cpp \
     Database/databasecore.cpp \
-    Console/consolecore.cpp
+    Console/consolecore.cpp \

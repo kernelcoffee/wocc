@@ -6,7 +6,7 @@
 #include <QLoggingCategory>
 #include <QTime>
 
-WoccApplication::WoccApplication(int &argc, char **argv) :
+WoccApplication::WoccApplication(int &argc, char *argv[]) :
   #ifndef console_mode
     QApplication(argc, argv)
   #else
@@ -20,6 +20,7 @@ WoccApplication::WoccApplication(int &argc, char **argv) :
 #endif
 
     QCoreApplication::setApplicationName(APPLICATION_NAME);
+    QCoreApplication::setApplicationVersion(APPLICATION_VERSION);
     QCoreApplication::setOrganizationName(ORGANISATION_NAME);
     QCoreApplication::setOrganizationDomain(ORGANISATION_DOMAIN);
 

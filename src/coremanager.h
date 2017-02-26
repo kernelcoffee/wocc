@@ -27,14 +27,11 @@ public:
     void    processArguments(QCommandLineParser &parser);
 
     NetworkCore* network() const;
-
-signals:
-    void initDone();
+    DatabaseCore* database() const;
 
 public slots:
     void    delayedInit();
     void    aboutToQuit();
-
 
 private:
     Q_DISABLE_COPY(CoreManager)

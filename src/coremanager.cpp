@@ -10,13 +10,14 @@ CoreManager::CoreManager(QObject *parent) :
   , m_database(new DatabaseCore(this))
   , m_console(new ConsoleCore(this))
 {
-
 #ifndef console_mode
     m_cores <<  m_ui;
 #endif
 
-    QTimer::singleShot(0, this, &CoreManager::delayedInit);
     m_cores << m_network << m_database << m_console;
+
+
+    QTimer::singleShot(0, this, &CoreManager::delayedInit);
 }
 
 CoreManager::~CoreManager()
@@ -53,9 +54,6 @@ void CoreManager::processArguments(QCommandLineParser &parser)
     for (auto core : m_cores) {
         core->processArguments(parser);
     }
-#ifdef console_mode
-    qApp->quit();
-#endif
 }
 
 NetworkCore *CoreManager::network() const
@@ -63,12 +61,16 @@ NetworkCore *CoreManager::network() const
     return m_network;
 }
 
+DatabaseCore*CoreManager::database() const
+{
+    return m_database;
+}
+
 void CoreManager::delayedInit()
 {
     for (auto core : m_cores) {
         core->delayedInit();
     }
-    emit initDone();
 }
 
 void CoreManager::aboutToQuit()
