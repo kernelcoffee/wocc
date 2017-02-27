@@ -1,6 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
-import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.1
 import Qt.labs.settings 1.0
 
 import Wocc 1.0
@@ -33,10 +33,19 @@ ApplicationWindow {
             anchors.left: parent.left
             anchors.right: parent.right
             height: 30
-            Label {
-                text: name
-                color: "black"
+            RowLayout {
+                anchors.fill: parent
+                Label {
+                    text: name
+                    color: "black"
+                }
+                Label {
+                    text: authors
+                    color: "black"
+                }
+
             }
+
             border.width: 1
             border.color: "black"
         }

@@ -1,4 +1,5 @@
 #include "wowaddonmodel.h"
+#include "Database/wowaddon.h"
 #include <QDebug>
 
 WowAddonModel::WowAddonModel(QObject *parent) :
@@ -9,7 +10,6 @@ WowAddonModel::WowAddonModel(QObject *parent) :
 
 QVariant WowAddonModel::data(const QModelIndex& index, int role) const
 {
-    qDebug() << role;
     if (m_data.isEmpty() || index.row() < 0 || index.row() > rowCount())
         return QVariant();
 
@@ -18,6 +18,9 @@ QVariant WowAddonModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case Name:
         return addon->name();
+    case Authors:
+        if (addon->authors().count() > 0)
+            return addon->authors().first().name;
     default:
         return "Invalid";
     }
@@ -27,13 +30,17 @@ QVariant WowAddonModel::data(const QModelIndex& index, int role) const
 int WowAddonModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
-    qDebug() << m_data.count();
     return m_data.count();
 }
 
 QHash<int, QByteArray> WowAddonModel::roleNames() const
 {
-    return {{Name, "name"}};
+    return {
+        {Name, "name"},
+        {Categories, "categories"},
+        {InstallCount, "installCount"},
+        {Authors, "authors"}
+    };
 }
 
 void WowAddonModel::setData(const QVector<WowAddon*>& data)
@@ -41,5 +48,4 @@ void WowAddonModel::setData(const QVector<WowAddon*>& data)
     beginResetModel();
     m_data = data;
     endResetModel();
-    qDebug() << "new model" << m_data.count();
 }

@@ -10,6 +10,9 @@ class WowAddonModel : public QAbstractListModel
 public:
     enum Roles {
         Name = Qt::UserRole,
+        InstallCount,
+        Categories,
+        Authors
     };
 
     WowAddonModel(QObject *parent = 0);

@@ -13,12 +13,18 @@ QString WowAddon::name() const
 
 void WowAddon::addAuthor(const QString& name, const QString& url)
 {
-    m_authors.append({name, url});
+    qDebug() << name << url;
+    m_authors.append(Author({name, url}));
 }
 
 void WowAddon::addCategory(int id, const QString& name, const QString& url)
 {
     m_categories.append(Category({id, name, url}));
+}
+
+QList<WowAddon::Author> WowAddon::authors() const
+{
+    return m_authors;
 }
 
 uint WowAddon::installCount() const

@@ -45,7 +45,7 @@ void FileDownloader::start()
     QNetworkRequest request(m_url);
 //    request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
     m_reply = m_manager->get(request);
-    connect(m_reply, &QNetworkReply::finished, [this](){onFinished(m_reply);});
+//    connect(m_reply, &QNetworkReply::finished, [this](){onFinished(m_reply);});
     connect(m_reply, &QNetworkReply::downloadProgress, [this](qint64 bytesReceived, qint64 bytesTotal) {
         qDebug() << bytesReceived << bytesTotal << 100 * bytesReceived / bytesTotal;
 //        setProgress(100 * bytesReceived / bytesTotal);
