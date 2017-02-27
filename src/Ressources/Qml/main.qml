@@ -15,4 +15,23 @@ ApplicationWindow {
         property alias width: root.width
         property alias height: root.height
     }
+
+    Shortcut {
+        sequence: StandardKey.Refresh
+        onActivated: db.refresh();
+    }
+
+    ListView {
+        anchors.fill: parent
+        model: db.model
+        delegate: Rectangle {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: 40
+            color: "lightsteelblue"
+            Label {
+                text: name
+            }
+        }
+    }
 }

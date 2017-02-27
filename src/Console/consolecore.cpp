@@ -34,6 +34,10 @@ void ConsoleCore::processArguments(QCommandLineParser &parser)
 
 void ConsoleCore::delayedInit()
 {
+    if (m_args.count() == 0) {
+        return;
+    }
+
     const QString& command = m_args.at(0);
 
     if (!m_commandMap.contains(command)) {

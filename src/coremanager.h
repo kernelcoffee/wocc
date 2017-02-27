@@ -3,13 +3,14 @@
 
 #include "Abstracts/abstractcore.h"
 
-#ifndef console_mode
-#include "Ui/uicore.h"
-#endif
 
 #include "Console/consolecore.h"
 #include "Network/networkcore.h"
 #include "Database/databasecore.h"
+
+#ifndef console_mode
+#include "Ui/uicore.h"
+#endif
 
 #include <QObject>
 #include <QList>

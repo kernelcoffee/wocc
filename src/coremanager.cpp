@@ -1,23 +1,10 @@
 #include "coremanager.h"
 #include <QTimer>
+#include <QDebug>
 
 CoreManager::CoreManager(QObject *parent) :
     AbstractCore(parent)
-#ifndef console_mode
-  , m_ui(new UiCore(this))
-#endif
-  , m_network(new NetworkCore(this))
-  , m_database(new DatabaseCore(this))
-  , m_console(new ConsoleCore(this))
 {
-#ifndef console_mode
-    m_cores <<  m_ui;
-#endif
-
-    m_cores << m_network << m_database << m_console;
-
-
-    QTimer::singleShot(0, this, &CoreManager::delayedInit);
 }
 
 CoreManager::~CoreManager()
@@ -27,8 +14,25 @@ CoreManager::~CoreManager()
 
 void CoreManager::init()
 {
+    m_network = new NetworkCore(this);
+    m_database = new DatabaseCore(this);
+    m_console = new ConsoleCore(this);
+#ifndef console_mode
+    m_ui = new UiCore(this);
+#endif
+
+    m_cores  << m_network << m_database  << m_console;
+
+#ifndef console_mode
+    m_cores <<  m_ui;
+    connect(m_console, &ConsoleCore::noCommandToProcess, m_ui, &UiCore::startX);
+#endif
+
+    QTimer::singleShot(0, this, &CoreManager::delayedInit);
+
     for (auto core : m_cores) {
-        core->init();
+        qDebug() << core << "init";
+        core->init(this);
     }
 }
 

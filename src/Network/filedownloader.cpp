@@ -7,7 +7,6 @@
 #include <QSslError>
 #include <QFile>
 #include <QFileInfo>
-#include <QUrl>
 #include <QDir>
 
 #include <QEventLoop>
@@ -19,7 +18,7 @@ FileDownloader::FileDownloader(QNetworkAccessManager *manager, QObject *parent) 
   , m_manager(manager)
 {
     connect(m_manager, &QNetworkAccessManager::finished,
-            this, &FileDownloader::downloadFinished);
+            this, &FileDownloader::onFinished);
 }
 
 QUrl FileDownloader::url() const
@@ -40,13 +39,16 @@ uint FileDownloader::progress() const
 void FileDownloader::start()
 {
     if (m_url.isEmpty()) {
-        emit downloadFinished(nullptr);
+        emit finished();
         return;
     }
     QNetworkRequest request(m_url);
+//    request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
     m_reply = m_manager->get(request);
+    connect(m_reply, &QNetworkReply::finished, [this](){onFinished(m_reply);});
     connect(m_reply, &QNetworkReply::downloadProgress, [this](qint64 bytesReceived, qint64 bytesTotal) {
-        qDebug() << bytesReceived << bytesTotal;
+        qDebug() << bytesReceived << bytesTotal << 100 * bytesReceived / bytesTotal;
+//        setProgress(100 * bytesReceived / bytesTotal);
     });
 }
 
@@ -114,8 +116,13 @@ void FileDownloader::setFileOverride(bool override)
     m_overrideSavedFile = override;
 }
 
-void FileDownloader::downloadFinished(QNetworkReply *reply)
+void FileDownloader::onFinished(QNetworkReply *reply)
 {
+    if (!reply) {
+        qDebug() << "reply is null";
+        return;
+    }
+    qDebug() << "Cache used : " << reply->attribute(QNetworkRequest::SourceIsFromCacheAttribute).toBool();
     QUrl url = reply->url();
     if (reply->error()) {
         qWarning() << QString("Download of %1 failed: %2").arg(url.toEncoded(), reply->errorString());

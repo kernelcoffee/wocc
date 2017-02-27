@@ -2,8 +2,12 @@
 #define FILEDOWNLOADER_H
 
 #include <QObject>
-#include <QNetworkAccessManager>
 #include <QUrl>
+#include <QString>
+
+class QNetworkAccessManager;
+class QNetworkReply;
+class QIODevice;
 
 class FileDownloader : public QObject
 {
@@ -38,7 +42,7 @@ public slots:
     void setFileOverride(bool override);
 
 private slots:
-    void downloadFinished(QNetworkReply *reply);
+    void onFinished(QNetworkReply *reply);
 
 private:
     QString saveFileName(const QUrl &url);

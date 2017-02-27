@@ -47,6 +47,9 @@ HEADERS += \
     Network/filedownloader.h \
     Database/databasecore.h \
     Console/consolecore.h \
+    Database/wowaddon.h \
+    Ui/databasecontroller.h \
+    Ui/wowaddonmodel.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
@@ -57,3 +60,6 @@ SOURCES += main.cpp \
     Network/filedownloader.cpp \
     Database/databasecore.cpp \
     Console/consolecore.cpp \
+    Database/wowaddon.cpp \
+    Ui/databasecontroller.cpp \
+    Ui/wowaddonmodel.cpp

@@ -2,9 +2,10 @@
 #define NETWORKCORE_H
 
 #include "Abstracts/abstractcore.h"
-#include <QNetworkAccessManager>
 
 class FileDownloader;
+class QNetworkAccessManager;
+class QNetworkDiskCache;
 
 class NetworkCore : public AbstractCore
 {
@@ -12,11 +13,14 @@ class NetworkCore : public AbstractCore
 public:
     explicit NetworkCore(QObject *parent = nullptr);
 
+    void init();
+
     FileDownloader* createFileDownloader();
 private:
     Q_DISABLE_COPY(NetworkCore)
 
-    QNetworkAccessManager m_manager;
+    QNetworkAccessManager* m_manager;
+    QNetworkDiskCache* m_cache;
 };
 
 #endif // NETWORKCORE_H
