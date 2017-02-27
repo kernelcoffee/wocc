@@ -17,32 +17,39 @@ public:
     QUrl url() const;
     QString destination() const;
     uint progress() const;
+    QString savedFileLocation() const;
 
     void start();
     void startSync();
+
+signals:
+    void urlChanged(const QUrl &url);
+    void destinationChanged(const QString& destination);
+    void progressChanged(uint progress);
+    void savedFileLocationChanged(const QString& savedFileLocation);
+    void finished();
 
 public slots:
     void setUrl(const QUrl &url);
     void setUrl(const QString &url);
     void setDestination(QString destination);
     void setProgress(uint progress);
-    void downloadFinished(QNetworkReply *reply);
+    void setSavedFileLocation(const QString& savedFileLocation);
 
-signals:
-    void urlChanged(const QUrl &url);
-    void destinationChanged(QString destination);
-    void progressChanged(uint progress);
-    void finished();
+private slots:
+    void downloadFinished(QNetworkReply *reply);
 
 private:
     QString saveFileName(const QUrl &url);
-    bool saveToDisk(const QString &filename, QIODevice *data);
+    bool saveToDisk(const QString &filePath, QIODevice *data);
 
     QNetworkAccessManager* m_manager;
     QNetworkReply* m_reply;
     QUrl m_url;
     QString m_destination;
     uint m_progress;
+    QString m_saveFileLocation;
+    bool m_overrideSavedFile;
 };
 
 #endif // FILEDOWNLOADER_H

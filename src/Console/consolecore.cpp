@@ -10,6 +10,11 @@ ConsoleCore::ConsoleCore(CoreManager *parent) :
 
 }
 
+void ConsoleCore::init()
+{
+    m_commandMap["update"] = [this](){update();};
+}
+
 void ConsoleCore::initArguments(QCommandLineParser &parser)
 {
     parser.addPositionalArgument("command", tr("command to run"));
@@ -27,13 +32,24 @@ void ConsoleCore::processArguments(QCommandLineParser &parser)
     }
 }
 
-void ConsoleCore::aboutToQuit()
-{
-    qDebug() << "About to quit";
-}
-
 void ConsoleCore::delayedInit()
 {
-    m_database->update(false);
+    const QString& command = m_args.at(0);
+
+    if (!m_commandMap.contains(command)) {
+        qWarning() << "Command not found";
+        qApp->exit();
+        return;
+    }
+
+    qDebug() << command;
+    m_commandMap[command]();
+
     qApp->exit();
+}
+
+void ConsoleCore::update()
+{
+    qDebug() << "update";
+    m_database->update(false);
 }

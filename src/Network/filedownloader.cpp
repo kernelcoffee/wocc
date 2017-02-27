@@ -17,8 +17,8 @@ FileDownloader::FileDownloader(QNetworkAccessManager *manager, QObject *parent) 
     QObject(parent)
   , m_manager(manager)
 {
-    connect(m_manager, SIGNAL(finished(QNetworkReply*)),
-            SLOT(downloadFinished(QNetworkReply*)));
+    connect(m_manager, &QNetworkAccessManager::finished,
+            this, &FileDownloader::downloadFinished);
 }
 
 QUrl FileDownloader::url() const
@@ -39,7 +39,6 @@ uint FileDownloader::progress() const
 void FileDownloader::start()
 {
     if (m_url.isEmpty()) {
-        qDebug() << "not url set";
         emit downloadFinished(nullptr);
         return;
     }
@@ -48,8 +47,6 @@ void FileDownloader::start()
     connect(m_reply, &QNetworkReply::downloadProgress, [this](qint64 bytesReceived, qint64 bytesTotal) {
         qDebug() << bytesReceived << bytesTotal;
     });
-
-    qDebug() << "QDebug started";
 }
 
 void FileDownloader::startSync()
@@ -60,6 +57,11 @@ void FileDownloader::startSync()
     start();
 
     loop.exec();
+}
+
+QString FileDownloader::savedFileLocation() const
+{
+    return m_saveFileLocation;
 }
 
 void FileDownloader::setUrl(const QUrl& url)
@@ -78,8 +80,9 @@ void FileDownloader::setUrl(const QString& url)
 
 void FileDownloader::setDestination(QString destination)
 {
-    if (m_destination == destination)
+    if (m_destination == destination) {
         return;
+    }
 
     m_destination = destination;
     emit destinationChanged(destination);
@@ -87,11 +90,22 @@ void FileDownloader::setDestination(QString destination)
 
 void FileDownloader::setProgress(uint progress)
 {
-    if (m_progress == progress)
+    if (m_progress == progress) {
         return;
+    }
 
     m_progress = progress;
     emit progressChanged(progress);
+}
+
+void FileDownloader::setSavedFileLocation(const QString& savedFileLocation)
+{
+    if (m_saveFileLocation == savedFileLocation) {
+        return;
+    }
+
+    m_saveFileLocation = savedFileLocation;
+    emit savedFileLocationChanged(savedFileLocation);
 }
 
 void FileDownloader::downloadFinished(QNetworkReply *reply)
@@ -99,21 +113,26 @@ void FileDownloader::downloadFinished(QNetworkReply *reply)
     QUrl url = reply->url();
     if (reply->error()) {
         qWarning() << QString("Download of %1 failed: %2").arg(url.toEncoded(), reply->errorString());
-    } else {
-        QString filename = saveFileName(url);
-        if (saveToDisk(filename, reply))
-            qInfo() << QString("Download of %1 succeded (saved to %2)").arg(url.toEncoded(), filename);
+        return;
+    }
+    QString filePath = m_destination + saveFileName(url);
+
+    if (!saveToDisk(filePath, reply)) {
+        qWarning() << "Saving to disk failed" <<  filePath;
+        return;
     }
 
+    qInfo() << QString("Download of %1 succeded (saved to %2)").arg(url.toEncoded(), filePath);
+
+
     reply->deleteLater();
+    setSavedFileLocation(filePath);
     emit finished();
 }
 
 QString FileDownloader::saveFileName(const QUrl& url)
 {
     QString basename = QFileInfo(url.path()).fileName();
-
-    qDebug() << basename;
 
     if (basename.isEmpty()) {
         basename = "download";
@@ -132,11 +151,11 @@ QString FileDownloader::saveFileName(const QUrl& url)
     return basename;
 }
 
-bool FileDownloader::saveToDisk(const QString& filename, QIODevice* data)
+bool FileDownloader::saveToDisk(const QString& filePath, QIODevice* data)
 {
-    QFile file(filename);
+    QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly)) {
-        qWarning() << QString("Could not open %1 for writing: %2").arg(filename, file.errorString());
+        qWarning() << QString("Could not open %1 for writing: %2").arg(filePath, file.errorString());
         return false;
     }
 
