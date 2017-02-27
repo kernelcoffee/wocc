@@ -7,6 +7,7 @@ Requires Qt 5.7 and `bzip2`
 ## Usage
 
 `wocc` to start the ui
+
 `wocc arg` to run in console mode
 
 ### Build CLI only version
