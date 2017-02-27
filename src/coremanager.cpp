@@ -4,7 +4,10 @@
 
 CoreManager::CoreManager(QObject *parent) :
     AbstractCore(parent)
+  , m_network(new NetworkCore(this))
+  , m_database(new DatabaseCore(this))
 {
+    QTimer::singleShot(0, this, &CoreManager::delayedInit);
 }
 
 CoreManager::~CoreManager()
@@ -14,8 +17,6 @@ CoreManager::~CoreManager()
 
 void CoreManager::init()
 {
-    m_network = new NetworkCore(this);
-    m_database = new DatabaseCore(this);
     m_console = new ConsoleCore(this);
 #ifndef console_mode
     m_ui = new UiCore(this);
@@ -28,11 +29,10 @@ void CoreManager::init()
     connect(m_console, &ConsoleCore::noCommandToProcess, m_ui, &UiCore::startX);
 #endif
 
-    QTimer::singleShot(0, this, &CoreManager::delayedInit);
 
     for (auto core : m_cores) {
         qDebug() << core << "init";
-        core->init(this);
+        core->init();
     }
 }
 

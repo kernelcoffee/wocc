@@ -1,5 +1,6 @@
 #include "wowaddonmodel.h"
 #include <QDebug>
+
 WowAddonModel::WowAddonModel(QObject *parent) :
     QAbstractListModel(parent)
 {
@@ -8,25 +9,37 @@ WowAddonModel::WowAddonModel(QObject *parent) :
 
 QVariant WowAddonModel::data(const QModelIndex& index, int role) const
 {
-    Q_UNUSED(index)
-    Q_UNUSED(role)
+    qDebug() << role;
+    if (m_data.isEmpty() || index.row() < 0 || index.row() > rowCount())
+        return QVariant();
+
+    WowAddon* addon = m_data.at(index.row());
+
+    switch (role) {
+    case Name:
+        return addon->name();
+    default:
+        return "Invalid";
+    }
     return QVariant();
 }
 
 int WowAddonModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
-    return 0;
+    qDebug() << m_data.count();
+    return m_data.count();
 }
 
 QHash<int, QByteArray> WowAddonModel::roleNames() const
 {
-    return {};
+    return {{Name, "name"}};
 }
 
 void WowAddonModel::setData(const QVector<WowAddon*>& data)
 {
+    beginResetModel();
     m_data = data;
-    emit dataChanged(index(0), index(data.count()));
-    qDebug() << "data set";
+    endResetModel();
+    qDebug() << "new model" << m_data.count();
 }

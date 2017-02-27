@@ -2,21 +2,17 @@
 #define WOWADDONMODEL_H
 
 #include <QAbstractListModel>
-#include <Database/wowaddon.h>
+#include "Database/wowaddon.h"
 
 class WowAddonModel : public QAbstractListModel
 {
     Q_OBJECT
-
 public:
     enum Roles {
         Name = Qt::UserRole,
-        Status,
-        Type
     };
 
-
-    explicit WowAddonModel(QObject *parent = 0);
+    WowAddonModel(QObject *parent = 0);
 
     QVariant                data(const QModelIndex &index, int role) const override;
     int                     rowCount(const QModelIndex &parent = QModelIndex()) const override;

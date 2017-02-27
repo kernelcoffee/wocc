@@ -16,6 +16,7 @@ DatabaseController::DatabaseController(DatabaseCore* database, QObject* parent) 
 
 WowAddonModel* DatabaseController::wowModel() const
 {
+    qDebug() << m_wowModel;
     return m_wowModel;
 }
 

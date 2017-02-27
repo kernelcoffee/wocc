@@ -10,7 +10,6 @@
 UiCore::UiCore(CoreManager *parent) :
     AbstractCore(parent)
   , m_database(parent->database())
-  , m_dbController(new DatabaseController(parent->database()))
 {
 
 }
@@ -24,6 +23,12 @@ void UiCore::startX()
 
 void UiCore::initContext()
 {
+    m_dbController = new DatabaseController(m_database);
+
     QQmlContext* context = m_engine.rootContext();
-    context->setContextProperty("db", m_dbController);
+
+    qmlRegisterType<DatabaseController>("Wocc", 1, 0, "DatabaseController");
+
+    context->setContextProperty("_database", m_dbController);
+    context->setContextProperty("addonModel", m_dbController->wowModel());
 }

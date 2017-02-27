@@ -17,7 +17,6 @@ public:
     explicit DatabaseCore(CoreManager *parent = nullptr);
     ~DatabaseCore();
 
-    void init();
     QVector<WowAddon*> addonList() const;
 
 signals:
