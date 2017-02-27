@@ -8,10 +8,12 @@
 class WowAddon : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
-    Q_PROPERTY(uint installCount READ installCount WRITE setInstallCount NOTIFY installCountChanged)
-    Q_PROPERTY(QList<Author> authors READ authors NOTIFY authorsChanged)
+    Q_PROPERTY(uint id READ id CONSTANT)
+    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(QString summary READ summary CONSTANT)
+    Q_PROPERTY(uint installCount READ installCount CONSTANT)
+    Q_PROPERTY(QList<Author> authors READ authors CONSTANT)
+
 
     struct Category {
         int id;
@@ -27,6 +29,7 @@ class WowAddon : public QObject
 public:
     explicit WowAddon(QObject *parent = nullptr);
 
+    uint id() const;
     QString name() const;
     QString summary() const;
     uint installCount() const;
@@ -36,18 +39,14 @@ public:
 
     QList<Author> authors() const;
 
-signals:
-    void nameChanged(QString name);
-    void summaryChanged(QString summary);
-    void installCountChanged(uint installCount);
-    void authorsChanged(QList<Author> authors);
-
 public slots:
-    void setName(QString name);
-    void setSummary(QString summary);
+    void setId(uint id);
+    void setName(const QString &name);
+    void setSummary(const QString &summary);
     void setInstallCount(uint installCount);
 
 private:
+    uint m_id;
     QString m_name;
     QString m_summary;
     uint m_installCount;

@@ -6,6 +6,11 @@ WowAddon::WowAddon(QObject *parent) :
 {
 }
 
+uint WowAddon::id() const
+{
+    return m_id;
+}
+
 QString WowAddon::name() const
 {
     return m_name;
@@ -19,6 +24,7 @@ void WowAddon::addAuthor(const QString& name, const QString& url)
 
 void WowAddon::addCategory(int id, const QString& name, const QString& url)
 {
+    qDebug() << id << name << url;
     m_categories.append(Category({id, name, url}));
 }
 
@@ -37,29 +43,26 @@ QString WowAddon::summary() const
     return m_summary;
 }
 
-void WowAddon::setName(QString name)
+void WowAddon::setId(uint id)
 {
-    if (m_name == name)
-        return;
+    qDebug() << id;
+    m_id = id;
+}
 
+void WowAddon::setName(const QString &name)
+{
+    qDebug() << name;
     m_name = name;
-    emit nameChanged(name);
 }
 
 void WowAddon::setInstallCount(uint installCount)
 {
-    if (m_installCount == installCount)
-        return;
-
+    qDebug() << installCount;
     m_installCount = installCount;
-    emit installCountChanged(installCount);
 }
 
-void WowAddon::setSummary(QString summary)
+void WowAddon::setSummary(const QString &summary)
 {
-    if (m_summary == summary)
-        return;
-
+    qDebug() << summary;
     m_summary = summary;
-    emit summaryChanged(summary);
 }

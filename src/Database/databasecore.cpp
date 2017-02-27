@@ -69,11 +69,12 @@ void DatabaseCore::parseToDatabase(const QString& data)
 {
     QXmlStreamReader reader(data);
 
-    qDebug() << "parsing xml";
+    int n = 0;
     while (!reader.atEnd()) {
         reader.readNextStartElement();
-
         if (reader.isStartElement() && reader.name() == "CAddOn") {
+            if (++n > 1)
+                continue;
             WowAddon* addon = new WowAddon;
 
             while (!reader.isEndElement() || reader.name() != "CAddOn") {
@@ -82,19 +83,21 @@ void DatabaseCore::parseToDatabase(const QString& data)
                 // Authors
                 if (reader.name() == "Authors") {
                     reader.readNextStartElement();
-                    while (!reader.isEndElement() && reader.name() == "CAddOnAuthor") {
+                    while (reader.isStartElement() && reader.name() == "CAddOnAuthor") {
                         reader.readNextStartElement();
                         QString name = reader.readElementText();
                         reader.readNextStartElement();
                         QString url = reader.readElementText();
                         addon->addAuthor(name, url);
                         reader.readNextStartElement();
+                        reader.readNextStartElement();
                     }
                 }
+
                 // Categories
                 if (reader.name() == "Categories") {
                     reader.readNextStartElement();
-                    while (!reader.isEndElement() && reader.name() == "CAddOnCategory") {
+                    while (reader.isStartElement() && reader.name() == "CAddOnCategory") {
                         reader.readNextStartElement();
                         int id = reader.readElementText().toInt();
                         reader.readNextStartElement();
@@ -103,18 +106,96 @@ void DatabaseCore::parseToDatabase(const QString& data)
                         QString url = reader.readElementText();
                         addon->addCategory(id, name, url);
                         reader.readNextStartElement();
+                        reader.readNextStartElement();
                     }
                 }
+                // CategorySection
+                if (reader.name() == "CategorySection") {
+                    reader.readNextStartElement();
+                    // ExtraIncludePattern
+                    reader.readNextStartElement();
+                    // GameID
+                    reader.readNextStartElement();
+                    // ID
+                    reader.readNextStartElement();
+                    // InitialInclusionPattern
+                    reader.readNextStartElement();
+                    // Name
+                    reader.readNextStartElement();
+                    // PackageType
+                    reader.readNextStartElement();
+                    // PackageType
+                    reader.readNextStartElement();
+                }
 
+                // CommentCount
+                // DefaultFileId
+                // DonationUrl
+                // DownloadCount
+                // ExternalUrl
+                // GameId
+                // IconId
+                // Id
+                if (reader.name() == "Id") {
+                    addon->setId(reader.readElementText().toInt());
+                    reader.readNextStartElement();
+                }
                 // Install Count
                 if (reader.name() == "InstallCount") {
                     addon->setInstallCount(reader.readElementText().toInt());
+                    reader.readNextStartElement();
                 }
-
+                // LatestFiles
+                if (reader.name() == "LatestFiles") {
+                    reader.readNextStartElement();
+                    // CAddOnFile
+                    reader.readNextStartElement();
+                    // AlternateFileId
+                    // Dependencies
+                    while (reader.isStartElement() && reader.name() == "CAddOnCategory") {
+                        // CAddOnFileDependency
+                        // AddOnId
+                        // Type
+                        reader.readNextStartElement();
+                    }
+                    // DownloadURL
+                    // FileDate
+                    // FileName
+                    // FileStatus
+                    // GameVersion
+                    // a:string
+                    // Id
+                    // IsAlternate
+                    // IsAvailable
+                    // Modules
+                    while (reader.isStartElement() && reader.name() == "CAddOnCategory") {
+                        // CAddOnModule
+                        // Fingerprint
+                        // Foldername
+                        reader.readNextStartElement();
+                    }
+                    // PackageFingerprint
+                    // ReleaseType
+                }
+                // Likes
                 // Name
                 if (reader.name() == "Name") {
                     addon->setName(reader.readElementText());
+                    reader.readNextStartElement();
                 }
+                // PackageType
+                // PrimaryAuthorName
+                // PrimaryCategoryId
+                // Rating
+                // Stage
+                // Status
+                // Summary
+                if (reader.name() == "Summary") {
+                    addon->setSummary(reader.readElementText());
+                    reader.readNextStartElement();
+                }
+                // WebSiteURL
+
             }
             m_database << addon;
         }
