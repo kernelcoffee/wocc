@@ -81,16 +81,14 @@ void DatabaseCore::parseToDatabase(const QString& data)
 
                 // Authors
                 if (reader.name() == "Authors") {
-                    while (reader.isStartDocument() && reader.name() == "CAddOnAuthor") {
+                    reader.readNextStartElement();
+                    while (!reader.isEndElement() && reader.name() == "CAddOnAuthor") {
                         reader.readNextStartElement();
-                        qDebug() << reader.name();
                         QString name = reader.readElementText();
                         reader.readNextStartElement();
-                        qDebug() << reader.name();
                         QString url = reader.readElementText();
                         addon->addAuthor(name, url);
                         reader.readNextStartElement();
-                        qDebug() << reader.name();
                     }
                 }
                 // Categories
