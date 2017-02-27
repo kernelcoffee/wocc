@@ -28,7 +28,6 @@ public slots:
 private:
     Q_DISABLE_COPY(DatabaseCore)
     bool inflate(const QString filePath);
-    void parseToDatabase(const QString& data);
 
     CoreManager *m_cores = nullptr;
     NetworkCore *m_network = nullptr;

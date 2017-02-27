@@ -49,7 +49,8 @@ HEADERS += \
     Console/consolecore.h \
     Database/wowaddon.h \
     Ui/databasecontroller.h \
-    Ui/wowaddonmodel.h
+    Ui/wowaddonmodel.h \
+    Database/wowcursexmlparser.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
@@ -62,4 +63,5 @@ SOURCES += main.cpp \
     Console/consolecore.cpp \
     Database/wowaddon.cpp \
     Ui/databasecontroller.cpp \
-    Ui/wowaddonmodel.cpp
+    Ui/wowaddonmodel.cpp \
+    Database/wowcursexmlparser.cpp
