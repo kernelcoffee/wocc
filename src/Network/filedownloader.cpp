@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QUrl>
+#include <QDir>
 
 #include <QEventLoop>
 
@@ -108,6 +109,11 @@ void FileDownloader::setSavedFileLocation(const QString& savedFileLocation)
     emit savedFileLocationChanged(savedFileLocation);
 }
 
+void FileDownloader::setFileOverride(bool override)
+{
+    m_overrideSavedFile = override;
+}
+
 void FileDownloader::downloadFinished(QNetworkReply *reply)
 {
     QUrl url = reply->url();
@@ -115,7 +121,7 @@ void FileDownloader::downloadFinished(QNetworkReply *reply)
         qWarning() << QString("Download of %1 failed: %2").arg(url.toEncoded(), reply->errorString());
         return;
     }
-    QString filePath = m_destination + saveFileName(url);
+    QString filePath = m_destination + QDir::separator() + saveFileName(url);
 
     if (!saveToDisk(filePath, reply)) {
         qWarning() << "Saving to disk failed" <<  filePath;
@@ -138,7 +144,7 @@ QString FileDownloader::saveFileName(const QUrl& url)
         basename = "download";
     }
 
-    if (QFile::exists(basename)) {
+    if (QFile::exists(basename) && !m_overrideSavedFile) {
         // already exists, don't overwrite
         int i = 0;
         basename += '.';

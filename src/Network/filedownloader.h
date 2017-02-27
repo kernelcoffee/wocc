@@ -35,6 +35,7 @@ public slots:
     void setDestination(QString destination);
     void setProgress(uint progress);
     void setSavedFileLocation(const QString& savedFileLocation);
+    void setFileOverride(bool override);
 
 private slots:
     void downloadFinished(QNetworkReply *reply);

@@ -17,6 +17,7 @@ public slots:
 
 private:
     Q_DISABLE_COPY(DatabaseCore)
+    bool inflate(const QString filePath);
 
     NetworkCore *m_network = nullptr;
 };
