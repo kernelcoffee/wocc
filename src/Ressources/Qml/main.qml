@@ -1,6 +1,7 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.1
+import QtQuick.Controls 2.1
+import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.2
 import Qt.labs.settings 1.0
 
 import Wocc 1.0
@@ -21,33 +22,70 @@ ApplicationWindow {
         property alias height: root.height
     }
 
-    Shortcut {
-        sequence: StandardKey.Refresh
-        onActivated: db.refresh();
+    header: TabBar {
+        id: tabbar
+        width: parent.width
+        position: TabBar.Header
+
+        TabButton {
+            text: qsTr("Home")
+        }
+        TabButton {
+            text: qsTr("Installed")
+        }
+        TabButton {
+            text: qsTr("Library")
+        }
     }
 
-    ListView {
+    StackLayout {
+        id: stackView
+        currentIndex: tabbar.currentIndex
         anchors.fill: parent
-        model: db.wowModel
-        delegate: Rectangle {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: 30
+        Item {
+            id: homeTab
+            FileDialog {
+                id: fileDialog
+                title: "Please choose a file"
+                selectExisting: false
+                selectFolder: true
+                selectMultiple: false
+                folder: db.wowDir
+                onAccepted: {
+                    console.log("You chose: " + folder)
+                    db.wowDir = folder
+                }
+                onRejected: {
+                    console.log("Canceled")
+                }
+            }
             RowLayout {
-                anchors.fill: parent
-                Label {
-                    text: name
-                    color: "black"
-                }
-                Label {
-                    text: authors
-                    color: "black"
-                }
-
+            TextField {
+                id: pathText
+                anchors.centerIn: parent
+                text: db.wowDir
+            }
+            Button {
+                text: "chose"
+                onClicked: fileDialog.visible = true
             }
 
-            border.width: 1
-            border.color: "black"
+            Button {
+                text: "detect"
+                onClicked: db.detect()
+            }
+            }
+
+        }
+        Item {
+            id: installedTab
+        }
+        Item {
+            id: libraryTab
+            LibraryView {
+                anchors.fill: parent
+                db: root.db
+            }
         }
     }
 }

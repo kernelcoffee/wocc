@@ -6,6 +6,9 @@
 
 class WowAddon;
 
+
+// XmlParser for the xml file from Curse
+// too fragile IMHO, should be more fault tolerant to scheme changes
 class WowCurseXmlParser : public QObject
 {
     Q_OBJECT
