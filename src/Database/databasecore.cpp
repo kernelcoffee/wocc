@@ -37,7 +37,7 @@ void DatabaseCore::update(bool isAsync)
     downloader->setDestination(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
 
     connect(downloader, &FileDownloader::finished, [this, downloader](){
-            inflate(downloader->savedFileLocation());
+            decompressBzip2File(downloader->savedFileLocation());
             downloader->deleteLater();
             emit wowAddonListUpdated(m_database);
     });
@@ -49,7 +49,7 @@ void DatabaseCore::update(bool isAsync)
     }
 }
 
-bool DatabaseCore::inflate(const QString filePath)
+bool DatabaseCore::decompressBzip2File(const QString filePath)
 {
     QProcess process(this);
     process.start("bzip2", {"-dkc", filePath});
@@ -61,7 +61,7 @@ bool DatabaseCore::inflate(const QString filePath)
         return false;
     }
 
-    qDebug() << "filePath decompressed";
+    qDebug() << filePath << "decompressed";
     WowCurseXmlParser parser;
     m_database = parser.XmlToAddonList(process.readAll());
     return true;

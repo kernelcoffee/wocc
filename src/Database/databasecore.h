@@ -27,7 +27,7 @@ public slots:
 
 private:
     Q_DISABLE_COPY(DatabaseCore)
-    bool inflate(const QString filePath);
+    bool decompressBzip2File(const QString filePath);
 
     CoreManager *m_cores = nullptr;
     NetworkCore *m_network = nullptr;

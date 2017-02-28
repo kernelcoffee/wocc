@@ -119,33 +119,38 @@ inline void parseLatestFiles(QXmlStreamReader &reader, WowAddon* addon)
         reader.readNextStartElement();
         // GameVersion
         reader.readNextStartElement();
-        //qDebug() << "GameVersion" << reader.name() << reader.tokenString();
+        if (reader.name() != "GameVersion" || !reader.isStartElement()) {
+            qDebug() << "GameVersion" << reader.name() << reader.tokenString();
+        }
         reader.readNextStartElement();
-        reader.readNextStartElement();
-        // Game version values
-        while (reader.name() == "string") {
-            //qDebug() << reader.name() << reader.readElementText() << reader.tokenString() << reader.namespaceUri();
+        if (reader.name() == "string") {
             reader.readNextStartElement();
+            // Game version values
+            while (reader.name() == "string") {
+                //qDebug() << reader.name() << reader.readElementText() << reader.tokenString() << reader.namespaceUri();
+                reader.readNextStartElement();
+            }
         }
 
         // Id
         reader.readNextStartElement();
-        if (reader.name() != "Id") {
+        if (reader.name() != "Id" || !reader.isStartElement()) {
             qDebug() << "Id" << reader.name() << reader.tokenString();
         }
         reader.readNextStartElement();
         // IsAlternate
         reader.readNextStartElement();
-        if (reader.name() != "IsAlternate" && reader.isStartElement()) {
+        if (reader.name() != "IsAlternate" || !reader.isStartElement()) {
             qDebug() << "IsAlternate" << reader.name() << reader.tokenString();
         }
         reader.readNextStartElement();
         // IsAvailable
         reader.readNextStartElement();
-        // qDebug() << "IsAvailable" << reader.name() << reader.tokenString();
+        if (reader.name() != "IsAvailable" || !reader.isStartElement()) {
+            qDebug() << "IsAvailable" << reader.name() << reader.tokenString();
+        }
         reader.readNextStartElement();
         // Modules
-        // qDebug() << "IsAvailable" << reader.name() << reader.tokenString();
         reader.readNextStartElement();
         if (reader.name() != "Modules" && reader.isStartElement()) {
             qDebug() << "Modules" << reader.name() << reader.tokenString();
@@ -203,11 +208,11 @@ QVector<WowAddon *> WowCurseXmlParser::XmlToAddonList(const QString &xml) const
     reader.readNextStartElement();
     // qDebug() << "CAddOn" << reader.name() << reader.tokenString();
     while (!reader.atEnd() && reader.isStartElement() && reader.name() == "CAddOn") {
-        //        qDebug() << n <<  "================= NEW ADDON PARSING ====================";
+        //qDebug() << n <<  "================= NEW ADDON PARSING ====================";
         reader.readNextStartElement();
-//        n += 1;
-//        if (n > 100)
-//            continue;
+        // n += 1;
+        //        if (n > 100)
+        //            continue;
 
         WowAddon* addon = new WowAddon;
 
