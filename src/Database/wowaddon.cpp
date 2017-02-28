@@ -18,13 +18,11 @@ QString WowAddon::name() const
 
 void WowAddon::addAuthor(const QString& name, const QString& url)
 {
-    qDebug() << name << url;
     m_authors.append(Author({name, url}));
 }
 
 void WowAddon::addCategory(int id, const QString& name, const QString& url)
 {
-    qDebug() << id << name << url;
     m_categories.append(Category({id, name, url}));
 }
 
@@ -45,24 +43,20 @@ QString WowAddon::summary() const
 
 void WowAddon::setId(uint id)
 {
-    qDebug() << id;
     m_id = id;
 }
 
 void WowAddon::setName(const QString &name)
 {
-    qDebug() << name;
     m_name = name;
 }
 
 void WowAddon::setInstallCount(uint installCount)
 {
-    qDebug() << installCount;
     m_installCount = installCount;
 }
 
 void WowAddon::setSummary(const QString &summary)
 {
-    qDebug() << summary;
     m_summary = summary;
 }
