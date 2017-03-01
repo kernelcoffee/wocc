@@ -1,6 +1,10 @@
 # Wocc
+World of Warcraft Add-on manager with cli and Ui.
 
-Requires Qt 5.7 and `bzip2`
+Requires Qt 5.7 and `bzip2`, developped and tested on Linux only.
+
+## Build:
+Open project with QtCreator and run.
 
 ## Init
 
