@@ -1,14 +1,19 @@
 #include "databasecore.h"
 #include "coremanager.h"
 #include "Network/filedownloader.h"
+#include "Utilities/fileextractor.h"
 #include "wowcursexmlparser.h"
 
 #include <QStandardPaths>
-#include <QProcess>
 #include <QXmlStreamReader>
+#include <QUrl>
+#include <QDir>
+#include <QSettings>
+#include <QSet>
+
+#include <algorithm>
 
 #include <QDebug>
-
 
 static constexpr char database_url[] = "http://clientupdate.curse.com/feed/Complete.xml.bz2";
 
@@ -20,26 +25,26 @@ DatabaseCore::DatabaseCore(CoreManager *parent) :
 
 DatabaseCore::~DatabaseCore()
 {
-    qDeleteAll(m_database);
+    qDeleteAll(m_addonList);
+    qDeleteAll(m_installedList);
 }
 
 QVector<WowAddon*> DatabaseCore::addonList() const
 {
-    return addonList();
+    return m_addonList;
 }
 
-void DatabaseCore::update(bool isAsync)
+void DatabaseCore::refresh(bool isAsync)
 {
-    qDebug() << m_network;
     FileDownloader *downloader =  m_network->createFileDownloader();
     downloader->setUrl(database_url);
     downloader->setFileOverride(true);
     downloader->setDestination(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
 
     connect(downloader, &FileDownloader::finished, [this, downloader](){
-            decompressBzip2File(downloader->savedFileLocation());
-            downloader->deleteLater();
-            emit wowAddonListUpdated(m_database);
+        QSettings settings;
+        settings.setValue("wowCurseArchive", downloader->savedFileLocation());
+        processCurseAddonArchive();
     });
 
     if (isAsync) {
@@ -49,20 +54,75 @@ void DatabaseCore::update(bool isAsync)
     }
 }
 
-bool DatabaseCore::decompressBzip2File(const QString filePath)
+void DatabaseCore::detect()
 {
-    QProcess process(this);
-    process.start("bzip2", {"-dkc", filePath});
-    if (!process.waitForStarted()) {
-        return false;
+    QSettings settings;
+
+    QDir dir(QUrl(settings.value("wowDir").toString()).toLocalFile() + "/Interface/AddOns");
+
+    qDebug() << dir.absolutePath();
+    if (!dir.exists()) {
+        qDebug() << "path doesn't exist";
     }
 
-    if (!process.waitForFinished()) {
-        return false;
+    QFileInfoList entries = dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Dirs);
+
+    QMap<QString, QSet<QString>> tmpMap;
+
+    // Let's create a map of addons per folder installed
+    for (auto entry : entries) {
+        for (auto addon : m_addonList) {
+            for (auto folder : addon->folders()) {
+                if (entry.fileName().startsWith(folder.name, Qt::CaseSensitivity::CaseInsensitive)) {
+                    if (!tmpMap[entry.fileName()].contains(addon->shortName())) {
+                        tmpMap[entry.fileName()] << addon->shortName();
+                    }
+                }
+            }
+        }
     }
 
-    qDebug() << filePath << "decompressed";
+    // tmpMap contains all the possible addon that could be installed;
+    qDebug() << tmpMap;
+
+    QSet<QString> possibleAddons;
+    // Create a list of possible addon installed
+    for (auto addonset : tmpMap) {
+        for (auto addon : addonset) {
+            if (!possibleAddons.contains(addon)) {
+                possibleAddons << addon;
+            }
+        }
+    }
+
+
+    // We'll detect addon by matching the folders to what they contains.
+    QVector<WowAddon*> finalAddonList;
+
+    for (const QString &possibleAddon : possibleAddons) {
+        auto itObj = std::find_if(m_addonList.begin(), m_addonList.end(),
+                                  [=](WowAddon* addon){
+            return addon->shortName() == possibleAddon;
+        });
+
+        if (itObj == m_addonList.constEnd()) {
+            qDebug() << "Addon not found :" << possibleAddon;
+            continue;
+        }
+
+       finalAddonList << (*itObj);
+    }
+    for (auto addon : finalAddonList) {
+        qDebug() << addon->name();
+    }
+}
+
+void DatabaseCore::processCurseAddonArchive()
+{
+    QSettings settings;
     WowCurseXmlParser parser;
-    m_database = parser.XmlToAddonList(process.readAll());
-    return true;
+    QString xmlOutput = FileExtractor::bzip2FileToString(settings.value("wowCurseArchive").toString());
+    m_addonList = parser.XmlToAddonList(xmlOutput);
+
+    emit wowAddonListUpdated(m_addonList);
 }

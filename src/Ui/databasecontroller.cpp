@@ -2,8 +2,6 @@
 #include "Database/databasecore.h"
 #include "Ui/wowaddonmodel.h"
 
-#include <QDir>
-#include <QUrl>
 #include <QDebug>
 #include <QSettings>
 #include <QStandardPaths>
@@ -33,23 +31,12 @@ WowAddonModel* DatabaseController::wowModel() const
 
 void DatabaseController::refresh()
 {
-    m_database->update();
+    m_database->refresh();
 }
 
 void DatabaseController::detect()
 {
-    QDir dir(QUrl(m_wowDir).toLocalFile() + "/Interface/AddOns");
-
-    qDebug() << dir.absolutePath();
-    if (!dir.exists()) {
-        qDebug() << "path doesn't exist";
-    }
-
-    QFileInfoList entries = dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Dirs);
-
-    for (auto entry : entries) {
-        qDebug() << entry.absoluteFilePath();
-    }
+    m_database->detect();
 }
 
 QString DatabaseController::wowDir() const

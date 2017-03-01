@@ -5,6 +5,7 @@
 
 ConsoleCore::ConsoleCore(CoreManager *parent) :
     AbstractCore(parent)
+  , m_cores(parent)
   , m_database(parent->database())
 {
 
@@ -13,6 +14,7 @@ ConsoleCore::ConsoleCore(CoreManager *parent) :
 void ConsoleCore::init()
 {
     m_commandMap["update"] = [this](){update();};
+    m_commandMap["detect"] = [this](){detect();};
 }
 
 void ConsoleCore::initArguments(QCommandLineParser &parser)
@@ -27,6 +29,7 @@ void ConsoleCore::processArguments(QCommandLineParser &parser)
     qDebug() << m_args;
 
     if (m_args.count() == 0) {
+        m_cores->setConsoleMode(true);
         emit noCommandToProcess();
         return;
     }
@@ -55,5 +58,12 @@ void ConsoleCore::delayedInit()
 void ConsoleCore::update()
 {
     qDebug() << "update";
-    m_database->update(false);
+    m_database->refresh(false);
+}
+
+void ConsoleCore::detect()
+{
+    qDebug() << "detect";
+    m_database->refresh(false);
+    m_database->detect();
 }

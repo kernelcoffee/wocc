@@ -50,7 +50,8 @@ HEADERS += \
     Database/wowaddon.h \
     Ui/databasecontroller.h \
     Ui/wowaddonmodel.h \
-    Database/wowcursexmlparser.h
+    Database/wowcursexmlparser.h \
+    Utilities/fileextractor.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
@@ -64,4 +65,5 @@ SOURCES += main.cpp \
     Database/wowaddon.cpp \
     Ui/databasecontroller.cpp \
     Ui/wowaddonmodel.cpp \
-    Database/wowcursexmlparser.cpp
+    Database/wowcursexmlparser.cpp \
+    Utilities/fileextractor.cpp

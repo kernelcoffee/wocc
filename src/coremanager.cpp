@@ -26,7 +26,8 @@ void CoreManager::init()
 
 #ifndef console_mode
     m_cores <<  m_ui;
-    connect(m_console, &ConsoleCore::noCommandToProcess, m_ui, &UiCore::startX);
+    connect(m_console, &ConsoleCore::noCommandToProcess, [this](){ setConsoleMode(true); });
+    connect(m_console, &ConsoleCore::noCommandToProcess, m_ui, &UiCore::startX, Qt::QueuedConnection);
 #endif
 
 
@@ -60,6 +61,11 @@ void CoreManager::processArguments(QCommandLineParser &parser)
     }
 }
 
+bool CoreManager::consoleMode()
+{
+    return m_consoleMode;
+}
+
 NetworkCore *CoreManager::network() const
 {
     return m_network;
@@ -82,5 +88,10 @@ void CoreManager::aboutToQuit()
     for (auto core : m_cores) {
         core->aboutToQuit();
     }
+}
+
+void CoreManager::setConsoleMode(bool consoleMode)
+{
+    m_consoleMode = consoleMode;
 }
 

@@ -30,9 +30,12 @@ private:
     Q_DISABLE_COPY(ConsoleCore)
 
     void update();
+    void detect();
 
     QStringList m_args;
-    DatabaseCore* m_database;
+
+    CoreManager* m_cores = nullptr;
+    DatabaseCore* m_database = nullptr;
 
     QMap<QString, std::function<void ()>> m_commandMap;
 };

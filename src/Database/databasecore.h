@@ -23,15 +23,20 @@ signals:
     void wowAddonListUpdated(const QVector<WowAddon*> &addonList);
 
 public slots:
-    void update(bool isAsync = true);
+    void refresh(bool isAsync = true);
+    void detect();
+
+private slots:
+    void processCurseAddonArchive();
 
 private:
     Q_DISABLE_COPY(DatabaseCore)
-    bool decompressBzip2File(const QString filePath);
+    bool decompressBzip2File(const QString &filePath);
 
     CoreManager *m_cores = nullptr;
     NetworkCore *m_network = nullptr;
-    QVector<WowAddon*> m_database;
+    QVector<WowAddon*> m_addonList;
+    QVector<WowAddon*> m_installedList;
 };
 
 #endif // DATABASECORE_H

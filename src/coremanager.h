@@ -22,30 +22,35 @@ public:
     explicit CoreManager(QObject *parent = 0);
     ~CoreManager();
 
-    void    init();
-    void    initSettings();
-    void    initArguments(QCommandLineParser &parser);
-    void    processArguments(QCommandLineParser &parser);
+    void init();
+    void initSettings();
+    void initArguments(QCommandLineParser &parser);
+    void processArguments(QCommandLineParser &parser);
+
+    bool consoleMode();
 
     NetworkCore* network() const;
     DatabaseCore* database() const;
 
 public slots:
-    void    delayedInit();
-    void    aboutToQuit();
+    void delayedInit();
+    void aboutToQuit();
+    void setConsoleMode(bool consoleMode);
 
 private:
     Q_DISABLE_COPY(CoreManager)
 
-    QList<AbstractCore*>   m_cores;
+    QList<AbstractCore*> m_cores;
+
+    bool m_consoleMode = false;
 
 #ifndef console_mode
-    UiCore  *m_ui;
+    UiCore *m_ui = nullptr;
 #endif
 
-    NetworkCore *m_network;
-    DatabaseCore *m_database;
-    ConsoleCore *m_console;
+    NetworkCore *m_network = nullptr;
+    DatabaseCore *m_database = nullptr;
+    ConsoleCore *m_console = nullptr;
 };
 
 #endif // COREMANAGER_H
