@@ -70,6 +70,8 @@ inline void parseCategorySection(QXmlStreamReader &reader, WowAddon* addon)
 
 inline void parseLatestFiles(QXmlStreamReader &reader, WowAddon* addon)
 {
+    WowAddon::File file;
+
     reader.readNextStartElement();
     // qDebug() << "CAddonFile" << reader.name() << reader.tokenString();
     while (reader.isStartElement() && reader.name() == "CAddOnFile") {
@@ -101,14 +103,14 @@ inline void parseLatestFiles(QXmlStreamReader &reader, WowAddon* addon)
         // DownloadURL
         reader.readNextStartElement();
         // qDebug() << "DownloadURL" << reader.name() << reader.tokenString();
-        addon->setDownloadUrl(reader.readElementText());
+        file.downloadUrl = reader.readElementText();
 
         // FileDate
         reader.readNextStartElement();
         if (reader.name() != "FileDate") {
             qDebug() << "FileDate" << reader.name() << reader.tokenString();
         }
-        reader.readNextStartElement();
+        file.date = QDateTime::fromString(reader.readElementText(), Qt::ISODate);
         // FileName
         reader.readNextStartElement();
         // qDebug() << "FileName" << reader.name() << reader.tokenString();
@@ -162,22 +164,23 @@ inline void parseLatestFiles(QXmlStreamReader &reader, WowAddon* addon)
         // CAddOnModule
         // qDebug() << "CAddOnModule" << reader.name() << reader.tokenString();
         while (reader.isStartElement() && reader.name() == "CAddOnModule") {
+            WowAddon::Module module;
             // Fingerprint
             reader.readNextStartElement();
             // qDebug() << "Fingerprint" << reader.name() << reader.tokenString();
-            QString fingerprint = reader.readElementText();
+            module.fingerprint = reader.readElementText();
 
             // Foldername
             reader.readNextStartElement();
             // qDebug() << "Foldername" << reader.name() << reader.tokenString();
-            QString name = reader.readElementText();
+            module.folderName = reader.readElementText();
 
             // CAddOnModule
             reader.readNextStartElement();
             // qDebug() << "/CAddOnModule"  << reader.name() << reader.tokenString();
             reader.readNextStartElement();
             // qDebug() << "CAddOnModule"  << reader.name() << reader.tokenString();
-            addon->addFolder(name, fingerprint);
+            file.modules << module;
         }
         // PackageFingerprint
         reader.readNextStartElement();
@@ -195,6 +198,7 @@ inline void parseLatestFiles(QXmlStreamReader &reader, WowAddon* addon)
         reader.readNextStartElement();
         reader.readNextStartElement();
     }
+    addon->addFile(file);
 }
 
 WowCurseXmlParser::WowCurseXmlParser(QObject *parent) :
@@ -213,11 +217,11 @@ QVector<WowAddon *> WowCurseXmlParser::XmlToAddonList(const QString &xml) const
     reader.readNextStartElement();
     // qDebug() << "CAddOn" << reader.name() << reader.tokenString();
     while (!reader.atEnd() && reader.isStartElement() && reader.name() == "CAddOn") {
-        //qDebug() << n <<  "================= NEW ADDON PARSING ====================";
+//        qDebug() << n <<  "================= NEW ADDON PARSING ====================";
         reader.readNextStartElement();
-        // n += 1;
-        //        if (n > 100)
-        //            continue;
+//        n += 1;
+//        if (n > 1)
+//            continue;
 
         WowAddon* addon = new WowAddon;
 

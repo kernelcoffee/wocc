@@ -26,7 +26,6 @@ DatabaseCore::DatabaseCore(CoreManager *parent) :
 DatabaseCore::~DatabaseCore()
 {
     qDeleteAll(m_addonList);
-    qDeleteAll(m_installedList);
 }
 
 QVector<WowAddon*> DatabaseCore::addonList() const
@@ -73,18 +72,17 @@ void DatabaseCore::detect()
     // Let's create a map of addons per folder installed
     for (auto entry : entries) {
         for (auto addon : m_addonList) {
-            for (auto folder : addon->folders()) {
-                if (entry.startsWith(folder.name, Qt::CaseSensitivity::CaseInsensitive)) {
-                    if (!tmpMap[entry].contains(addon->shortName())) {
-                        tmpMap[entry] << addon->shortName();
+            for (auto file : addon->files()) {
+                for (auto module : file.modules) {
+                    if (module.folderName.startsWith(entry, Qt::CaseInsensitive)) {
+                        if (!tmpMap[entry].contains(addon->shortName())) {
+                            tmpMap[entry] << addon->shortName();
+                        }
                     }
                 }
             }
         }
     }
-
-    // tmpMap contains all the possible addon that could be installed;
-    qDebug() << tmpMap;
 
     QSet<QString> possibleAddons;
     // Create a list of possible addon installed
@@ -96,10 +94,11 @@ void DatabaseCore::detect()
         }
     }
 
+    qDebug() << "Premiminary addon detection :" << possibleAddons.count();
 
     // We'll detect addon by matching the folders to what they contains.
-    QVector<WowAddon*> finalAddonList;
     QVector<WowAddon*> badAddons;
+    m_installedList.clear();
 
     for (const QString &possibleAddon : possibleAddons) {
 
@@ -110,39 +109,41 @@ void DatabaseCore::detect()
         });
 
         if (itObj == m_addonList.constEnd()) {
-            qDebug() << "Addon not found :" << possibleAddon;
             continue;
         }
 
         WowAddon* addon = (*itObj);
         int addonFolderDetected = 0;
+        bool matches = false;
 
-        // Compare the folder the addon install against the folder installed
-        for (auto addonFolder : addon->folders()) {
-            for (auto installedFolder : entries) {
-                if (addonFolder.name == installedFolder) {
-                    addonFolderDetected++;
+        // addons can have multiple versions (when dependencies are added for ex.)
+        for (auto file : addon->files()) {
+            // each file is composed of modules
+            addonFolderDetected = 0;
+            for (auto module : file.modules) {
+                // we match the number of files detected with the number of file registered
+                for (auto installedFolder : entries) {
+                    if (module.folderName == installedFolder) {
+                        addonFolderDetected++;
+                    }
                 }
             }
+
+            // We check if the number of folder match with the database
+            if (addonFolderDetected == file.modules.count()) {
+                //qDebug() << "Add matched perfectly" << addon->name();
+                matches = true;
+            }
         }
-        if (addonFolderDetected == addon->folders().count()) {
-//            qDebug() << "addon found " << addon->name();
-            finalAddonList << addon;
+
+        if (matches) {
+            m_installedList << addon;
         } else {
             badAddons << addon;
-            qDebug() << "Bad number detected" << addon->name() << addon->folders().count() << addonFolderDetected;
         }
     }
-
-    qDebug() << "number of addon detected" << finalAddonList.count();
-    for (auto addon : finalAddonList) {
-        qDebug() << addon->name();
-    }
-
-    qDebug() << "----------------------------------";
-    for (auto addon : badAddons) {
-        qDebug() << addon->name();
-    }
+    qDebug() << "Addon detected" << m_installedList.count();
+    qDebug() << "addon rejected" << badAddons.count();
 }
 
 void DatabaseCore::processCurseAddonArchive()

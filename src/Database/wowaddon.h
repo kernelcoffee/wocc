@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QString>
 #include <QUrl>
+#include <QDateTime>
+#include <QList>
 
 class WowAddon : public QObject
 {
@@ -11,13 +13,12 @@ class WowAddon : public QObject
     Q_PROPERTY(uint id READ id CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QString shortName READ shortName CONSTANT)
-    Q_PROPERTY(QUrl downloadUrl READ downloadUrl CONSTANT)
     Q_PROPERTY(QUrl websiteUrl READ websiteUrl CONSTANT)
     Q_PROPERTY(QString summary READ summary CONSTANT)
     Q_PROPERTY(uint installCount READ installCount CONSTANT)
     Q_PROPERTY(QList<Author> authors READ authors CONSTANT)
-    Q_PROPERTY(QList<Folder> folders READ folders CONSTANT)
 
+public:
     struct Category {
         int id;
         QString name;
@@ -29,12 +30,18 @@ class WowAddon : public QObject
         QString url;
     };
 
-    struct Folder {
-        QString name;
+    struct Module {
+        QString folderName;
         QString fingerprint;
     };
 
-public:
+    struct File {
+        QString downloadUrl;
+        QString name;
+        QDateTime date;
+        QList<Module> modules;
+    };
+
     explicit WowAddon(QObject *parent = nullptr);
 
     uint id() const;
@@ -48,17 +55,18 @@ public:
     void addFolder(const QString& name, const QString& fingerprint);
 
     QList<Author> authors() const;
-    QList<Folder> folders() const;
-    QUrl downloadUrl() const;
+    QList<File> files();
     QUrl websiteUrl() const;
+
+    void printContent();
 
 public slots:
     void setId(uint id);
     void setName(const QString &name);
     void setSummary(const QString &summary);
     void setInstallCount(uint installCount);
-    void setDownloadUrl(const QString &downloadUrl);
     void setWebsiteUrl(const QString &websiteUrl);
+    void addFile(const File &file);
 
 private:
     uint m_id;
@@ -66,12 +74,11 @@ private:
     QString m_shortName;
     QString m_summary;
     uint m_installCount;
-    QUrl m_downloadUrl;
     QUrl m_websiteUrl;
 
     QList<Author> m_authors;
     QList<Category> m_categories;
-    QList<Folder> m_folders;
+    QList<File> m_files;
 };
 
 #endif // WOWADDON_H

@@ -31,29 +31,31 @@ void WowAddon::addCategory(int id, const QString& name, const QString& url)
     m_categories.append(Category({id, name, url}));
 }
 
-void WowAddon::addFolder(const QString &name, const QString &fingerprint)
-{
-    m_folders.append({name, fingerprint});
-}
-
 QList<WowAddon::Author> WowAddon::authors() const
 {
     return m_authors;
 }
 
-QList<WowAddon::Folder> WowAddon::folders() const
+QList<WowAddon::File> WowAddon::files()
 {
-    return m_folders;
-}
-
-QUrl WowAddon::downloadUrl() const
-{
-    return m_downloadUrl;
+    return m_files;
 }
 
 QUrl WowAddon::websiteUrl() const
 {
     return m_websiteUrl;
+}
+
+void WowAddon::printContent()
+{
+    qDebug() << m_name << m_shortName;
+    for (auto file : m_files) {
+        qDebug() << "Files" << file.name << file.downloadUrl;
+        for (auto module : file.modules) {
+            qDebug() << module.folderName;
+        }
+        qDebug();
+    }
 }
 
 uint WowAddon::installCount() const
@@ -81,15 +83,15 @@ void WowAddon::setInstallCount(uint installCount)
     m_installCount = installCount;
 }
 
-void WowAddon::setDownloadUrl(const QString &downloadUrl)
-{
-    m_downloadUrl = QUrl(downloadUrl);
-}
-
 void WowAddon::setWebsiteUrl(const QString &websiteUrl)
 {
     m_shortName = websiteUrl.section('/', -1);
-    m_downloadUrl = QUrl(websiteUrl);
+    m_websiteUrl = QUrl(websiteUrl);
+}
+
+void WowAddon::addFile(const WowAddon::File& file)
+{
+    m_files << file;
 }
 
 void WowAddon::setSummary(const QString &summary)
