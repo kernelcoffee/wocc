@@ -21,6 +21,7 @@ public:
 
 signals:
     void wowAddonListUpdated(const QVector<WowAddon*> &addonList);
+    void wowInstalledAddonListUpdated(const QVector<WowAddon*> &installedAddonList);
 
 public slots:
     void refresh(bool isAsync = true);

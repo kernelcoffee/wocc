@@ -9,15 +9,11 @@ Item {
     id: libraryView
 
     property DatabaseController db: _database
-
-    Shortcut {
-        sequence: StandardKey.Refresh
-        onActivated: db.refresh();
-    }
+    property alias model: listView.model
 
     ListView {
+        id: listView
         anchors.fill: parent
-        model: db.wowModel
         delegate: Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right

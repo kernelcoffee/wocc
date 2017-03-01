@@ -144,6 +144,7 @@ void DatabaseCore::detect()
     }
     qDebug() << "Addon detected" << m_installedList.count();
     qDebug() << "addon rejected" << badAddons.count();
+    emit wowInstalledAddonListUpdated(m_installedList);
 }
 
 void DatabaseCore::processCurseAddonArchive()

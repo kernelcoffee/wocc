@@ -21,10 +21,9 @@ QVariant WowAddonModel::data(const QModelIndex& index, int role) const
     case Authors:
         if (addon->authors().count() > 0)
             return addon->authors().first().name;
-    default:
-        return "Invalid";
+        break;
     }
-    return QVariant();
+    return "Invalid";
 }
 
 int WowAddonModel::rowCount(const QModelIndex& parent) const
@@ -45,6 +44,7 @@ QHash<int, QByteArray> WowAddonModel::roleNames() const
 
 void WowAddonModel::setData(const QVector<WowAddon*>& data)
 {
+    qDebug() << "Update data" << data.count();
     beginResetModel();
     m_data = data;
     endResetModel();
