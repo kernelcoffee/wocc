@@ -54,6 +54,7 @@ void DatabaseCore::refresh(bool isAsync)
     }
 }
 
+// Not really optimized but it works.
 void DatabaseCore::detect()
 {
     QSettings settings;
@@ -65,7 +66,7 @@ void DatabaseCore::detect()
         qDebug() << "path doesn't exist";
     }
 
-    QFileInfoList entries = dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Dirs);
+    QStringList entries = dir.entryList(QDir::NoDotAndDotDot | QDir::Dirs);
 
     QMap<QString, QSet<QString>> tmpMap;
 
@@ -73,9 +74,9 @@ void DatabaseCore::detect()
     for (auto entry : entries) {
         for (auto addon : m_addonList) {
             for (auto folder : addon->folders()) {
-                if (entry.fileName().startsWith(folder.name, Qt::CaseSensitivity::CaseInsensitive)) {
-                    if (!tmpMap[entry.fileName()].contains(addon->shortName())) {
-                        tmpMap[entry.fileName()] << addon->shortName();
+                if (entry.startsWith(folder.name, Qt::CaseSensitivity::CaseInsensitive)) {
+                    if (!tmpMap[entry].contains(addon->shortName())) {
+                        tmpMap[entry] << addon->shortName();
                     }
                 }
             }
@@ -98,8 +99,11 @@ void DatabaseCore::detect()
 
     // We'll detect addon by matching the folders to what they contains.
     QVector<WowAddon*> finalAddonList;
+    QVector<WowAddon*> badAddons;
 
     for (const QString &possibleAddon : possibleAddons) {
+
+        // let's retrieve the AddOn using the shortname
         auto itObj = std::find_if(m_addonList.begin(), m_addonList.end(),
                                   [=](WowAddon* addon){
             return addon->shortName() == possibleAddon;
@@ -110,9 +114,33 @@ void DatabaseCore::detect()
             continue;
         }
 
-       finalAddonList << (*itObj);
+        WowAddon* addon = (*itObj);
+        int addonFolderDetected = 0;
+
+        // Compare the folder the addon install against the folder installed
+        for (auto addonFolder : addon->folders()) {
+            for (auto installedFolder : entries) {
+                if (addonFolder.name == installedFolder) {
+                    addonFolderDetected++;
+                }
+            }
+        }
+        if (addonFolderDetected == addon->folders().count()) {
+//            qDebug() << "addon found " << addon->name();
+            finalAddonList << addon;
+        } else {
+            badAddons << addon;
+            qDebug() << "Bad number detected" << addon->name() << addon->folders().count() << addonFolderDetected;
+        }
     }
+
+    qDebug() << "number of addon detected" << finalAddonList.count();
     for (auto addon : finalAddonList) {
+        qDebug() << addon->name();
+    }
+
+    qDebug() << "----------------------------------";
+    for (auto addon : badAddons) {
         qDebug() << addon->name();
     }
 }
