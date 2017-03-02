@@ -1,5 +1,5 @@
 #include "wowaddonmodel.h"
-#include "Database/wowaddon.h"
+#include "Store/wowaddon.h"
 #include <QDebug>
 
 WowAddonModel::WowAddonModel(QObject *parent) :

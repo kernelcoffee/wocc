@@ -14,7 +14,7 @@ ApplicationWindow {
     minimumHeight: 600
     minimumWidth: 800
 
-    property DatabaseController db: _database
+    property CurseStoreController store: _curseStore
     property bool hideSidebar: false
     property alias viewIndex: sideMenuContent.currentIndex
 
@@ -134,10 +134,10 @@ ApplicationWindow {
                     selectExisting: false
                     selectFolder: true
                     selectMultiple: false
-                    folder: db.wowDir
+                    folder: store.wowDir
                     onAccepted: {
                         console.log("You chose: " + folder)
-                        db.wowDir = folder
+                        store.wowDir = folder
                     }
                     onRejected: {
                         console.log("Canceled")
@@ -152,7 +152,7 @@ ApplicationWindow {
                     }
                     TextField {
                         id: pathText
-                        text: db.wowDir
+                        text: store.wowDir
                     }
                     Button {
                         text: "Select"
@@ -165,11 +165,11 @@ ApplicationWindow {
 
                     Button {
                         text: "Detect"
-                        onClicked: db.detect()
+                        onClicked: store.detect()
                     }
                     Button {
                         text: "Refresh"
-                        onClicked: db.refresh()
+                        onClicked: store.refresh()
                     }
                 }
             }
@@ -177,16 +177,16 @@ ApplicationWindow {
                 id: installedTab
                 LibraryView {
                     anchors.fill: parent
-                    db: root.db
-                    model: root.db.wowInstalledModel
+                    store: root.store
+                    model: root.store.wowInstalledModel
                 }
             }
             Item {
                 id: libraryTab
                 LibraryView {
                     anchors.fill: parent
-                    db: root.db
-                    model: root.db.wowModel
+                    store: root.store
+                    model: root.store.wowModel
                 }
             }
         }

@@ -3,17 +3,16 @@
 
 #include "Abstracts/abstractcore.h"
 
-
-#include "Console/consolecore.h"
-#include "Network/networkcore.h"
-#include "Database/databasecore.h"
-
-#ifndef console_mode
-#include "Ui/uicore.h"
-#endif
-
 #include <QObject>
 #include <QList>
+
+class ConsoleCore;
+class NetworkCore;
+class StoreCore;
+
+#ifndef console_mode
+class UiCore;
+#endif
 
 class CoreManager : public AbstractCore
 {
@@ -30,7 +29,7 @@ public:
     bool consoleMode();
 
     NetworkCore* network() const;
-    DatabaseCore* database() const;
+    StoreCore* stores() const;
 
 public slots:
     void delayedInit();
@@ -49,8 +48,8 @@ private:
 #endif
 
     NetworkCore *m_network = nullptr;
-    DatabaseCore *m_database = nullptr;
     ConsoleCore *m_console = nullptr;
+    StoreCore *m_stores = nullptr;
 };
 
 #endif // COREMANAGER_H

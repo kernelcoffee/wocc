@@ -2,7 +2,8 @@
 #define WOWADDONMODEL_H
 
 #include <QAbstractListModel>
-#include "Database/wowaddon.h"
+
+class WowAddon;
 
 class WowAddonModel : public QAbstractListModel
 {

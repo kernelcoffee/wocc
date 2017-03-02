@@ -7,7 +7,7 @@
 #include <functional>
 
 class CoreManager;
-class DatabaseCore;
+class StoreCore;
 
 class ConsoleCore : public AbstractCore
 {
@@ -35,7 +35,7 @@ private:
     QStringList m_args;
 
     CoreManager* m_cores = nullptr;
-    DatabaseCore* m_database = nullptr;
+    StoreCore* m_stores = nullptr;
 
     QMap<QString, std::function<void ()>> m_commandMap;
 };

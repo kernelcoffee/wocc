@@ -1,11 +1,20 @@
 #include "coremanager.h"
+#include "Network/networkcore.h"
+#include "Store/storecore.h"
+#include "Console/consolecore.h"
+
+#ifndef console_mode
+#include "Ui/uicore.h"
+#endif
+
 #include <QTimer>
+
 #include <QDebug>
 
 CoreManager::CoreManager(QObject *parent) :
     AbstractCore(parent)
   , m_network(new NetworkCore(this))
-  , m_database(new DatabaseCore(this))
+  , m_stores(new StoreCore(this))
 {
     QTimer::singleShot(0, this, &CoreManager::delayedInit);
 }
@@ -22,7 +31,7 @@ void CoreManager::init()
     m_ui = new UiCore(this);
 #endif
 
-    m_cores  << m_network << m_database  << m_console;
+    m_cores  << m_network << m_stores  << m_console;
 
 #ifndef console_mode
     m_cores <<  m_ui;
@@ -71,9 +80,9 @@ NetworkCore *CoreManager::network() const
     return m_network;
 }
 
-DatabaseCore*CoreManager::database() const
+StoreCore *CoreManager::stores() const
 {
-    return m_database;
+    return m_stores;
 }
 
 void CoreManager::delayedInit()

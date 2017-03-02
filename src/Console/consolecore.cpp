@@ -1,12 +1,14 @@
 #include "consolecore.h"
 #include "coremanager.h"
+#include "Store/storecore.h"
+#include "Store/cursestore.h"
 
 #include <QDebug>
 
 ConsoleCore::ConsoleCore(CoreManager *parent) :
     AbstractCore(parent)
   , m_cores(parent)
-  , m_database(parent->database())
+  , m_stores(parent->stores())
 {
 
 }
@@ -58,12 +60,12 @@ void ConsoleCore::delayedInit()
 void ConsoleCore::update()
 {
     qDebug() << "update";
-    m_database->refresh(false);
+    m_stores->curseStore()->refresh(false);
 }
 
 void ConsoleCore::detect()
 {
     qDebug() << "detect";
-    m_database->refresh(false);
-    m_database->detect();
+    m_stores->curseStore()->refresh(false);
+    m_stores->curseStore()->detect();
 }

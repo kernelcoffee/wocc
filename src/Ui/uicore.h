@@ -5,8 +5,8 @@
 #include <QQmlApplicationEngine>
 
 class CoreManager;
-class DatabaseController;
-class DatabaseCore;
+class CurseStoreController;
+class StoreCore;
 
 
 class UiCore : public AbstractCore
@@ -23,8 +23,8 @@ private:
 
     QQmlApplicationEngine m_engine;
 
-    DatabaseCore* m_database = nullptr;
-    DatabaseController* m_dbController = nullptr;
+    StoreCore* m_stores = nullptr;
+    CurseStoreController* m_cStoreController = nullptr;
 };
 
 #endif // UICORE_H

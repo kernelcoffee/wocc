@@ -7,7 +7,7 @@ import Wocc 1.0
 Item {
     id: libraryView
 
-    property DatabaseController db: _database
+    property CurseStoreController store: _database
     property alias model: listView.model
 
     ListView {

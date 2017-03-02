@@ -45,13 +45,14 @@ HEADERS += \
     woccapplication.h \
     Network/networkcore.h \
     Network/filedownloader.h \
-    Database/databasecore.h \
     Console/consolecore.h \
-    Database/wowaddon.h \
-    Ui/databasecontroller.h \
     Ui/wowaddonmodel.h \
-    Database/wowcursexmlparser.h \
-    Utilities/fileextractor.h
+    Utilities/fileextractor.h \
+    Store/cursestore.h \
+    Store/storecore.h \
+    Store/wowcursexmlparser.h \
+    Store/wowaddon.h \
+    Ui/cursestorecontroller.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
@@ -60,10 +61,11 @@ SOURCES += main.cpp \
     woccapplication.cpp \
     Network/networkcore.cpp \
     Network/filedownloader.cpp \
-    Database/databasecore.cpp \
     Console/consolecore.cpp \
-    Database/wowaddon.cpp \
-    Ui/databasecontroller.cpp \
     Ui/wowaddonmodel.cpp \
-    Database/wowcursexmlparser.cpp \
-    Utilities/fileextractor.cpp
+    Utilities/fileextractor.cpp \
+    Store/cursestore.cpp \
+    Store/storecore.cpp \
+    Store/wowcursexmlparser.cpp \
+    Store/wowaddon.cpp \
+    Ui/cursestorecontroller.cpp

@@ -1,15 +1,16 @@
 #include "uicore.h"
 #include "coremanager.h"
-#include "Database/databasecore.h"
+#include "Store/storecore.h"
+#include "wowaddonmodel.h"
 
-#include "databasecontroller.h"
+#include "cursestorecontroller.h"
 
 #include <QQmlContext>
 #include <QDebug>
 
 UiCore::UiCore(CoreManager *parent) :
     AbstractCore(parent)
-  , m_database(parent->database())
+  , m_stores(parent->stores())
 {
 
 }
@@ -23,12 +24,12 @@ void UiCore::startX()
 
 void UiCore::initContext()
 {
-    m_dbController = new DatabaseController(m_database);
+    m_cStoreController = new CurseStoreController(m_stores->curseStore());
 
     QQmlContext* context = m_engine.rootContext();
 
-    qmlRegisterType<DatabaseController>("Wocc", 1, 0, "DatabaseController");
+    qmlRegisterType<CurseStoreController>("Wocc", 1, 0, "CurseStoreController");
+    qRegisterMetaType<WowAddonModel*>("WowAddonModel*");
 
-    context->setContextProperty("_database", m_dbController);
-    context->setContextProperty("addonModel", m_dbController->wowModel());
+    context->setContextProperty("_curseStore", m_cStoreController);
 }
