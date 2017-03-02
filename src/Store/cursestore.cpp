@@ -5,12 +5,15 @@
 #include "wowcursexmlparser.h"
 #include "wowaddon.h"
 
+#include "wowaddondetectionworker.h"
+
 #include <QStandardPaths>
 #include <QXmlStreamReader>
 #include <QUrl>
 #include <QDir>
+#include <QFile>
+#include <QDataStream>
 #include <QSettings>
-#include <QSet>
 
 #include <algorithm>
 
@@ -22,7 +25,6 @@ CurseStore::CurseStore(NetworkCore* network, QObject *parent) :
     QObject(parent)
   , m_network(network)
 {
-
 }
 
 CurseStore::~CurseStore()
@@ -30,17 +32,18 @@ CurseStore::~CurseStore()
     qDeleteAll(m_wowLibrary);
 }
 
-void CurseStore::refresh(bool isAsync)
+FileDownloader* CurseStore::refresh(bool isAsync)
 {
     FileDownloader *downloader =  m_network->createFileDownloader();
     downloader->setUrl(archive_url);
     downloader->setFileOverride(true);
     downloader->setDestination(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
 
-    connect(downloader, &FileDownloader::finished, [this, downloader](){
+    connect(downloader, &FileDownloader::finished, [this, downloader, isAsync](){
         QSettings settings;
         settings.setValue("wowCurseArchive", downloader->savedFileLocation());
-        processWowArchive();
+        loadLibrary(isAsync);
+        downloader->deleteLater();
     });
 
     if (isAsync) {
@@ -48,109 +51,104 @@ void CurseStore::refresh(bool isAsync)
     } else {
         downloader->startSync();
     }
+    return downloader;
 }
 
-// Not really optimized but it works.
-void CurseStore::detect()
+WowAddonDetectionWorker* CurseStore::detect(bool isAsync)
 {
-    QSettings settings;
-
-    QDir dir(QUrl(settings.value("wowDir").toString()).toLocalFile() + "/Interface/AddOns");
-
-    qDebug() << dir.absolutePath();
-    if (!dir.exists()) {
-        qDebug() << "path doesn't exist";
+    if (isAsync && m_workerThread.isRunning()) {
+        qDebug() << "job is already running";
+        return nullptr;
     }
 
-    QStringList entries = dir.entryList(QDir::NoDotAndDotDot | QDir::Dirs);
+    WowAddonDetectionWorker* worker = new WowAddonDetectionWorker(m_wowLibrary);
+    connect(worker, &WowAddonDetectionWorker::succcess, [this, isAsync](const QVector<WowAddon*> &result){
+        setWowInstalledAddons(result);
+        saveInstalled();
+        m_workerThread.quit();
+        m_workerThread.wait();
+        m_mutex.unlock();
+    });
 
-    QMap<QString, QSet<QString>> tmpMap;
+    connect(worker, &WowAddonDetectionWorker::error, [this] {
+        m_mutex.unlock();
+    });
 
-    // Let's create a map of addons per folder installed
-    for (auto entry : entries) {
-        for (auto addon : m_wowLibrary) {
-            for (auto file : addon->files()) {
-                for (auto module : file.modules) {
-                    if (module.folderName.startsWith(entry, Qt::CaseInsensitive)) {
-                        if (!tmpMap[entry].contains(addon->shortName())) {
-                            tmpMap[entry] << addon->shortName();
-                        }
-                    }
-                }
-            }
-        }
+
+    if (isAsync) {
+        connect(&m_workerThread, &QThread::finished, worker, &QObject::deleteLater);
+        m_mutex.lock();
+        worker->moveToThread(&m_workerThread);
+        m_workerThread.start();
+        worker->run();
+        return worker;
     }
 
-    QSet<QString> possibleAddons;
-    // Create a list of possible addon installed
-    for (auto addonset : tmpMap) {
-        for (auto addon : addonset) {
-            if (!possibleAddons.contains(addon)) {
-                possibleAddons << addon;
-            }
-        }
-    }
-
-    qDebug() << "Premiminary addon detection :" << possibleAddons.count();
-
-    // We'll detect addon by matching the folders to what they contains.
-    QVector<WowAddon*> badAddons;
-    m_wowInstalled.clear();
-
-    for (const QString &possibleAddon : possibleAddons) {
-
-        // let's retrieve the AddOn using the shortname
-        auto itObj = std::find_if(m_wowLibrary.begin(), m_wowLibrary.end(),
-                                  [=](WowAddon* addon){
-            return addon->shortName() == possibleAddon;
-        });
-
-        if (itObj == m_wowLibrary.constEnd()) {
-            continue;
-        }
-
-        WowAddon* addon = (*itObj);
-        int addonFolderDetected = 0;
-        bool matches = false;
-
-        // addons can have multiple versions (when dependencies are added for ex.)
-        for (auto file : addon->files()) {
-            // each file is composed of modules
-            addonFolderDetected = 0;
-            for (auto module : file.modules) {
-                // we match the number of files detected with the number of file registered
-                for (auto installedFolder : entries) {
-                    if (module.folderName == installedFolder) {
-                        addonFolderDetected++;
-                    }
-                }
-            }
-
-            // We check if the number of folder match with the database
-            if (addonFolderDetected == file.modules.count()) {
-                //qDebug() << "Add matched perfectly" << addon->name();
-                matches = true;
-            }
-        }
-
-        if (matches) {
-            m_wowInstalled << addon;
-        } else {
-            badAddons << addon;
-        }
-    }
-    qDebug() << "Addon detected" << m_wowInstalled.count();
-    qDebug() << "addon rejected" << badAddons.count();
-    emit wowInstalledListUpdated(m_wowInstalled);
-
+    worker->run();
+    worker->deleteLater();
+    return nullptr;
 }
 
-void CurseStore::processWowArchive()
+void CurseStore::loadLibrary(bool isAsync)
 {
+    if (isAsync && m_workerThread.isRunning()) {
+        qDebug() << "job is already running";
+        return;
+    }
+
     QSettings settings;
     WowCurseXmlParser parser;
     QString xmlOutput = FileExtractor::bzip2FileToString(settings.value("wowCurseArchive").toString());
+
     m_wowLibrary = parser.XmlToAddonList(xmlOutput);
 
     emit wowLibraryUpdated(m_wowLibrary);
+}
+
+bool CurseStore::loadInstalled(bool isAsync)
+{
+    QFile loadFile(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/installed.json");
+    if (!loadFile.open(QIODevice::ReadOnly)) {
+        qWarning("Couldn't open save file.");
+        return false;
+    }
+    QByteArray data = loadFile.readAll();
+    const QStringList &savedAddonsList = QString::fromLocal8Bit(data).split(';');
+    const QVector<WowAddon*> &installedAddons = WowAddonDetectionWorker::getInstalledAddons(savedAddonsList, m_wowLibrary);
+    setWowInstalledAddons(installedAddons);
+    qDebug() << installedAddons.count() << "addons loaded";
+    return true;
+}
+
+bool CurseStore::saveInstalled()
+{
+    QList<QString> installedAddons;
+
+    for (WowAddon* addon : m_wowInstalled) {
+        installedAddons << addon->shortName();
+    }
+
+    QDir dir(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
+    if (!dir.exists()) {
+        dir.mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
+    }
+
+
+    QFile saveFile(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/installed.json");
+    if (!saveFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning("Couldn't open save file.");
+        return false;
+    }
+    QString msg(installedAddons.join(';'));
+    saveFile.write(msg.toLocal8Bit());
+    saveFile.flush();
+    saveFile.close();
+    qDebug() << "Installed Addons saved";
+    return true;
+}
+
+void CurseStore::setWowInstalledAddons(const QVector<WowAddon*>& installedAddons)
+{
+    m_wowInstalled = installedAddons;
+    emit wowInstalledListUpdated(installedAddons);
 }

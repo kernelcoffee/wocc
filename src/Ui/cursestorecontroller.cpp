@@ -27,6 +27,9 @@ CurseStoreController::CurseStoreController(CurseStore* store, QObject* parent) :
             m_wowModel, &WowAddonModel::setData);
     connect(m_store, &CurseStore::wowInstalledListUpdated,
             m_wowInstalledModel, &WowAddonModel::setData);
+
+    m_store->loadLibrary();
+    m_store->loadInstalled();
 }
 
 void CurseStoreController::refresh()

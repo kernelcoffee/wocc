@@ -52,7 +52,8 @@ HEADERS += \
     Store/storecore.h \
     Store/wowcursexmlparser.h \
     Store/wowaddon.h \
-    Ui/cursestorecontroller.h
+    Ui/cursestorecontroller.h \
+    Store/wowaddondetectionworker.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
@@ -68,4 +69,5 @@ SOURCES += main.cpp \
     Store/storecore.cpp \
     Store/wowcursexmlparser.cpp \
     Store/wowaddon.cpp \
-    Ui/cursestorecontroller.cpp
+    Ui/cursestorecontroller.cpp \
+    Store/wowaddondetectionworker.cpp

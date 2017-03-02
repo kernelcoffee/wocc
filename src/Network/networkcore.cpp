@@ -12,7 +12,6 @@ NetworkCore::NetworkCore(QObject *parent) :
   , m_manager(new QNetworkAccessManager)
   , m_cache(new QNetworkDiskCache)
 {
-    qDebug() << m_manager;
 }
 
 void NetworkCore::init()
@@ -23,6 +22,5 @@ void NetworkCore::init()
 
 FileDownloader* NetworkCore::createFileDownloader()
 {
-    qDebug() << m_manager;
-    return new FileDownloader(m_manager);;
+    return new FileDownloader(m_manager, this);;
 }

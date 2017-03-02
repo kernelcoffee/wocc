@@ -29,8 +29,12 @@ ApplicationWindow {
         RowLayout {
             anchors.fill: parent
             ToolButton {
-                text: qsTr("\u25C0 %1").arg(Qt.application.name)
+                text: "\u25C0"
+                rotation: hideSidebar ? 180 : 0
                 onClicked: hideSidebar = !hideSidebar
+                Behavior on rotation {
+                    NumberAnimation {duration: 80}
+                }
             }
             Item { Layout.fillWidth: true }
         }
@@ -54,6 +58,7 @@ ApplicationWindow {
     Controls1.SplitView {
         id: splitView
         anchors.fill: parent
+
         Item {
             id: sideMenu
             Layout.minimumWidth: 200
@@ -67,7 +72,6 @@ ApplicationWindow {
                 when: !hideSidebar
                 value: sideMenu.width -10
             }
-
             Component {
                 id: sectionHeading
                 Label {

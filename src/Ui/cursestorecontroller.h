@@ -14,6 +14,12 @@ class CurseStoreController : public QObject
     Q_PROPERTY(WowAddonModel* wowModel READ wowModel CONSTANT)
     Q_PROPERTY(WowAddonModel* wowInstalledModel READ wowInstalledModel CONSTANT)
 public:
+    enum class State {
+        Ready,
+        Refreshing,
+        Detecting
+    };
+
     CurseStoreController() {}
     explicit CurseStoreController(CurseStore* store, QObject *parent = nullptr);
 
