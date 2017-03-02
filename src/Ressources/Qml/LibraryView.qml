@@ -1,6 +1,5 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
-import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
 
 import Wocc 1.0
@@ -14,7 +13,10 @@ Item {
     ListView {
         id: listView
         anchors.fill: parent
-        delegate: Rectangle {
+        ScrollBar.vertical: ScrollBar { id: scrollBar }
+        highlight: Rectangle {color: 'grey'}
+        highlightMoveDuration: 10
+        delegate: Item {
             anchors.left: parent.left
             anchors.right: parent.right
             height: 30
@@ -22,12 +24,14 @@ Item {
                 anchors.fill: parent
                 Label {
                     text: name
-                    color: "black"
                 }
                 Label {
                     text: authors
-                    color: "black"
                 }
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: listView.currentIndex = index
             }
         }
     }

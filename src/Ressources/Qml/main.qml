@@ -4,7 +4,7 @@ import QtQuick.Controls 1.4 as Controls1
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import Qt.labs.settings 1.0
-
+import QtQml 2.2
 import Wocc 1.0
 
 ApplicationWindow {
@@ -16,6 +16,7 @@ ApplicationWindow {
 
     property DatabaseController db: _database
     property bool hideSidebar: false
+    property alias viewIndex: sideMenuContent.currentIndex
 
     Settings {
         property alias x: root.x
@@ -24,50 +25,81 @@ ApplicationWindow {
         property alias height: root.height
     }
 
-    header: TabBar {
-        id: tabbar
-        width: parent.width
-        position: TabBar.Header
+    header: ToolBar {
+        RowLayout {
+            anchors.fill: parent
+            ToolButton {
+                text: qsTr("\u25C0 %1").arg(Qt.application.name)
+                onClicked: hideSidebar = !hideSidebar
+            }
+            Item { Layout.fillWidth: true }
+        }
+    }
 
-        TabButton {
-            text: qsTr("Home")
+    ListModel {
+        id: sideMenuModel
+        ListElement {
+            name: "Dashboard"
         }
-        TabButton {
-            text: qsTr("Installed")
+        ListElement {
+            sectionName: "wow"
+            name: "Installed"
         }
-        TabButton {
-            text: qsTr("Library")
+        ListElement {
+            sectionName: "wow"
+            name: "Library"
         }
     }
 
     Controls1.SplitView {
         id: splitView
         anchors.fill: parent
-        Rectangle {
+        Item {
             id: sideMenu
             Layout.minimumWidth: 200
             Layout.maximumWidth: 400
             clip: true
-            color: "lightsteelblue"
 
             Binding {
                 id: sideMenuBinding
                 target: sideMenuContent
                 property: "width"
                 when: !hideSidebar
-                value: sideMenu.width
+                value: sideMenu.width -10
             }
 
-            Item {
+            Component {
+                id: sectionHeading
+                Label {
+                    text: section
+                    font.bold: true
+                }
+            }
+
+            ListView {
                 id: sideMenuContent
+                model: sideMenuModel
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                Text {
-                    text: "Screen 1"
-                    anchors.centerIn: parent
+                highlight: Rectangle {
+                    color: 'grey'
                 }
 
+                delegate: Label {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 10
+                    text: name
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: sideMenuContent.currentIndex = index
+                    }
+                }
+
+                section.property: "sectionName"
+                section.criteria: ViewSection.FullString
+                section.delegate: sectionHeading
             }
 
             states: [
@@ -83,15 +115,15 @@ ApplicationWindow {
             ]
             transitions: [
                 Transition {
-                    NumberAnimation {properties: "Layout.maximumWidth"; duration: 1000}
-                    NumberAnimation {properties: "Layout.minimumWidth"; duration: 1000}
+                    NumberAnimation {properties: "Layout.maximumWidth"; duration: 80}
+                    NumberAnimation {properties: "Layout.minimumWidth"; duration: 80}
                 }
             ]
         }
 
         StackLayout {
             id: stackView
-            currentIndex: tabbar.currentIndex
+            currentIndex: root.viewIndex
             Layout.fillWidth: true
 
             Item {
