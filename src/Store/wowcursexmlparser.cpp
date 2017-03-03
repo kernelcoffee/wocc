@@ -131,6 +131,7 @@ inline void parseLatestFiles(QXmlStreamReader &reader, WowAddon* addon)
             reader.readNextStartElement();
             // Game version values
             while (reader.name() == "string") {
+                file.version = reader.readElementText();
                 //qDebug() << reader.name() << reader.readElementText() << reader.tokenString() << reader.namespaceUri();
                 reader.readNextStartElement();
             }
@@ -359,6 +360,7 @@ QVector<WowAddon *> WowCurseXmlParser::XmlToAddonList(const QString &xml) const
         reader.readNextStartElement();
         reader.readNextStartElement();
         //qDebug() << "CAddon"  << reader.name() << reader.tokenString();
+
 
         addonList << addon;
     }

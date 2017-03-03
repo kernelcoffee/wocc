@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QVector>
+#include <QMap>
 
 class WowAddon;
 
@@ -19,7 +20,7 @@ public:
 
     static QStringList getPossibleAddons(const QVector<WowAddon*> &library);
     static QVector<WowAddon*> getInstalledAddons(const QStringList &possibleAddons, const QVector<WowAddon*> &library);
-
+    static QMap<QString, QString> getInfosFromToc(const QString &tocPath);
 signals:
     void error(const QString& errString);
     void succcess(const QVector<WowAddon*> &installAddons);

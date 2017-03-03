@@ -28,6 +28,7 @@ signals:
 public slots:
     FileDownloader* refresh(bool isAsync = true);
     WowAddonDetectionWorker* detect(bool isAsync = true);
+
     void loadLibrary(bool isAsync = true);
     bool loadInstalled(bool isAsync = true);
     bool saveInstalled();

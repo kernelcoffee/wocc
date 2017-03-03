@@ -39,7 +39,7 @@ FileDownloader* CurseStore::refresh(bool isAsync)
     downloader->setFileOverride(true);
     downloader->setDestination(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
 
-    connect(downloader, &FileDownloader::finished, [this, downloader, isAsync](){
+    connect(downloader, &FileDownloader::finished, [this, downloader, &isAsync](){
         QSettings settings;
         settings.setValue("wowCurseArchive", downloader->savedFileLocation());
         loadLibrary(isAsync);
@@ -62,7 +62,7 @@ WowAddonDetectionWorker* CurseStore::detect(bool isAsync)
     }
 
     WowAddonDetectionWorker* worker = new WowAddonDetectionWorker(m_wowLibrary);
-    connect(worker, &WowAddonDetectionWorker::succcess, [this, isAsync](const QVector<WowAddon*> &result){
+    connect(worker, &WowAddonDetectionWorker::succcess, [this, &isAsync](const QVector<WowAddon*> &result){
         setWowInstalledAddons(result);
         saveInstalled();
         m_workerThread.quit();

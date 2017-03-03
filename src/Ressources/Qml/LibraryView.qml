@@ -16,10 +16,11 @@ Item {
         ScrollBar.vertical: ScrollBar { id: scrollBar }
         highlight: Rectangle {color: 'grey'}
         highlightMoveDuration: 10
-        delegate: Item {
+        delegate: Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             height: 30
+            color: versionInstalled == versionAvailable ? "transparent" : "lightgreen"
             RowLayout {
                 anchors.fill: parent
                 Label {

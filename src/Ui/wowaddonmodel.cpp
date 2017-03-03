@@ -22,6 +22,14 @@ QVariant WowAddonModel::data(const QModelIndex& index, int role) const
         if (addon->authors().count() > 0)
             return addon->authors().first().name;
         break;
+    case Installed:
+        return addon->isInstalled();
+    case InstallCount:
+        return addon->installCount();
+    case VersionAvailable:
+        return addon->versionAvailable();
+    case VersionInstalled:
+        return addon->versionInstalled();
     }
     return "Invalid";
 }
@@ -38,7 +46,10 @@ QHash<int, QByteArray> WowAddonModel::roleNames() const
         {Name, "name"},
         {Categories, "categories"},
         {InstallCount, "installCount"},
-        {Authors, "authors"}
+        {Authors, "authors"},
+        {Installed, "isInstalled"},
+        {VersionAvailable, "versionAvailable"},
+        {VersionInstalled, "versionInstalled"}
     };
 }
 

@@ -13,7 +13,10 @@ public:
         Name = Qt::UserRole,
         InstallCount,
         Categories,
-        Authors
+        Authors,
+        Installed,
+        VersionInstalled,
+        VersionAvailable
     };
 
     WowAddonModel(QObject *parent = 0);

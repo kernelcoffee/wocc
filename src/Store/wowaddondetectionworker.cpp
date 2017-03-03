@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QUrl>
 #include <QSet>
+#include <QRegularExpression>
 
 #include <QDebug>
 
@@ -117,6 +118,10 @@ QVector<WowAddon*> WowAddonDetectionWorker::getInstalledAddons(const QStringList
         }
 
         if (matches) {
+
+            addon->setIsInstalled(true);
+            auto tocInfos = getInfosFromToc(addonPath + "/" + addon->files().first().modules.first().folderName);
+            addon->setVersionInstalled(tocInfos["Version"]);
             installedAddons << addon;
         } else {
             badAddons << addon;
@@ -129,6 +134,43 @@ QVector<WowAddon*> WowAddonDetectionWorker::getInstalledAddons(const QStringList
     return installedAddons;
 }
 
+QMap<QString, QString> WowAddonDetectionWorker::getInfosFromToc(const QString &path)
+{
+    QDir dir(QUrl(path).toLocalFile());
+    QFileInfoList entries = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files);
+
+    for (const QFileInfo &entry : entries) {
+        if (entry.suffix() == "toc") {
+            QFile file(entry.absoluteFilePath());
+
+            if (!file.open(QIODevice::ReadOnly)) {
+                qWarning() << "Could not open toc file :" << entry.absoluteFilePath();
+                return QMap<QString, QString>();
+            }
+
+            QMap<QString, QString> result;
+            QTextStream inputStream(&file);
+            QRegularExpression versionPattern("^\\s*##\\s*Version:\\s*([^\\s]+)");
+            QRegularExpressionMatch match;
+            while (!inputStream.atEnd())
+            {
+                QString line = inputStream.readLine();
+
+                // Extract Version
+                match = versionPattern.match(line);
+                if (match.hasMatch()) {
+                    result["Version"] = match.captured(1);
+                }
+
+            }
+            file.close();
+            return result;
+
+        }
+    }
+    qWarning() << "Addon doesn't contain a toc file";
+    return QMap<QString, QString>();
+}
 
 // Not really optimized but it works.
 void WowAddonDetectionWorker::run()
