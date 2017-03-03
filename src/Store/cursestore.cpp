@@ -32,6 +32,11 @@ CurseStore::~CurseStore()
     qDeleteAll(m_wowLibrary);
 }
 
+QVector<WowAddon*> CurseStore::wowLibrary() const
+{
+    return m_wowLibrary;
+}
+
 FileDownloader* CurseStore::refresh(bool isAsync)
 {
     FileDownloader *downloader =  m_network->createFileDownloader();
@@ -87,6 +92,36 @@ WowAddonDetectionWorker* CurseStore::detect(bool isAsync)
     worker->run();
     worker->deleteLater();
     return nullptr;
+}
+
+void CurseStore::update(WowAddon* addon)
+{
+    qDebug() << addon->name();
+    install(addon);
+}
+
+void CurseStore::install(WowAddon* addon)
+{
+    qDebug() << addon->name();
+    qDebug() << addon->files().first().downloadUrl;
+    auto downloader = m_network->createFileDownloader();
+    downloader->setUrl(addon->files().first().downloadUrl);
+    downloader->setFileOverride(true);
+    downloader->setDestination(QStandardPaths::writableLocation(QStandardPaths::TempLocation));
+
+    connect(downloader, &FileDownloader::finished, [this, downloader](){
+        QSettings settings;
+        QString dest = QUrl(settings.value("wowDir").toString() + "/Interface/AddOns").toLocalFile();
+        FileExtractor::unzip(downloader->savedFileLocation(), dest);
+        downloader->deleteLater();
+        detect();
+    });
+    downloader->start();
+}
+
+void CurseStore::remove(WowAddon* addon)
+{
+
 }
 
 void CurseStore::loadLibrary(bool isAsync)

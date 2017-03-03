@@ -25,6 +25,7 @@ public:
 
     Q_INVOKABLE void refresh();
     Q_INVOKABLE void detect();
+    Q_INVOKABLE void update(int index);
 
     QString wowDir() const;
 

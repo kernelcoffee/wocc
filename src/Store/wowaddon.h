@@ -20,6 +20,7 @@ class WowAddon : public QObject
     Q_PROPERTY(bool isInstalled READ isInstalled NOTIFY isInstalledChanged)
     Q_PROPERTY(QString versionInstalled READ versionInstalled NOTIFY versionInstalledChanged)
     Q_PROPERTY(QString versionAvailable READ versionAvailable CONSTANT)
+    Q_PROPERTY(QUrl folderPath READ folderPath CONSTANT)
 
 public:
     struct Category {
@@ -66,6 +67,11 @@ public:
     QString versionInstalled() const;
     QString versionAvailable() const;
 
+    QUrl folderPath() const
+    {
+        return m_folderPath;
+    }
+
 public slots:
     void addFile(const File &file);
 
@@ -95,6 +101,7 @@ private:
     bool m_isInstalled = false;
     QString m_versionInstalled;
     QString m_versionAvailable;
+    QUrl m_folderPath;
 };
 
 #endif // WOWADDON_H

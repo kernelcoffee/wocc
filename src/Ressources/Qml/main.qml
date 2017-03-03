@@ -46,11 +46,9 @@ ApplicationWindow {
             name: "Dashboard"
         }
         ListElement {
-            sectionName: "wow"
             name: "Installed"
         }
         ListElement {
-            sectionName: "wow"
             name: "Library"
         }
     }

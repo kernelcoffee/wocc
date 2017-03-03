@@ -42,6 +42,11 @@ void CurseStoreController::detect()
     m_store->detect();
 }
 
+void CurseStoreController::update(int index)
+{
+    m_store->update(m_store->wowLibrary().at(index));
+}
+
 QString CurseStoreController::wowDir() const
 {
     return m_wowDir;

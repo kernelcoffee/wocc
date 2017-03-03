@@ -9,6 +9,7 @@ class FileExtractor : public QObject
 public:
     explicit FileExtractor(QObject *parent = 0);
     static QString bzip2FileToString(const QString &filePath);
+    static bool unzip(const QString &filePath, const QString &destination);
 };
 
 #endif // FILEEXTRACTOR_H

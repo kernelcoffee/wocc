@@ -7,7 +7,7 @@ import Wocc 1.0
 Item {
     id: libraryView
 
-    property CurseStoreController store: _database
+    property CurseStoreController store
     property alias model: listView.model
 
     ListView {
@@ -20,19 +20,33 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             height: 30
-            color: versionInstalled == versionAvailable ? "transparent" : "lightgreen"
+            MouseArea {
+                anchors.fill: parent
+                onClicked: listView.currentIndex = index
+            }
             RowLayout {
                 anchors.fill: parent
                 Label {
                     text: name
                 }
+                Button {
+                    visible: versionInstalled != versionAvailable
+                    text: qsTr("Update")
+                    height: parent.height
+                    onClicked: {
+                        console.log(index)
+                        store.update(index);
+                    }
+                }
                 Label {
                     text: authors
                 }
-            }
-            MouseArea {
-                anchors.fill: parent
-                onClicked: listView.currentIndex = index
+                Label {
+                    text: versionAvailable
+                }
+                Label {
+                    text: versionInstalled
+                }
             }
         }
     }

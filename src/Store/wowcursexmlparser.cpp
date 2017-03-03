@@ -113,8 +113,8 @@ inline void parseLatestFiles(QXmlStreamReader &reader, WowAddon* addon)
         file.date = QDateTime::fromString(reader.readElementText(), Qt::ISODate);
         // FileName
         reader.readNextStartElement();
-        // qDebug() << "FileName" << reader.name() << reader.tokenString();
-        reader.readNextStartElement();
+        file.version = reader.readElementText();
+        qDebug() << "FileName" << reader.name() << reader.tokenString();
         // FileStatus
         reader.readNextStartElement();
         if (reader.name() != "FileStatus") {
@@ -127,16 +127,10 @@ inline void parseLatestFiles(QXmlStreamReader &reader, WowAddon* addon)
             qDebug() << "GameVersion" << reader.name() << reader.tokenString();
         }
         reader.readNextStartElement();
-        if (reader.name() == "string") {
+        while (reader.name() == "string") {
             reader.readNextStartElement();
             // Game version values
-            while (reader.name() == "string") {
-                file.version = reader.readElementText();
-                //qDebug() << reader.name() << reader.readElementText() << reader.tokenString() << reader.namespaceUri();
-                reader.readNextStartElement();
-            }
         }
-
         // Id
         reader.readNextStartElement();
         if (reader.name() != "Id" || !reader.isStartElement()) {

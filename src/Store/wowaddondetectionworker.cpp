@@ -122,6 +122,7 @@ QVector<WowAddon*> WowAddonDetectionWorker::getInstalledAddons(const QStringList
             addon->setIsInstalled(true);
             auto tocInfos = getInfosFromToc(addonPath + "/" + addon->files().first().modules.first().folderName);
             addon->setVersionInstalled(tocInfos["Version"]);
+            qDebug() << addon->name() << addon->versionAvailable() << addon->versionInstalled();
             installedAddons << addon;
         } else {
             badAddons << addon;
@@ -151,6 +152,7 @@ QMap<QString, QString> WowAddonDetectionWorker::getInfosFromToc(const QString &p
             QMap<QString, QString> result;
             QTextStream inputStream(&file);
             QRegularExpression versionPattern("^\\s*##\\s*Version:\\s*([^\\s]+)");
+            QRegularExpression xversionPattern("^\\s*##\\s*X-Curse-Packaged-Version:\\s*([^\\s]+)");
             QRegularExpressionMatch match;
             while (!inputStream.atEnd())
             {
@@ -160,6 +162,11 @@ QMap<QString, QString> WowAddonDetectionWorker::getInfosFromToc(const QString &p
                 match = versionPattern.match(line);
                 if (match.hasMatch()) {
                     result["Version"] = match.captured(1);
+                }
+
+                match = xversionPattern.match(line);
+                if (match.hasMatch()) {
+                    result["version"] = match.captured(1);
                 }
 
             }
