@@ -114,7 +114,6 @@ inline void parseLatestFiles(QXmlStreamReader &reader, WowAddon* addon)
         // FileName
         reader.readNextStartElement();
         file.version = reader.readElementText();
-        qDebug() << "FileName" << reader.name() << reader.tokenString();
         // FileStatus
         reader.readNextStartElement();
         if (reader.name() != "FileStatus") {

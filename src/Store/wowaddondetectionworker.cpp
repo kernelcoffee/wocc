@@ -118,11 +118,9 @@ QVector<WowAddon*> WowAddonDetectionWorker::getInstalledAddons(const QStringList
         }
 
         if (matches) {
-
             addon->setIsInstalled(true);
             auto tocInfos = getInfosFromToc(addonPath + "/" + addon->files().first().modules.first().folderName);
-            addon->setVersionInstalled(tocInfos["Version"]);
-            qDebug() << addon->name() << addon->versionAvailable() << addon->versionInstalled();
+            qDebug() << addon->name() << tocInfos;
             installedAddons << addon;
         } else {
             badAddons << addon;
@@ -151,28 +149,27 @@ QMap<QString, QString> WowAddonDetectionWorker::getInfosFromToc(const QString &p
 
             QMap<QString, QString> result;
             QTextStream inputStream(&file);
-            QRegularExpression versionPattern("^\\s*##\\s*Version:\\s*([^\\s]+)");
-            QRegularExpression xversionPattern("^\\s*##\\s*X-Curse-Packaged-Version:\\s*([^\\s]+)");
-            QRegularExpressionMatch match;
-            while (!inputStream.atEnd())
-            {
-                QString line = inputStream.readLine();
-
-                // Extract Version
-                match = versionPattern.match(line);
-                if (match.hasMatch()) {
-                    result["Version"] = match.captured(1);
+            QMap<QString, QRegularExpression> patternMap;
+            patternMap["Version"] = QRegularExpression("^\\s*##\\s*Version:\\s*([^\\s]+)");
+            patternMap["X-Curse-Packaged-Version"] = QRegularExpression("^\\s*##\\s*X-Curse-Packaged-Version:\\s*([^\\s]+)");
+            patternMap["X-Curse-Project-ID"] = QRegularExpression("^\\s*##\\s*X-Curse-Project-ID:\\s*([^\\s]+)");
+            patternMap["Dependencies"] = QRegularExpression("^\\s*##\\s*Dependencies:\\s*([^\\s]+)");
+            patternMap["OptionalDeps"] = QRegularExpression("^\\s*##\\s*OptionalDeps:\\s*([^\\s]+)");
+            patternMap["X-Child-Of"] = QRegularExpression("^\\s*##\\s*X-Child-Of:\\s*([^\\s]+)");
+            QString line;
+            while (!inputStream.atEnd()) {
+                line = inputStream.readLine();
+                QMapIterator<QString, QRegularExpression> it(patternMap);
+                while (it.hasNext()) {
+                    it.next();
+                    auto match = it.value().match(line);
+                    if (match.hasMatch()) {
+                        result[it.key()] = match.captured(1);
+                    }
                 }
-
-                match = xversionPattern.match(line);
-                if (match.hasMatch()) {
-                    result["version"] = match.captured(1);
-                }
-
             }
             file.close();
             return result;
-
         }
     }
     qWarning() << "Addon doesn't contain a toc file";
