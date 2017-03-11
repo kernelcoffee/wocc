@@ -23,51 +23,57 @@ CONFIG(console_mode) {
     QT += qml quick widgets
 
     RESOURCES += \
-            Ressources/Qml/qml.qrc
+            ressources/qml/qml.qrc
 
     # Default rules for deployment.
     include(deployment.pri)
     message(ui mode enabled)
 
 HEADERS += \
-    Ui/uicore.h \
+    ui/uicore.h \
 
 SOURCES += \
-    Ui/uicore.cpp \
+    ui/uicore.cpp \
 }
 
 HEADERS += \
     common.h \
     coremanager.h \
-    Utilities/logger.h \
-    Utilities/singleton.h \
-    Abstracts/abstractcore.h \
+    utilities/logger.h \
+    utilities/singleton.h \
+    abstracts/abstractcore.h \
     woccapplication.h \
-    Network/networkcore.h \
-    Network/filedownloader.h \
-    Console/consolecore.h \
-    Ui/wowaddonmodel.h \
-    Utilities/fileextractor.h \
-    Store/cursestore.h \
-    Store/storecore.h \
-    Store/wowcursexmlparser.h \
-    Store/wowaddon.h \
-    Ui/cursestorecontroller.h \
-    Store/wowaddondetectionworker.h
+    network/networkcore.h \
+    network/filedownloader.h \
+    console/consolecore.h \
+    ui/wowaddonmodel.h \
+    utilities/fileextractor.h \
+    store/storecore.h \
+    store/curse/worldofwarcraft/wowaddondetectionworker.h \
+    ui/cursestorecontroller.h \
+    abstracts/abstractaddon.h \
+    abstracts/abstractgame.h \
+    store/curse/xmlparser.h \
+    store/curse/worldofwarcraft/worldofwarcraft.h \
+    store/curse/addon.h \
+    store/curse/store.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
-    Utilities/logger.cpp \
-    Abstracts/abstractcore.cpp \
+    utilities/logger.cpp \
+    abstracts/abstractcore.cpp \
     woccapplication.cpp \
-    Network/networkcore.cpp \
-    Network/filedownloader.cpp \
-    Console/consolecore.cpp \
-    Ui/wowaddonmodel.cpp \
-    Utilities/fileextractor.cpp \
-    Store/cursestore.cpp \
-    Store/storecore.cpp \
-    Store/wowcursexmlparser.cpp \
-    Store/wowaddon.cpp \
-    Ui/cursestorecontroller.cpp \
-    Store/wowaddondetectionworker.cpp
+    network/networkcore.cpp \
+    network/filedownloader.cpp \
+    console/consolecore.cpp \
+    ui/wowaddonmodel.cpp \
+    utilities/fileextractor.cpp \
+    store/storecore.cpp \
+    store/curse/worldofwarcraft/wowaddondetectionworker.cpp \
+    ui/cursestorecontroller.cpp \
+    abstracts/abstractaddon.cpp \
+    abstracts/abstractgame.cpp \
+    store/curse/xmlparser.cpp \
+    store/curse/worldofwarcraft/worldofwarcraft.cpp \
+    store/curse/addon.cpp \
+    store/curse/store.cpp

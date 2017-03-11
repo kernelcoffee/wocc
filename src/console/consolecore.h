@@ -1,13 +1,13 @@
 #ifndef CONSOLECORE_H
 #define CONSOLECORE_H
 
-#include "Abstracts/abstractcore.h"
+#include "abstracts/abstractcore.h"
 #include <QCommandLineOption>
 #include <QMap>
 #include <functional>
 
 class CoreManager;
-class StoreCore;
+class storeCore;
 
 class ConsoleCore : public AbstractCore
 {
@@ -35,7 +35,7 @@ private:
     QStringList m_args;
 
     CoreManager* m_cores = nullptr;
-    StoreCore* m_stores = nullptr;
+    storeCore* m_stores = nullptr;
 
     QMap<QString, std::function<void ()>> m_commandMap;
 };

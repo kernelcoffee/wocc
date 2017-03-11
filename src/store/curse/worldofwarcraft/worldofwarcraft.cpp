@@ -1,6 +1,7 @@
 #include "worldofwarcraft.h"
 
-WorldOfWarcraft::WorldOfWarcraft(QObject *parent) : QObject(parent)
+WorldOfWarcraft::WorldOfWarcraft(QObject *parent) :
+    AbstractGame(parent)
 {
 
 }

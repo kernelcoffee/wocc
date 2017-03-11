@@ -1,7 +1,7 @@
 #ifndef NETWORKCORE_H
 #define NETWORKCORE_H
 
-#include "Abstracts/abstractcore.h"
+#include "abstracts/abstractcore.h"
 
 class FileDownloader;
 class QNetworkAccessManager;

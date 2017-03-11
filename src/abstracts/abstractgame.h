@@ -1,11 +1,12 @@
 #ifndef ABSTRACTGAME_H
 #define ABSTRACTGAME_H
 
+#include <QObject>
 
-class AbstractGame
+class AbstractGame : public QObject
 {
 public:
-    AbstractGame();
+    AbstractGame(QObject *parent = 0);
 };
 
 #endif // ABSTRACTGAME_H

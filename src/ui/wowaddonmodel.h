@@ -3,7 +3,9 @@
 
 #include <QAbstractListModel>
 
-class WowAddon;
+namespace Curse {
+    class Addon;
+}
 
 class WowAddonModel : public QAbstractListModel
 {
@@ -26,10 +28,10 @@ public:
     QHash<int, QByteArray>  roleNames() const override;
 
 public slots:
-    void setData(const QVector<WowAddon*>& data);
+    void setData(const QVector<Curse::Addon*>& data);
 
 private:
-    QVector<WowAddon*> m_data;
+    QVector<Curse::Addon*> m_data;
 };
 
 #endif // WOWADDONMODEL_H

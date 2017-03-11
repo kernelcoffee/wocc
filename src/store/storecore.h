@@ -1,20 +1,24 @@
 #ifndef STORECORE_H
 #define STORECORE_H
 
-#include "Abstracts/abstractcore.h"
+#include "abstracts/abstractcore.h"
+#include "curse/store.h"
 
 class CoreManager;
-class CurseStore;
 
-class StoreCore : public AbstractCore
+class storeCore : public AbstractCore
 {
     Q_OBJECT
 public:
-    explicit StoreCore(CoreManager *parent = nullptr);
+    enum class Games {
+        WorldOfWarcraft
+    };
 
-    CurseStore* curseStore() const;
+    explicit storeCore(CoreManager *parent = nullptr);
+
+    Curse::Store* curse() const;
 private:
-    CurseStore* m_curseStore;
+    Curse::Store* m_curse;
 };
 
 #endif // STORECORE_H

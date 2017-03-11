@@ -3,10 +3,12 @@
 
 #include <QObject>
 
-class CurseStore;
+namespace Curse {
+class Store;
+}
 class WowAddonModel;
 
-class CurseStoreController : public QObject
+class CursestoreController : public QObject
 {
     Q_OBJECT
 
@@ -20,8 +22,8 @@ public:
         Detecting
     };
 
-    CurseStoreController() {}
-    explicit CurseStoreController(CurseStore* store, QObject *parent = nullptr);
+    CursestoreController() {}
+    explicit CursestoreController(Curse::Store* store, QObject *parent = nullptr);
 
     Q_INVOKABLE void refresh();
     Q_INVOKABLE void detect();
@@ -39,7 +41,7 @@ signals:
     void wowDirChanged(const QString &wowDir);
 
 private:
-    CurseStore* m_store;
+    Curse::Store* m_store;
     WowAddonModel* m_wowModel;
     WowAddonModel* m_wowInstalledModel;
 

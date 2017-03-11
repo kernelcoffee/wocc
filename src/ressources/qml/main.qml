@@ -14,7 +14,7 @@ ApplicationWindow {
     minimumHeight: 600
     minimumWidth: 800
 
-    property CurseStoreController store: _curseStore
+    property CursestoreController store: _cursestore
     property bool hideSidebar: false
     property alias viewIndex: sideMenuContent.currentIndex
 

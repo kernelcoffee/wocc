@@ -1,15 +1,15 @@
 #include "storecore.h"
 #include "coremanager.h"
-#include "Store/cursestore.h"
+#include "store/curse/store.h"
 
-StoreCore::StoreCore(CoreManager *parent) :
+storeCore::storeCore(CoreManager *parent) :
     AbstractCore(parent)
-  , m_curseStore(new CurseStore(parent->network()))
+  , m_curse(new Curse::Store(parent->network()))
 {
 
 }
 
-CurseStore*StoreCore::curseStore() const
+Curse::Store* storeCore::curse() const
 {
-    return m_curseStore;
+    return m_curse;
 }

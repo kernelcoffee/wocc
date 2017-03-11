@@ -56,7 +56,7 @@ void Logger::log(QtMsgType type, const QMessageLogContext &context, const QStrin
             + logLevel_str[type]
             + ",\t" + context.file
             + ",\t" + QString::number(context.line)
-            + ",\t" + context.function
+//            + ",\t" + context.function
             + ",\t" + msg
             + "\n";
     std::cerr << message.toStdString();

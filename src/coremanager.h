@@ -1,14 +1,14 @@
 #ifndef COREMANAGER_H
 #define COREMANAGER_H
 
-#include "Abstracts/abstractcore.h"
+#include "abstracts/abstractcore.h"
 
 #include <QObject>
 #include <QList>
 
 class ConsoleCore;
 class NetworkCore;
-class StoreCore;
+class storeCore;
 
 #ifndef console_mode
 class UiCore;
@@ -29,7 +29,7 @@ public:
     bool consoleMode();
 
     NetworkCore* network() const;
-    StoreCore* stores() const;
+    storeCore* stores() const;
 
 public slots:
     void delayedInit();
@@ -49,7 +49,7 @@ private:
 
     NetworkCore *m_network = nullptr;
     ConsoleCore *m_console = nullptr;
-    StoreCore *m_stores = nullptr;
+    storeCore *m_stores = nullptr;
 };
 
 #endif // COREMANAGER_H

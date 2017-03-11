@@ -1,11 +1,11 @@
-#include "cursestore.h"
-#include "Network/networkcore.h"
-#include "Network/filedownloader.h"
-#include "Utilities/fileextractor.h"
-#include "wowcursexmlparser.h"
-#include "wowaddon.h"
+#include "store.h"
+#include "network/networkcore.h"
+#include "network/filedownloader.h"
+#include "utilities/fileextractor.h"
+#include "xmlparser.h"
+#include "addon.h"
 
-#include "wowaddondetectionworker.h"
+#include "store/curse/worldofwarcraft/wowaddondetectionworker.h"
 
 #include <QStandardPaths>
 #include <QXmlStreamReader>
@@ -19,25 +19,27 @@
 
 #include <QDebug>
 
+using namespace Curse;
+
 static constexpr char archive_url[] = "http://clientupdate.curse.com/feed/Complete.xml.bz2";
 
-CurseStore::CurseStore(NetworkCore* network, QObject *parent) :
+Store::Store(NetworkCore* network, QObject *parent) :
     QObject(parent)
   , m_network(network)
 {
 }
 
-CurseStore::~CurseStore()
+Store::~Store()
 {
     qDeleteAll(m_wowLibrary);
 }
 
-QVector<WowAddon*> CurseStore::wowLibrary() const
+QVector<Addon*> Store::wowLibrary() const
 {
     return m_wowLibrary;
 }
 
-FileDownloader* CurseStore::refresh(bool isAsync)
+FileDownloader* Store::refresh(bool isAsync)
 {
     FileDownloader *downloader =  m_network->createFileDownloader();
     downloader->setUrl(archive_url);
@@ -59,7 +61,7 @@ FileDownloader* CurseStore::refresh(bool isAsync)
     return downloader;
 }
 
-WowAddonDetectionWorker* CurseStore::detect(bool isAsync)
+WowAddonDetectionWorker* Store::detect(bool isAsync)
 {
     if (isAsync && m_workerThread.isRunning()) {
         qDebug() << "job is already running";
@@ -67,7 +69,7 @@ WowAddonDetectionWorker* CurseStore::detect(bool isAsync)
     }
 
     WowAddonDetectionWorker* worker = new WowAddonDetectionWorker(m_wowLibrary);
-    connect(worker, &WowAddonDetectionWorker::succcess, [this, &isAsync](const QVector<WowAddon*> &result){
+    connect(worker, &WowAddonDetectionWorker::succcess, [this, &isAsync](const QVector<Addon*> &result){
         setWowInstalledAddons(result);
         saveInstalled();
         m_workerThread.quit();
@@ -94,13 +96,13 @@ WowAddonDetectionWorker* CurseStore::detect(bool isAsync)
     return nullptr;
 }
 
-void CurseStore::update(WowAddon* addon)
+void Store::update(Addon* addon)
 {
     qDebug() << addon->name();
     install(addon);
 }
 
-void CurseStore::install(WowAddon* addon)
+void Store::install(Addon* addon)
 {
     qDebug() << addon->name();
     qDebug() << addon->files().first().downloadUrl;
@@ -119,12 +121,12 @@ void CurseStore::install(WowAddon* addon)
     downloader->start();
 }
 
-void CurseStore::remove(WowAddon* addon)
+void Store::remove(Addon* addon)
 {
 
 }
 
-void CurseStore::loadLibrary(bool isAsync)
+void Store::loadLibrary(bool isAsync)
 {
     if (isAsync && m_workerThread.isRunning()) {
         qDebug() << "job is already running";
@@ -132,7 +134,7 @@ void CurseStore::loadLibrary(bool isAsync)
     }
 
     QSettings settings;
-    WowCurseXmlParser parser;
+    XmlParser parser;
     QString xmlOutput = FileExtractor::bzip2FileToString(settings.value("wowCurseArchive").toString());
 
     m_wowLibrary = parser.XmlToAddonList(xmlOutput);
@@ -140,7 +142,7 @@ void CurseStore::loadLibrary(bool isAsync)
     emit wowLibraryUpdated(m_wowLibrary);
 }
 
-bool CurseStore::loadInstalled(bool isAsync)
+bool Store::loadInstalled(bool isAsync)
 {
     QFile loadFile(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/installed.json");
     if (!loadFile.open(QIODevice::ReadOnly)) {
@@ -149,17 +151,17 @@ bool CurseStore::loadInstalled(bool isAsync)
     }
     QByteArray data = loadFile.readAll();
     const QStringList &savedAddonsList = QString::fromLocal8Bit(data).split(';');
-    const QVector<WowAddon*> &installedAddons = WowAddonDetectionWorker::getInstalledAddons(savedAddonsList, m_wowLibrary);
+    const QVector<Addon*> &installedAddons = WowAddonDetectionWorker::getInstalledAddons(savedAddonsList, m_wowLibrary);
     setWowInstalledAddons(installedAddons);
     qDebug() << installedAddons.count() << "addons loaded";
     return true;
 }
 
-bool CurseStore::saveInstalled()
+bool Store::saveInstalled()
 {
     QList<QString> installedAddons;
 
-    for (WowAddon* addon : m_wowInstalled) {
+    for (Addon* addon : m_wowInstalled) {
         installedAddons << addon->shortName();
     }
 
@@ -182,7 +184,7 @@ bool CurseStore::saveInstalled()
     return true;
 }
 
-void CurseStore::setWowInstalledAddons(const QVector<WowAddon*>& installedAddons)
+void Store::setWowInstalledAddons(const QVector<Addon*>& installedAddons)
 {
     m_wowInstalled = installedAddons;
     emit wowInstalledListUpdated(installedAddons);

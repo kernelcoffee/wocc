@@ -1,12 +1,12 @@
 #ifndef UICORE_H
 #define UICORE_H
 
-#include "Abstracts/abstractcore.h"
+#include "abstracts/abstractcore.h"
 #include <QQmlApplicationEngine>
 
 class CoreManager;
-class CurseStoreController;
-class StoreCore;
+class CursestoreController;
+class storeCore;
 
 
 class UiCore : public AbstractCore
@@ -23,8 +23,8 @@ private:
 
     QQmlApplicationEngine m_engine;
 
-    StoreCore* m_stores = nullptr;
-    CurseStoreController* m_cStoreController = nullptr;
+    storeCore* m_stores = nullptr;
+    CursestoreController* m_cstoreController = nullptr;
 };
 
 #endif // UICORE_H

@@ -1,5 +1,5 @@
 #include "wowaddondetectionworker.h"
-#include "wowaddon.h"
+#include "store/curse/addon.h"
 
 #include <QSettings>
 #include <QDir>
@@ -9,7 +9,9 @@
 
 #include <QDebug>
 
-WowAddonDetectionWorker::WowAddonDetectionWorker(const QVector<WowAddon*> &library, QObject *parent) :
+using namespace Curse;
+
+WowAddonDetectionWorker::WowAddonDetectionWorker(const QVector<Addon*> &library, QObject *parent) :
     QObject(parent)
   , m_library(library)
 {
@@ -21,12 +23,9 @@ uint WowAddonDetectionWorker::progress() const
     return m_progress;
 }
 
-QStringList WowAddonDetectionWorker::getPossibleAddons(const QVector<WowAddon*>& library)
+QStringList WowAddonDetectionWorker::getPossibleAddons(const QString &path, const QVector<Addon*>& library)
 {
-    QSettings settings;
-
-    const QString &addonPath = settings.value("wowDir").toString() + "/Interface/AddOns";
-    QDir dir(QUrl(addonPath).toLocalFile());
+    QDir dir(QUrl(path).toLocalFile());
 
     if (!dir.exists()) {
         qDebug()  << "Addon path doesn't exist";
@@ -70,11 +69,12 @@ QStringList WowAddonDetectionWorker::getPossibleAddons(const QVector<WowAddon*>&
     return possibleAddons;
 }
 
-QVector<WowAddon*> WowAddonDetectionWorker::getInstalledAddons(const QStringList& possibleAddons, const QVector<WowAddon*>& library)
+QVector<Addon*> WowAddonDetectionWorker::getInstalledAddons(const QStringList& possibleAddons, const QVector<Addon*>& library)
 {
     // We'll detect addon by matching the folders to what they contains.
-    QVector<WowAddon*> badAddons;
-    QVector<WowAddon*> installedAddons;
+    QVector<Addon*> badAddons;
+    QVector<Addon*> installedAddons;
+    QVector<Addon*> updatableAddons;
     QSettings settings;
 
     const QString &addonPath = settings.value("wowDir").toString() + "/Interface/AddOns";
@@ -85,7 +85,7 @@ QVector<WowAddon*> WowAddonDetectionWorker::getInstalledAddons(const QStringList
     for (const QString &possibleAddon : possibleAddons) {
 
         // let's retrieve the AddOn using the shortname
-        auto itObj = std::find_if(library.begin(), library.end(), [=](WowAddon* addon){
+        auto itObj = std::find_if(library.begin(), library.end(), [=](Addon* addon){
             return addon->shortName() == possibleAddon;
         });
 
@@ -93,7 +93,7 @@ QVector<WowAddon*> WowAddonDetectionWorker::getInstalledAddons(const QStringList
             continue;
         }
 
-        WowAddon* addon = (*itObj);
+        Addon* addon = (*itObj);
         int addonFolderDetected = 0;
         bool matches = false;
 
@@ -120,7 +120,13 @@ QVector<WowAddon*> WowAddonDetectionWorker::getInstalledAddons(const QStringList
         if (matches) {
             addon->setIsInstalled(true);
             auto tocInfos = getInfosFromToc(addonPath + "/" + addon->files().first().modules.first().folderName);
-            qDebug() << addon->name() << tocInfos;
+            //            qDebug() << addon->name() << tocInfos;
+            if (tocInfos.contains("X-Curse-Project-ID") && addon->shortName() == tocInfos["X-Curse-Project-ID"]) {
+                updatableAddons << addon;
+                qDebug() << addon->shortName() << "found to curse database" << tocInfos;
+            } else {
+                qDebug() << addon->shortName() << "is not a root addon" << tocInfos;
+            }
             installedAddons << addon;
         } else {
             badAddons << addon;
@@ -179,10 +185,15 @@ QMap<QString, QString> WowAddonDetectionWorker::getInfosFromToc(const QString &p
 // Not really optimized but it works.
 void WowAddonDetectionWorker::run()
 {
-    const QStringList &possibleAddons = getPossibleAddons(m_library);
+    QSettings settings;
+
+    const QString &addonDirPath = settings.value("wowDir").toString() + "/Interface/AddOns";
+
+    const QStringList &possibleAddons = getPossibleAddons(addonDirPath, m_library);
+
     qDebug() << "Premiminary addon detection :" << possibleAddons.count();
 
-    const QVector<WowAddon*> &installedAddons = getInstalledAddons(possibleAddons, m_library);
+    const QVector<Addon*> &installedAddons = getInstalledAddons(possibleAddons, m_library);
 
     emit succcess(installedAddons);
 }

@@ -1,5 +1,5 @@
 #include "wowaddonmodel.h"
-#include "Store/wowaddon.h"
+#include "store/curse/addon.h"
 #include <QDebug>
 
 WowAddonModel::WowAddonModel(QObject *parent) :
@@ -13,7 +13,7 @@ QVariant WowAddonModel::data(const QModelIndex& index, int role) const
     if (m_data.isEmpty() || index.row() < 0 || index.row() > rowCount())
         return QVariant();
 
-    WowAddon* addon = m_data.at(index.row());
+    Curse::Addon* addon = m_data.at(index.row());
 
     switch (role) {
     case Name:
@@ -53,7 +53,7 @@ QHash<int, QByteArray> WowAddonModel::roleNames() const
     };
 }
 
-void WowAddonModel::setData(const QVector<WowAddon*>& data)
+void WowAddonModel::setData(const QVector<Curse::Addon*>& data)
 {
     qDebug() << "Update data" << data.count();
     beginResetModel();

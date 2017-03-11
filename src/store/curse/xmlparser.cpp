@@ -1,10 +1,12 @@
-#include "wowcursexmlparser.h"
-#include "wowaddon.h"
+#include "xmlparser.h"
+#include "addon.h"
 
 #include <QXmlStreamReader>
 #include <QDebug>
 
-inline void parseAuthors(QXmlStreamReader &reader, WowAddon* addon)
+using namespace Curse;
+
+inline void parseAuthors(QXmlStreamReader &reader, Addon* addon)
 {
     reader.readNextStartElement();
     while (reader.isStartElement() && reader.name() == "CAddOnAuthor") {
@@ -18,7 +20,7 @@ inline void parseAuthors(QXmlStreamReader &reader, WowAddon* addon)
     }
 }
 
-inline void parseCategories(QXmlStreamReader &reader, WowAddon* addon)
+inline void parseCategories(QXmlStreamReader &reader, Addon* addon)
 {
     reader.readNextStartElement();
     while (reader.isStartElement() && reader.name() == "CAddOnCategory") {
@@ -34,7 +36,7 @@ inline void parseCategories(QXmlStreamReader &reader, WowAddon* addon)
     }
 }
 
-inline void parseCategorySection(QXmlStreamReader &reader, WowAddon* addon)
+inline void parseCategorySection(QXmlStreamReader &reader, Addon* addon)
 {
     // ExtraIncludePattern
     reader.readNextStartElement();
@@ -68,9 +70,9 @@ inline void parseCategorySection(QXmlStreamReader &reader, WowAddon* addon)
     reader.readNextStartElement();
 }
 
-inline void parseLatestFiles(QXmlStreamReader &reader, WowAddon* addon)
+inline void parseLatestFiles(QXmlStreamReader &reader, Addon* addon)
 {
-    WowAddon::File file;
+    Addon::File file;
 
     reader.readNextStartElement();
     // qDebug() << "CAddonFile" << reader.name() << reader.tokenString();
@@ -158,7 +160,7 @@ inline void parseLatestFiles(QXmlStreamReader &reader, WowAddon* addon)
         // CAddOnModule
         // qDebug() << "CAddOnModule" << reader.name() << reader.tokenString();
         while (reader.isStartElement() && reader.name() == "CAddOnModule") {
-            WowAddon::Module module;
+            Addon::Module module;
             // Fingerprint
             reader.readNextStartElement();
             // qDebug() << "Fingerprint" << reader.name() << reader.tokenString();
@@ -195,16 +197,16 @@ inline void parseLatestFiles(QXmlStreamReader &reader, WowAddon* addon)
     addon->addFile(file);
 }
 
-WowCurseXmlParser::WowCurseXmlParser(QObject *parent) :
+XmlParser::XmlParser(QObject *parent) :
     QObject(parent)
 {
 
 }
 
-QVector<WowAddon *> WowCurseXmlParser::XmlToAddonList(const QString &xml) const
+QVector<Addon *> XmlParser::XmlToAddonList(const QString &xml) const
 {
     QXmlStreamReader reader(xml);
-    QVector<WowAddon *> addonList;
+    QVector<Addon *> addonList;
 
 //    int n = 0;
     reader.readNextStartElement();
@@ -217,7 +219,7 @@ QVector<WowAddon *> WowCurseXmlParser::XmlToAddonList(const QString &xml) const
 //        if (n > 1)
 //            continue;
 
-        WowAddon* addon = new WowAddon;
+        Addon* addon = new Addon;
 
         // Authors
         if (reader.name() != "Authors") {

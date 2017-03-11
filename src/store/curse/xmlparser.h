@@ -4,18 +4,22 @@
 #include <QObject>
 #include <QVector>
 
-class WowAddon;
+namespace Curse {
+class Addon;
+}
 
+namespace Curse {
 
 // XmlParser for the xml file from Curse
 // too fragile IMHO, should be more fault tolerant to scheme changes
-class WowCurseXmlParser : public QObject
+class XmlParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit WowCurseXmlParser(QObject *parent = 0);
+    explicit XmlParser(QObject *parent = 0);
 
-    QVector<WowAddon*> XmlToAddonList(const QString &xml) const;
+    QVector<Curse::Addon*> XmlToAddonList(const QString &xml) const;
 };
 
+}
 #endif // WOWCURSEXMLPARSER_H

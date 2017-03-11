@@ -1,7 +1,7 @@
 #include "consolecore.h"
 #include "coremanager.h"
-#include "Store/storecore.h"
-#include "Store/cursestore.h"
+#include "store/storecore.h"
+#include "store/curse/store.h"
 
 #include <QDebug>
 
@@ -60,12 +60,12 @@ void ConsoleCore::delayedInit()
 void ConsoleCore::update()
 {
     qDebug() << "update";
-    m_stores->curseStore()->refresh(false);
+    m_stores->curse()->refresh(false);
 }
 
 void ConsoleCore::detect()
 {
     qDebug() << "detect";
-    m_stores->curseStore()->refresh(false);
-    m_stores->curseStore()->detect();
+    m_stores->curse()->refresh(false);
+    m_stores->curse()->detect();
 }

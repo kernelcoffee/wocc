@@ -7,7 +7,9 @@
 #include <QDateTime>
 #include <QList>
 
-class WowAddon : public QObject
+namespace Curse {
+
+class Addon : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(uint id READ id CONSTANT)
@@ -21,6 +23,7 @@ class WowAddon : public QObject
     Q_PROPERTY(QString versionInstalled READ versionInstalled NOTIFY versionInstalledChanged)
     Q_PROPERTY(QString versionAvailable READ versionAvailable CONSTANT)
     Q_PROPERTY(QUrl folderPath READ folderPath CONSTANT)
+    Q_PROPERTY(bool updateAvailable READ updateAvailable NOTIFY updateAvailableChanged)
 
 public:
     struct Category {
@@ -47,7 +50,7 @@ public:
         QList<Module> modules;
     };
 
-    explicit WowAddon(QObject *parent = nullptr);
+    explicit Addon(QObject *parent = nullptr);
 
 
     void addAuthor(const QString& name, const QString& url);
@@ -66,11 +69,8 @@ public:
     bool isInstalled() const;
     QString versionInstalled() const;
     QString versionAvailable() const;
-
-    QUrl folderPath() const
-    {
-        return m_folderPath;
-    }
+    QUrl folderPath() const;
+    bool updateAvailable() const;
 
 public slots:
     void addFile(const File &file);
@@ -86,6 +86,7 @@ public slots:
 signals:
     void isInstalledChanged(bool isInstalled);
     void versionInstalledChanged(const QString &versionInstalled);
+    void updateAvailableChanged(bool updateAvailable);
 
 private:
     uint m_id;
@@ -102,6 +103,9 @@ private:
     QString m_versionInstalled;
     QString m_versionAvailable;
     QUrl m_folderPath;
+    bool m_updateAvailable;
 };
+
+}
 
 #endif // WOWADDON_H

@@ -1,6 +1,7 @@
 #include "abstractgame.h"
 
-AbstractGame::AbstractGame()
+AbstractGame::AbstractGame(QObject *parent) :
+    QObject(parent)
 {
 
 }

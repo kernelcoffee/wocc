@@ -1,6 +1,6 @@
 #include "woccapplication.h"
 #include "common.h"
-#include "Utilities/logger.h"
+#include "utilities/logger.h"
 
 #include <QSettings>
 #include <QLoggingCategory>

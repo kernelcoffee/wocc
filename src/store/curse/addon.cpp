@@ -1,22 +1,24 @@
-#include "wowaddon.h"
+#include "addon.h"
 #include <QDebug>
 
-WowAddon::WowAddon(QObject *parent) :
+using namespace Curse;
+
+Addon::Addon(QObject *parent) :
     QObject(parent)
 {
 }
 
-void WowAddon::addAuthor(const QString& name, const QString& url)
+void Addon::addAuthor(const QString& name, const QString& url)
 {
     m_authors.append(Author({name, url}));
 }
 
-void WowAddon::addCategory(int id, const QString& name, const QString& url)
+void Addon::addCategory(int id, const QString& name, const QString& url)
 {
     m_categories.append(Category({id, name, url}));
 }
 
-void WowAddon::printContent()
+void Addon::printContent()
 {
     qDebug() << m_name << m_shortName;
     for (auto file : m_files) {
@@ -28,83 +30,93 @@ void WowAddon::printContent()
     }
 }
 
-uint WowAddon::id() const
+uint Addon::id() const
 {
     return m_id;
 }
 
-QString WowAddon::name() const
+QString Addon::name() const
 {
     return m_name;
 }
 
-QString WowAddon::shortName() const
+QString Addon::shortName() const
 {
     return m_shortName;
 }
 
-bool WowAddon::isInstalled() const
+bool Addon::isInstalled() const
 {
     return m_isInstalled;
 }
 
-QString WowAddon::versionInstalled() const
+QString Addon::versionInstalled() const
 {
     return m_versionInstalled;
 }
 
-QString WowAddon::versionAvailable() const
+QString Addon::versionAvailable() const
 {
     return m_files.first().version;
 }
 
-QString WowAddon::summary() const
+QUrl Addon::folderPath() const
+{
+    return m_folderPath;
+}
+
+bool Addon::updateAvailable() const
+{
+    return m_updateAvailable;
+}
+
+QString Addon::summary() const
 {
     return m_summary;
 }
 
-uint WowAddon::installCount() const
+uint Addon::installCount() const
 {
     return m_installCount;
 }
 
-QList<WowAddon::Author> WowAddon::authors() const
+QList<Addon::Author> Addon::authors() const
 {
     return m_authors;
 }
 
-QList<WowAddon::File> WowAddon::files()
+QList<Addon::File> Addon::files()
 {
     return m_files;
 }
 
-QUrl WowAddon::websiteUrl() const
+QUrl Addon::websiteUrl() const
 {
     return m_websiteUrl;
 }
 
-void WowAddon::setId(uint id)
+void Addon::setId(uint id)
 {
     m_id = id;
 }
 
-void WowAddon::setName(const QString &name)
+void Addon::setName(const QString &name)
 {
     m_name = name;
 }
 
-void WowAddon::setInstallCount(uint installCount)
+void Addon::setInstallCount(uint installCount)
 {
     m_installCount = installCount;
 }
 
-void WowAddon::setWebsiteUrl(const QString &websiteUrl)
+void Addon::setWebsiteUrl(const QString &websiteUrl)
 {
     m_shortName = websiteUrl.section('/', -1);
     m_websiteUrl = QUrl(websiteUrl);
 }
 
-void WowAddon::setIsInstalled(bool isInstalled)
+void Addon::setIsInstalled(bool isInstalled)
 {
     if (m_isInstalled == isInstalled) {
         return;
@@ -113,7 +125,7 @@ void WowAddon::setIsInstalled(bool isInstalled)
     emit isInstalledChanged(isInstalled);
 }
 
-void WowAddon::setVersionInstalled(const QString &versionInstalled)
+void Addon::setVersionInstalled(const QString &versionInstalled)
 {
     if (m_versionInstalled == versionInstalled) {
         return;
@@ -122,12 +134,12 @@ void WowAddon::setVersionInstalled(const QString &versionInstalled)
     emit versionInstalledChanged(versionInstalled);
 }
 
-void WowAddon::addFile(const WowAddon::File& file)
+void Addon::addFile(const Addon::File& file)
 {
     m_files << file;
 }
 
-void WowAddon::setSummary(const QString &summary)
+void Addon::setSummary(const QString &summary)
 {
     m_summary = summary;
 }

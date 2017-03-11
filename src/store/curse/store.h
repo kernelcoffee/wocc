@@ -7,41 +7,44 @@
 #include <QThread>
 #include <QMutex>
 
-class WowAddon;
 class NetworkCore;
 class FileDownloader;
 class WowAddonDetectionWorker;
 
-class CurseStore : public QObject
+namespace Curse {
+
+class Addon;
+
+class Store : public QObject
 {
     Q_OBJECT
 public:
-    explicit CurseStore(NetworkCore* network, QObject *parent = nullptr);
-    ~CurseStore();
+    explicit Store(NetworkCore* network, QObject *parent = nullptr);
+    ~Store();
 
-    QVector<WowAddon*> wowLibrary() const;
+    QVector<Addon*> wowLibrary() const;
 
 signals:
-    void wowLibraryUpdated(const QVector<WowAddon*> &addonList);
-    void wowInstalledListUpdated(const QVector<WowAddon*> &installedAddonList);
+    void wowLibraryUpdated(const QVector<Addon*> &addonList);
+    void wowInstalledListUpdated(const QVector<Addon*> &installedAddonList);
 
 public slots:
     FileDownloader* refresh(bool isAsync = true);
     WowAddonDetectionWorker* detect(bool isAsync = true);
-    void update(WowAddon* addon);
-    void install(WowAddon* addon);
-    void remove(WowAddon* addon);
+    void update(Addon* addon);
+    void install(Addon* addon);
+    void remove(Addon* addon);
 
     void loadLibrary(bool isAsync = true);
     bool loadInstalled(bool isAsync = true);
     bool saveInstalled();
 
 private slots:
-    void setWowInstalledAddons(const QVector<WowAddon*> &installedAddons);
+    void setWowInstalledAddons(const QVector<Addon*> &installedAddons);
 
 private:
-    QVector<WowAddon*> m_wowLibrary;
-    QVector<WowAddon*> m_wowInstalled;
+    QVector<Addon*> m_wowLibrary;
+    QVector<Addon*> m_wowInstalled;
 
     QDateTime m_lastRefresh;
 
@@ -49,5 +52,7 @@ private:
     QMutex m_mutex;
     NetworkCore* m_network;
 };
+
+}
 
 #endif // CURSESTORE_H

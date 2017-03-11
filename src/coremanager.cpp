@@ -1,10 +1,10 @@
 #include "coremanager.h"
-#include "Network/networkcore.h"
-#include "Store/storecore.h"
-#include "Console/consolecore.h"
+#include "network/networkcore.h"
+#include "store/storecore.h"
+#include "console/consolecore.h"
 
 #ifndef console_mode
-#include "Ui/uicore.h"
+#include "ui/uicore.h"
 #endif
 
 #include <QTimer>
@@ -14,7 +14,7 @@
 CoreManager::CoreManager(QObject *parent) :
     AbstractCore(parent)
   , m_network(new NetworkCore(this))
-  , m_stores(new StoreCore(this))
+  , m_stores(new storeCore(this))
 {
     QTimer::singleShot(0, this, &CoreManager::delayedInit);
 }
@@ -80,7 +80,7 @@ NetworkCore *CoreManager::network() const
     return m_network;
 }
 
-StoreCore *CoreManager::stores() const
+storeCore *CoreManager::stores() const
 {
     return m_stores;
 }

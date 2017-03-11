@@ -1,6 +1,6 @@
 #include "uicore.h"
 #include "coremanager.h"
-#include "Store/storecore.h"
+#include "store/storecore.h"
 #include "wowaddonmodel.h"
 
 #include "cursestorecontroller.h"
@@ -24,12 +24,12 @@ void UiCore::startX()
 
 void UiCore::initContext()
 {
-    m_cStoreController = new CurseStoreController(m_stores->curseStore());
+    m_cstoreController = new CursestoreController(m_stores->curse());
 
     QQmlContext* context = m_engine.rootContext();
 
-    qmlRegisterType<CurseStoreController>("Wocc", 1, 0, "CurseStoreController");
+    qmlRegisterType<CursestoreController>("Wocc", 1, 0, "CursestoreController");
     qRegisterMetaType<WowAddonModel*>("WowAddonModel*");
 
-    context->setContextProperty("_curseStore", m_cStoreController);
+    context->setContextProperty("_cursestore", m_cstoreController);
 }
