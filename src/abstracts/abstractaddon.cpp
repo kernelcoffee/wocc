@@ -1,6 +1,7 @@
 #include "abstractaddon.h"
 
-AbstractAddon::AbstractAddon(QObject *parent) : QObject(parent)
+AbstractAddon::AbstractAddon(QObject *parent) :
+    QObject(parent)
 {
 
 }

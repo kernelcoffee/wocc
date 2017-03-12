@@ -9,6 +9,10 @@
 class CoreManager;
 class storeCore;
 
+namespace Curse {
+class Addon;
+}
+
 class ConsoleCore : public AbstractCore
 {
     Q_OBJECT

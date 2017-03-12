@@ -1,5 +1,5 @@
-#ifndef WOWADDONMODEL_H
-#define WOWADDONMODEL_H
+#ifndef CURSEADDONMODEL_H
+#define CURSEADDONMODEL_H
 
 #include <QAbstractListModel>
 
@@ -7,7 +7,7 @@ namespace Curse {
     class Addon;
 }
 
-class WowAddonModel : public QAbstractListModel
+class CurseAddonModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
@@ -21,7 +21,7 @@ public:
         VersionAvailable
     };
 
-    WowAddonModel(QObject *parent = 0);
+    CurseAddonModel(QObject *parent = 0);
 
     QVariant                data(const QModelIndex &index, int role) const override;
     int                     rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -34,4 +34,4 @@ private:
     QVector<Curse::Addon*> m_data;
 };
 
-#endif // WOWADDONMODEL_H
+#endif // CURSEADDONMODEL_H

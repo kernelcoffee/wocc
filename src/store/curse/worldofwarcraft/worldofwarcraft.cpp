@@ -59,5 +59,5 @@ void WorldOfWarcraft::setLibrary(const QVector<Addon*> &library)
 {
     m_library = library;
     qDebug() << "Wow library updated with " << m_library.count() << "addons";
-    emit libraryUpdated();
+    emit libraryUpdated(library);
 }

@@ -6,15 +6,16 @@
 namespace Curse {
 class Store;
 }
-class WowAddonModel;
+
+class CurseAddonModel;
 
 class CursestoreController : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY(QString wowDir READ wowDir WRITE setWowDir NOTIFY wowDirChanged)
-    Q_PROPERTY(WowAddonModel* wowModel READ wowModel CONSTANT)
-    Q_PROPERTY(WowAddonModel* wowInstalledModel READ wowInstalledModel CONSTANT)
+    Q_PROPERTY(CurseAddonModel* wowModel READ wowModel CONSTANT)
+    Q_PROPERTY(CurseAddonModel* wowInstalledModel READ wowInstalledModel CONSTANT)
 public:
     enum class State {
         Ready,
@@ -31,8 +32,8 @@ public:
 
     QString wowDir() const;
 
-    WowAddonModel* wowModel() const;
-    WowAddonModel* wowInstalledModel() const;
+    CurseAddonModel* wowModel() const;
+    CurseAddonModel* wowInstalledModel() const;
 
 public slots:
     void setWowDir(const QString &wowDir);
@@ -42,8 +43,8 @@ signals:
 
 private:
     Curse::Store* m_store;
-    WowAddonModel* m_wowModel;
-    WowAddonModel* m_wowInstalledModel;
+    CurseAddonModel* m_wowModel;
+    CurseAddonModel* m_wowInstalledModel;
 
     QString m_wowDir;
 };

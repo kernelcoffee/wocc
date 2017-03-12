@@ -1,7 +1,7 @@
 #include "uicore.h"
 #include "coremanager.h"
 #include "store/storecore.h"
-#include "wowaddonmodel.h"
+#include "curseaddonmodel.h"
 
 #include "cursestorecontroller.h"
 
@@ -12,7 +12,6 @@ UiCore::UiCore(CoreManager *parent) :
     AbstractCore(parent)
   , m_stores(parent->stores())
 {
-
 }
 
 void UiCore::startX()
@@ -29,7 +28,7 @@ void UiCore::initContext()
     QQmlContext* context = m_engine.rootContext();
 
     qmlRegisterType<CursestoreController>("Wocc", 1, 0, "CursestoreController");
-    qRegisterMetaType<WowAddonModel*>("WowAddonModel*");
+    qRegisterMetaType<CurseAddonModel*>("CurseAddonModel*");
 
     context->setContextProperty("_cursestore", m_cstoreController);
 }

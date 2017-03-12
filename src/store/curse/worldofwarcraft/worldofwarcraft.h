@@ -24,7 +24,7 @@ public:
 
 signals:
     void refreshRequest();
-    void libraryUpdated();
+    void libraryUpdated(const QVector<Addon*> &library);
 
 public slots:
     void setLibrary(const QVector<Addon*> &library);

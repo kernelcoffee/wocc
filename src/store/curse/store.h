@@ -1,5 +1,5 @@
-#ifndef CURSESTORE_H
-#define CURSESTORE_H
+#ifndef STORE_H
+#define STORE_H
 
 #include "abstracts/abstractstore.h"
 
@@ -22,12 +22,25 @@ class Store : public AbstractStore
 {
     Q_OBJECT
 public:
+    enum class Games {
+        WorldOfWarcraft = 1,
+        TheSecretWorld = 64,
+        RuneOfMagic = 335,
+        WorldOfTank = 423,
+        Ryft = 424,
+        MineCraft = 432,
+        Skyrim = 449,
+        WildStar = 454,
+        TheElderScrollOnline = 455,
+        Firefall = 456
+    };
+
     explicit Store(NetworkCore* network, QObject *parent = nullptr);
     ~Store();
 
     WorldOfWarcraft* wow();
 
-public slots:
+//public slots:
 //    AddonDetectJob* detect();
 
 //    bool loadInstalled(bool isAsync = true);
@@ -50,4 +63,4 @@ private:
 
 }
 
-#endif // CURSESTORE_H
+#endif // STORE_H

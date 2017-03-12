@@ -1,14 +1,14 @@
-#include "wowaddonmodel.h"
+#include "curseaddonmodel.h"
 #include "store/curse/addon.h"
 #include <QDebug>
 
-WowAddonModel::WowAddonModel(QObject *parent) :
+CurseAddonModel::CurseAddonModel(QObject *parent) :
     QAbstractListModel(parent)
 {
 
 }
 
-QVariant WowAddonModel::data(const QModelIndex& index, int role) const
+QVariant CurseAddonModel::data(const QModelIndex& index, int role) const
 {
     if (m_data.isEmpty() || index.row() < 0 || index.row() > rowCount())
         return QVariant();
@@ -34,13 +34,13 @@ QVariant WowAddonModel::data(const QModelIndex& index, int role) const
     return "Invalid";
 }
 
-int WowAddonModel::rowCount(const QModelIndex& parent) const
+int CurseAddonModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
     return m_data.count();
 }
 
-QHash<int, QByteArray> WowAddonModel::roleNames() const
+QHash<int, QByteArray> CurseAddonModel::roleNames() const
 {
     return {
         {Name, "name"},
@@ -53,7 +53,7 @@ QHash<int, QByteArray> WowAddonModel::roleNames() const
     };
 }
 
-void WowAddonModel::setData(const QVector<Curse::Addon*>& data)
+void CurseAddonModel::setData(const QVector<Curse::Addon*>& data)
 {
     qDebug() << "Update data" << data.count();
     beginResetModel();

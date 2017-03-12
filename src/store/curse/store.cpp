@@ -149,7 +149,7 @@ void Store::refresh()
 
     connect(downloader, &FileDownloader::finished, [this, downloader](){
         QSettings settings;
-        settings.setValue("wowCurseArchive", downloader->savedFileLocation());
+        settings.setValue("curseArchive", downloader->savedFileLocation());
         loadLibraries();
         downloader->deleteLater();
     });
@@ -167,12 +167,12 @@ void Store::loadLibraries()
 {
     QSettings settings;
     XmlParser parser;
-    QString xmlOutput = FileExtractor::bzip2FileToString(settings.value("wowCurseArchive").toString());
+    QString xmlOutput = FileExtractor::bzip2FileToString(settings.value("curseArchive").toString());
 
     m_library = parser.XmlToAddonList(xmlOutput);
     QVector<Addon*> wowLibrary;
     for (Addon* addon: m_library) {
-        if (addon->gameId() == 1) {
+        if (addon->gameId() == (uint)Games::WorldOfWarcraft) {
             wowLibrary << addon;
         }
     }

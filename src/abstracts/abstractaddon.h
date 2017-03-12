@@ -11,6 +11,7 @@ class AbstractAddon : public QObject
 
 public:
     explicit AbstractAddon(QObject *parent = 0);
+
     QString name() const;
     QString author() const;
 

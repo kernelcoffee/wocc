@@ -1,5 +1,5 @@
-#ifndef WOWADDONDETECTIONWORKER_H
-#define WOWADDONDETECTIONWORKER_H
+#ifndef ADDONDETECTJOB_H
+#define ADDONDETECTJOB_H
 
 #include <QThread>
 #include <QVector>
@@ -34,4 +34,4 @@ private:
     uint m_progress;
 };
 
-#endif // WOWADDONDETECTIONWORKER_H
+#endif // ADDONDETECTJOB_H

@@ -1,5 +1,5 @@
-#ifndef WOWCURSEXMLPARSER_H
-#define WOWCURSEXMLPARSER_H
+#ifndef XMLPARSER_H
+#define XMLPARSER_H
 
 #include <QObject>
 #include <QVector>
@@ -22,4 +22,4 @@ public:
 };
 
 }
-#endif // WOWCURSEXMLPARSER_H
+#endif // XMLPARSER_H

@@ -46,7 +46,6 @@ HEADERS += \
     network/networkcore.h \
     network/filedownloader.h \
     console/consolecore.h \
-    ui/wowaddonmodel.h \
     utilities/fileextractor.h \
     store/storecore.h \
     ui/cursestorecontroller.h \
@@ -61,7 +60,8 @@ HEADERS += \
     abstracts/abstractjob.h \
     store/curse/downloadfilejob.h \
     abstracts/abstractstore.h \
-    store/curse/worldofwarcraft/addondetectjob.h
+    store/curse/worldofwarcraft/addondetectjob.h \
+    ui/curseaddonmodel.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
@@ -71,7 +71,6 @@ SOURCES += main.cpp \
     network/networkcore.cpp \
     network/filedownloader.cpp \
     console/consolecore.cpp \
-    ui/wowaddonmodel.cpp \
     utilities/fileextractor.cpp \
     store/storecore.cpp \
     ui/cursestorecontroller.cpp \
@@ -86,4 +85,5 @@ SOURCES += main.cpp \
     abstracts/abstractjob.cpp \
     store/curse/downloadfilejob.cpp \
     abstracts/abstractstore.cpp \
-    store/curse/worldofwarcraft/addondetectjob.cpp
+    store/curse/worldofwarcraft/addondetectjob.cpp \
+    ui/curseaddonmodel.cpp

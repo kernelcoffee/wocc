@@ -14,7 +14,8 @@ ApplicationWindow {
     minimumHeight: 600
     minimumWidth: 800
 
-    property CursestoreController store: _cursestore
+    property CursestoreController curse: _cursestore
+
     property bool hideSidebar: false
     property alias viewIndex: sideMenuContent.currentIndex
 
@@ -136,7 +137,7 @@ ApplicationWindow {
                     selectExisting: false
                     selectFolder: true
                     selectMultiple: false
-                    folder: store.wowDir
+                    folder: curse.wowDir
                     onAccepted: {
                         console.log("You chose: " + folder)
                         store.wowDir = folder
@@ -145,16 +146,11 @@ ApplicationWindow {
                         console.log("Canceled")
                     }
                 }
-
                 RowLayout {
                     width: parent.width
-                    Button {
-                        text: hideSidebar ? "Show" : "Hide"
-                        onClicked: hideSidebar = !hideSidebar
-                    }
                     TextField {
                         id: pathText
-                        text: store.wowDir
+                        text: curse.wowDir
                     }
                     Button {
                         text: "Select"
@@ -167,11 +163,11 @@ ApplicationWindow {
 
                     Button {
                         text: "Detect"
-                        onClicked: store.detect()
+                        onClicked: curse.detect()
                     }
                     Button {
                         text: "Refresh"
-                        onClicked: store.refresh()
+                        onClicked: curse.refresh()
                     }
                 }
             }
@@ -179,16 +175,16 @@ ApplicationWindow {
                 id: installedTab
                 LibraryView {
                     anchors.fill: parent
-                    store: root.store
-                    model: root.store.wowInstalledModel
+                    store: curse
+                    model: curse.wowInstalledModel
                 }
             }
             Item {
                 id: libraryTab
                 LibraryView {
                     anchors.fill: parent
-                    store: root.store
-                    model: root.store.wowModel
+                    store: curse
+                    model: curse.wowModel
                 }
             }
         }

@@ -1,6 +1,7 @@
 #include "consolecore.h"
 #include "coremanager.h"
 #include "store/storecore.h"
+#include "store/curse/addon.h"
 #include "store/curse/store.h"
 #include "store/curse/worldofwarcraft/worldofwarcraft.h"
 
@@ -12,7 +13,6 @@ ConsoleCore::ConsoleCore(CoreManager *parent) :
   , m_cores(parent)
   , m_stores(parent->stores())
 {
-
 }
 
 void ConsoleCore::init()
@@ -68,7 +68,7 @@ void ConsoleCore::update()
     QEventLoop loop;
     Curse::WorldOfWarcraft* wow = m_stores->curse()->wow();
     connect(wow, &Curse::WorldOfWarcraft::libraryUpdated,
-            &loop,  &QEventLoop::quit);
+            &loop, &QEventLoop::quit);
     wow->refresh();
     loop.exec();
 }

@@ -55,7 +55,6 @@ public:
 
     explicit Addon(QObject *parent = nullptr);
 
-
     void addAuthor(const QString& name, const QString& url);
     void addCategory(int id, const QString& name, const QString& url);
 
