@@ -1,4 +1,4 @@
-#include "wowaddondetectionworker.h"
+#include "addondetectjob.h"
 #include "store/curse/addon.h"
 
 #include <QSettings>
@@ -11,19 +11,19 @@
 
 using namespace Curse;
 
-WowAddonDetectionWorker::WowAddonDetectionWorker(const QVector<Addon*> &library, QObject *parent) :
+AddonDetectJob::AddonDetectJob(const QVector<Addon*> &library, QObject *parent) :
     QObject(parent)
   , m_library(library)
 {
     qDebug() << m_library.count();
 }
 
-uint WowAddonDetectionWorker::progress() const
+uint AddonDetectJob::progress() const
 {
     return m_progress;
 }
 
-QStringList WowAddonDetectionWorker::getPossibleAddons(const QString &path, const QVector<Addon*>& library)
+QStringList AddonDetectJob::getPossibleAddons(const QString &path, const QVector<Addon*>& library)
 {
     QDir dir(QUrl(path).toLocalFile());
 
@@ -69,7 +69,7 @@ QStringList WowAddonDetectionWorker::getPossibleAddons(const QString &path, cons
     return possibleAddons;
 }
 
-QVector<Addon*> WowAddonDetectionWorker::getInstalledAddons(const QStringList& possibleAddons, const QVector<Addon*>& library)
+QVector<Addon*> AddonDetectJob::getInstalledAddons(const QStringList& possibleAddons, const QVector<Addon*>& library)
 {
     // We'll detect addon by matching the folders to what they contains.
     QVector<Addon*> badAddons;
@@ -139,7 +139,7 @@ QVector<Addon*> WowAddonDetectionWorker::getInstalledAddons(const QStringList& p
     return installedAddons;
 }
 
-QMap<QString, QString> WowAddonDetectionWorker::getInfosFromToc(const QString &path)
+QMap<QString, QString> AddonDetectJob::getInfosFromToc(const QString &path)
 {
     QDir dir(QUrl(path).toLocalFile());
     QFileInfoList entries = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files);
@@ -183,7 +183,7 @@ QMap<QString, QString> WowAddonDetectionWorker::getInfosFromToc(const QString &p
 }
 
 // Not really optimized but it works.
-void WowAddonDetectionWorker::run()
+void AddonDetectJob::run()
 {
     QSettings settings;
 

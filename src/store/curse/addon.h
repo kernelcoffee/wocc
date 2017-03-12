@@ -1,6 +1,9 @@
 #ifndef WOWADDON_H
 #define WOWADDON_H
 
+
+#include "abstracts/abstractaddon.h"
+
 #include <QObject>
 #include <QString>
 #include <QUrl>
@@ -9,11 +12,11 @@
 
 namespace Curse {
 
-class Addon : public QObject
+class Addon : public AbstractAddon
 {
     Q_OBJECT
     Q_PROPERTY(uint id READ id CONSTANT)
-    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(uint gameId READ gameId CONSTANT)
     Q_PROPERTY(QString shortName READ shortName CONSTANT)
     Q_PROPERTY(QUrl websiteUrl READ websiteUrl CONSTANT)
     Q_PROPERTY(QString summary READ summary CONSTANT)
@@ -59,7 +62,7 @@ public:
     void printContent();
 
     uint id() const;
-    QString name() const;
+    uint gameId() const;
     QString shortName() const;
     QString summary() const;
     uint installCount() const;
@@ -72,11 +75,11 @@ public:
     QUrl folderPath() const;
     bool updateAvailable() const;
 
+
 public slots:
     void addFile(const File &file);
-
     void setId(uint id);
-    void setName(const QString &name);
+    void setGameId(uint gameId);
     void setSummary(const QString &summary);
     void setInstallCount(uint installCount);
     void setWebsiteUrl(const QString &websiteUrl);
@@ -90,7 +93,8 @@ signals:
 
 private:
     uint m_id;
-    QString m_name;
+    uint m_gameId;
+
     QString m_shortName;
     QString m_summary;
     uint m_installCount;

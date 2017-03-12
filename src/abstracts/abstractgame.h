@@ -7,6 +7,10 @@ class AbstractGame : public QObject
 {
 public:
     AbstractGame(QObject *parent = 0);
+
+    virtual void refresh() = 0;
+    virtual void detect() = 0;
+
 };
 
 #endif // ABSTRACTGAME_H

@@ -1,5 +1,6 @@
 #include "coremanager.h"
 #include "network/networkcore.h"
+#include "threads/threadcore.h"
 #include "store/storecore.h"
 #include "console/consolecore.h"
 
@@ -14,6 +15,7 @@
 CoreManager::CoreManager(QObject *parent) :
     AbstractCore(parent)
   , m_network(new NetworkCore(this))
+  , m_threads(new ThreadCore(this))
   , m_stores(new storeCore(this))
 {
     QTimer::singleShot(0, this, &CoreManager::delayedInit);

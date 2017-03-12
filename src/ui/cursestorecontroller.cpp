@@ -1,6 +1,7 @@
 #include "cursestorecontroller.h"
 #include "ui/wowaddonmodel.h"
 #include "store/curse/store.h"
+#include "store/curse/worldofwarcraft/worldofwarcraft.h"
 #include "store/curse/addon.h"
 
 #include <QDebug>
@@ -23,28 +24,28 @@ CursestoreController::CursestoreController(Curse::Store* store, QObject* parent)
 
     setWowDir(settings.value(settings_wowdir, QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString());
 
-    connect(m_store, &Curse::Store::wowLibraryUpdated,
-            m_wowModel, &WowAddonModel::setData);
-    connect(m_store, &Curse::Store::wowInstalledListUpdated,
-            m_wowInstalledModel, &WowAddonModel::setData);
+//    connect(m_store, &Curse::Store::wowLibraryUpdated,
+//            m_wowModel, &WowAddonModel::setData);
+//    connect(m_store, &Curse::Store::wowInstalledListUpdated,
+//            m_wowInstalledModel, &WowAddonModel::setData);
 
-    m_store->loadLibrary();
-    m_store->loadInstalled();
+//    m_store->loadLibraries();
+//    m_store->loadInstalled();
 }
 
 void CursestoreController::refresh()
 {
-    m_store->refresh();
+    m_store->wow()->refresh();
 }
 
 void CursestoreController::detect()
 {
-    m_store->detect();
+//    m_store->detect();
 }
 
 void CursestoreController::update(int index)
 {
-    m_store->update(m_store->wowLibrary().at(index));
+//    m_store->update(m_store->wowLibrary().at(index));
 }
 
 QString CursestoreController::wowDir() const

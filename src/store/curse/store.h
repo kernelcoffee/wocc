@@ -1,6 +1,8 @@
 #ifndef CURSESTORE_H
 #define CURSESTORE_H
 
+#include "abstracts/abstractstore.h"
+
 #include <QObject>
 #include <QVector>
 #include <QDateTime>
@@ -9,48 +11,41 @@
 
 class NetworkCore;
 class FileDownloader;
-class WowAddonDetectionWorker;
+class AddonDetectJob;
 
 namespace Curse {
 
 class Addon;
+class WorldOfWarcraft;
 
-class Store : public QObject
+class Store : public AbstractStore
 {
     Q_OBJECT
 public:
     explicit Store(NetworkCore* network, QObject *parent = nullptr);
     ~Store();
 
-    QVector<Addon*> wowLibrary() const;
-
-signals:
-    void wowLibraryUpdated(const QVector<Addon*> &addonList);
-    void wowInstalledListUpdated(const QVector<Addon*> &installedAddonList);
+    WorldOfWarcraft* wow();
 
 public slots:
-    FileDownloader* refresh(bool isAsync = true);
-    WowAddonDetectionWorker* detect(bool isAsync = true);
-    void update(Addon* addon);
-    void install(Addon* addon);
-    void remove(Addon* addon);
+//    AddonDetectJob* detect();
 
-    void loadLibrary(bool isAsync = true);
-    bool loadInstalled(bool isAsync = true);
-    bool saveInstalled();
+//    bool loadInstalled(bool isAsync = true);
+//    bool saveInstalled();
+
 
 private slots:
-    void setWowInstalledAddons(const QVector<Addon*> &installedAddons);
+    void refresh();
+//    void setWowInstalledAddons(const QVector<Addon*> &installedAddons);
 
 private:
-    QVector<Addon*> m_wowLibrary;
-    QVector<Addon*> m_wowInstalled;
+    void loadLibraries();
+
+    WorldOfWarcraft* m_wow;
+
+    QVector<Addon*> m_library;
 
     QDateTime m_lastRefresh;
-
-    QThread m_workerThread;
-    QMutex m_mutex;
-    NetworkCore* m_network;
 };
 
 }

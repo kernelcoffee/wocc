@@ -25,5 +25,7 @@ WoccApplication::WoccApplication(int &argc, char *argv[]) :
     QCoreApplication::setOrganizationDomain(ORGANISATION_DOMAIN);
 
     qInstallMessageHandler(Logger::instance()->log);
+    Logger::instance()->setOutputToStd(true);
+    Logger::instance()->setFullDebugOutput(true);
     qsrand(static_cast<uint>(QTime::currentTime().msec()));
 }

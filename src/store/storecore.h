@@ -10,10 +10,6 @@ class storeCore : public AbstractCore
 {
     Q_OBJECT
 public:
-    enum class Games {
-        WorldOfWarcraft
-    };
-
     explicit storeCore(CoreManager *parent = nullptr);
 
     Curse::Store* curse() const;

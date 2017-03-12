@@ -52,15 +52,22 @@ Logger::~Logger()
 
 void Logger::log(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
+    Logger* logger = Logger::instance();
     QString message = Logger::instance()->_getLogPrefix()
             + logLevel_str[type]
             + ",\t" + context.file
             + ",\t" + QString::number(context.line)
-//            + ",\t" + context.function
+            + ",\t" + context.function
             + ",\t" + msg
-            + "\n";
-    std::cerr << message.toStdString();
-    Logger::instance()->_write(message);
+            ;
+
+    if (logger->outputToStd() && logger->fullDebugOutput()) {
+        logger->_outputToStd(type, message);
+    } else if (logger->outputToStd()) {
+        logger->_outputToStd(type, msg);
+    }
+
+    logger->_write(message);
     if (type == QtFatalMsg) {
         abort();
     }
@@ -74,6 +81,26 @@ void Logger::notice(const QString &msg)
 
     std::cout << message.toStdString();
     Logger::instance()->_write(message);
+}
+
+void Logger::setOutputToStd(bool outputToStd)
+{
+    m_outputToStd = outputToStd;
+}
+
+void Logger::setFullDebugOutput(bool fullDebugOutput)
+{
+    m_fullDebugOutput = fullDebugOutput;
+}
+
+bool Logger::outputToStd()
+{
+    return m_outputToStd;
+}
+
+bool Logger::fullDebugOutput()
+{
+    return m_fullDebugOutput;
 }
 
 void Logger::_write(const QString &msg)
@@ -91,8 +118,21 @@ void Logger::_write(const QString &msg)
         _write(QStringLiteral("---- NEW SESSION ----\n"));
     }
 
-    _logFile->write(msg.toLocal8Bit());
+    _logFile->write(msg.toLocal8Bit() + '\n');
     _logFile->flush();
+}
+
+void Logger::_outputToStd(QtMsgType type, const QString& msg)
+{
+    switch (type) {
+    case QtDebugMsg:
+    case QtInfoMsg:
+        std::cout << msg.toStdString() << std::endl;
+        break;
+    default:
+        std::cerr << msg.toStdString();
+        break;
+    }
 }
 
 QString	Logger::_getLogFileName()

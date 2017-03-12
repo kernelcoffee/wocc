@@ -38,6 +38,7 @@ inline void parseCategories(QXmlStreamReader &reader, Addon* addon)
 
 inline void parseCategorySection(QXmlStreamReader &reader, Addon* addon)
 {
+    Q_UNUSED(addon)
     // ExtraIncludePattern
     reader.readNextStartElement();
     // qDebug() << "ExtraIncludePattern" << reader.name() << reader.tokenString();
@@ -208,16 +209,10 @@ QVector<Addon *> XmlParser::XmlToAddonList(const QString &xml) const
     QXmlStreamReader reader(xml);
     QVector<Addon *> addonList;
 
-//    int n = 0;
     reader.readNextStartElement();
     reader.readNextStartElement();
-    // qDebug() << "CAddOn" << reader.name() << reader.tokenString();
     while (!reader.atEnd() && reader.isStartElement() && reader.name() == "CAddOn") {
-//        qDebug() << n <<  "================= NEW ADDON PARSING ====================";
         reader.readNextStartElement();
-//        n += 1;
-//        if (n > 1)
-//            continue;
 
         Addon* addon = new Addon;
 
@@ -272,7 +267,7 @@ QVector<Addon *> XmlParser::XmlToAddonList(const QString &xml) const
 
         // GameId
         // qDebug() << "GameId" << reader.name() << reader.tokenString();
-        reader.readNextStartElement();
+        addon->setGameId(reader.readElementText().toInt());
         reader.readNextStartElement();
 
         // IconId

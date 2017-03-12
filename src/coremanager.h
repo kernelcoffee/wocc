@@ -8,6 +8,7 @@
 
 class ConsoleCore;
 class NetworkCore;
+class ThreadCore;
 class storeCore;
 
 #ifndef console_mode
@@ -48,6 +49,7 @@ private:
 #endif
 
     NetworkCore *m_network = nullptr;
+    ThreadCore *m_threads = nullptr;
     ConsoleCore *m_console = nullptr;
     storeCore *m_stores = nullptr;
 };

@@ -9,12 +9,12 @@ namespace Curse {
 class Addon;
 }
 
-class WowAddonDetectionWorker : public QObject
+class AddonDetectJob : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(uint progress READ progress NOTIFY progressChanged)
 public:
-    explicit WowAddonDetectionWorker(const QVector<Curse::Addon*> &library, QObject *parent = nullptr);
+    explicit AddonDetectJob(const QVector<Curse::Addon*> &library, QObject *parent = nullptr);
 
     void run();
 

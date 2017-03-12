@@ -9,8 +9,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <QEventLoop>
-
 #include <QDebug>
 
 FileDownloader::FileDownloader(QNetworkAccessManager *manager, QObject *parent) :
@@ -49,16 +47,6 @@ void FileDownloader::start()
         qDebug() << bytesReceived << bytesTotal << 100 * bytesReceived / bytesTotal;
         setProgress(100 * bytesReceived / bytesTotal);
     });
-}
-
-void FileDownloader::startSync()
-{
-    QEventLoop loop;
-
-    connect(this, &FileDownloader::finished, &loop, &QEventLoop::quit);
-    start();
-
-    loop.exec();
 }
 
 QString FileDownloader::savedFileLocation() const

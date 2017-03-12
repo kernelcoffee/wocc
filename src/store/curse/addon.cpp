@@ -4,7 +4,7 @@
 using namespace Curse;
 
 Addon::Addon(QObject *parent) :
-    QObject(parent)
+    AbstractAddon(parent)
 {
 }
 
@@ -35,9 +35,9 @@ uint Addon::id() const
     return m_id;
 }
 
-QString Addon::name() const
+uint Addon::gameId() const
 {
-    return m_name;
+    return m_gameId;
 }
 
 QString Addon::shortName() const
@@ -100,9 +100,9 @@ void Addon::setId(uint id)
     m_id = id;
 }
 
-void Addon::setName(const QString &name)
+void Addon::setGameId(uint gameId)
 {
-    m_name = name;
+    m_gameId = gameId;
 }
 
 void Addon::setInstallCount(uint installCount)

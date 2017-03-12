@@ -2,8 +2,10 @@
 #include "coremanager.h"
 #include "store/storecore.h"
 #include "store/curse/store.h"
+#include "store/curse/worldofwarcraft/worldofwarcraft.h"
 
 #include <QDebug>
+#include <QEventLoop>
 
 ConsoleCore::ConsoleCore(CoreManager *parent) :
     AbstractCore(parent)
@@ -40,6 +42,9 @@ void ConsoleCore::processArguments(QCommandLineParser &parser)
 void ConsoleCore::delayedInit()
 {
     if (m_args.count() == 0) {
+#ifdef console_mode
+        qApp->exit();
+#endif
         return;
     }
 
@@ -60,12 +65,17 @@ void ConsoleCore::delayedInit()
 void ConsoleCore::update()
 {
     qDebug() << "update";
-    m_stores->curse()->refresh(false);
+    QEventLoop loop;
+    Curse::WorldOfWarcraft* wow = m_stores->curse()->wow();
+    connect(wow, &Curse::WorldOfWarcraft::libraryUpdated,
+            &loop,  &QEventLoop::quit);
+    wow->refresh();
+    loop.exec();
 }
 
 void ConsoleCore::detect()
 {
     qDebug() << "detect";
-    m_stores->curse()->refresh(false);
-    m_stores->curse()->detect();
+//    m_stores->curse()->refresh(false);
+//    m_stores->curse()->detect();
 }
