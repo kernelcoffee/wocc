@@ -2,7 +2,7 @@ QT += core network
 
 CONFIG += c++11
 
-lessThan(QT_VERSION, 5.7) {
+lessThan(QT_VERSION, 5.7.0) {
     error("requires at least Qt 5.7")
 }
 
@@ -20,7 +20,7 @@ CONFIG(console_mode) {
 
     message(console_mode enabled)
 } else {
-    QT += qml quick widgets
+    QT += qml quick widgets quickcontrols2
 
     RESOURCES += \
             ressources/qml/qml.qrc
@@ -87,3 +87,6 @@ SOURCES += main.cpp \
     abstracts/abstractstore.cpp \
     store/curse/worldofwarcraft/addondetectjob.cpp \
     ui/curseaddonmodel.cpp
+
+DISTFILES += \
+    ressources/qml/qtquickcontrols2.conf

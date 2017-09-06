@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Controls 1.4 as Controls1
+import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import Qt.labs.settings 1.0
@@ -34,7 +35,7 @@ ApplicationWindow {
                 rotation: hideSidebar ? 180 : 0
                 onClicked: hideSidebar = !hideSidebar
                 Behavior on rotation {
-                    NumberAnimation {duration: 80}
+                    NumberAnimation { duration: 80 }
                 }
             }
             Item { Layout.fillWidth: true }
@@ -58,7 +59,7 @@ ApplicationWindow {
         id: splitView
         anchors.fill: parent
 
-        Item {
+        Pane {
             id: sideMenu
             Layout.minimumWidth: 200
             Layout.maximumWidth: 400
@@ -71,6 +72,7 @@ ApplicationWindow {
                 when: !hideSidebar
                 value: sideMenu.width -10
             }
+
             Component {
                 id: sectionHeading
                 Label {
