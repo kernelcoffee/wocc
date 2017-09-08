@@ -1,6 +1,7 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick 2.9
 import QtQuick.Controls 1.4 as Controls1
+import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 
 import Wocc 1.0
@@ -14,13 +15,13 @@ Controls1.TableView {
         id: rowDelegate
         height: 40
 
+        color: Material.background
         states: [
             State {
                 when: styleData.selected
                 PropertyChanges {
                     target: rowDelegate
-                    color: "grey"
-
+                    color: "lightsteelblue"
                 }
             }
         ]
@@ -34,6 +35,7 @@ Controls1.TableView {
             width: parent.width
             text: styleData.value
             elide: Text.ElideRight
+            color: "black"
         }
     }
 
@@ -73,11 +75,10 @@ Controls1.TableView {
         role: ""
         title: "Action"
         delegate: Button {
-            visible: styleData.versionInstalled !== styleData.versionAvailable
             text: qsTr("Update")
             onClicked: {
-                console.log(index)
-                store.update(index);
+                console.log(currentRow)
+                store.update(currentRow);
             }
         }
     }

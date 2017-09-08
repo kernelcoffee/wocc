@@ -7,11 +7,13 @@
 
 #include <QQmlContext>
 #include <QDebug>
+#include <QQuickStyle>
 
 UiCore::UiCore(CoreManager *parent) :
     AbstractCore(parent)
   , m_stores(parent->stores())
 {
+    QQuickStyle::setStyle("Material");
 }
 
 void UiCore::startX()
@@ -19,6 +21,10 @@ void UiCore::startX()
     initContext();
 
     m_engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    if (m_engine.rootObjects().isEmpty()) {
+        qFatal("Could not load the main view");
+    }
+
 }
 
 void UiCore::initContext()

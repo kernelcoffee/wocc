@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>LibraryView.qml</file>
+        <file>SidePanel.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>Dashboard.qml</file>
     </qresource>
 </RCC>

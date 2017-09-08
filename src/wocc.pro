@@ -87,6 +87,3 @@ SOURCES += main.cpp \
     abstracts/abstractstore.cpp \
     store/curse/worldofwarcraft/addondetectjob.cpp \
     ui/curseaddonmodel.cpp
-
-DISTFILES += \
-    ressources/qml/qtquickcontrols2.conf

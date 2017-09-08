@@ -1,12 +1,13 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
-import QtQuick.Controls 1.4 as Controls1
-import QtQuick.Controls.Material 2.0
-import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
+import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import QtQml 2.2
+
 import Wocc 1.0
+
+import "."
 
 ApplicationWindow {
     id: root
@@ -17,9 +18,6 @@ ApplicationWindow {
 
     property CursestoreController curse: _cursestore
 
-    property bool hideSidebar: false
-    property alias viewIndex: sideMenuContent.currentIndex
-
     Settings {
         property alias x: root.x
         property alias y: root.y
@@ -27,164 +25,43 @@ ApplicationWindow {
         property alias height: root.height
     }
 
-    header: ToolBar {
-        RowLayout {
-            anchors.fill: parent
-            ToolButton {
-                text: "\u25C0"
-                rotation: hideSidebar ? 180 : 0
-                onClicked: hideSidebar = !hideSidebar
-                Behavior on rotation {
-                    NumberAnimation { duration: 80 }
-                }
-            }
-            Item { Layout.fillWidth: true }
-        }
-    }
-
-    ListModel {
-        id: sideMenuModel
-        ListElement {
-            name: "Dashboard"
-        }
-        ListElement {
-            name: "Installed"
-        }
-        ListElement {
-            name: "Library"
-        }
-    }
-
-    Controls1.SplitView {
-        id: splitView
+    Item {
         anchors.fill: parent
 
-        Pane {
-            id: sideMenu
-            Layout.minimumWidth: 200
-            Layout.maximumWidth: 400
-            clip: true
-
-            Binding {
-                id: sideMenuBinding
-                target: sideMenuContent
-                property: "width"
-                when: !hideSidebar
-                value: sideMenu.width -10
-            }
-
-            Component {
-                id: sectionHeading
-                Label {
-                    text: section
-                    font.bold: true
-                }
-            }
-
-            ListView {
-                id: sideMenuContent
-                model: sideMenuModel
-                anchors.right: parent.right
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                highlight: Rectangle {
-                    color: 'grey'
-                }
-
-                delegate: Label {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: 10
-                    text: name
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: sideMenuContent.currentIndex = index
-                    }
-                }
-
-                section.property: "sectionName"
-                section.criteria: ViewSection.FullString
-                section.delegate: sectionHeading
-            }
-
-            states: [
-                State {
-                    when: root.hideSidebar
-                    PropertyChanges {
-                        target: sideMenu;
-                        width: 0
-                        Layout.minimumWidth: 0
-                        Layout.maximumWidth: 0
-                    }
-                }
-            ]
-            transitions: [
-                Transition {
-                    NumberAnimation {properties: "Layout.maximumWidth"; duration: 80}
-                    NumberAnimation {properties: "Layout.minimumWidth"; duration: 80}
-                }
-            ]
+        SidePanel {
+            id: sidePanel
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
         }
 
-        StackLayout {
-            id: stackView
-            currentIndex: root.viewIndex
-            Layout.fillWidth: true
+        Item {
+            anchors.left: sidePanel.right
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.margins: 10
 
-            Item {
-                id: homeTab
-                FileDialog {
-                    id: fileDialog
-                    title: "Please choose a file"
-                    selectExisting: false
-                    selectFolder: true
-                    selectMultiple: false
-                    folder: curse.wowDir
-                    onAccepted: {
-                        console.log("You chose: " + folder)
-                        store.wowDir = folder
-                    }
-                    onRejected: {
-                        console.log("Canceled")
-                    }
-                }
-                RowLayout {
-                    width: parent.width
-                    TextField {
-                        id: pathText
-                        text: curse.wowDir
-                    }
-                    Button {
-                        text: "Select"
-                        onClicked: fileDialog.visible = true
-                    }
-                    Item {
-                        id: spacer
-                        Layout.fillWidth: true
-                    }
+            SwipeView {
+                id: stackView
+                anchors.fill: parent
+                currentIndex: sidePanel.index
+                interactive: false
+                clip: true
 
-                    Button {
-                        text: "Detect"
-                        onClicked: curse.detect()
-                    }
-                    Button {
-                        text: "Refresh"
-                        onClicked: curse.refresh()
-                    }
+                Dashboard {
+                    id: dashboard
+                    store: root.curse
                 }
-            }
-            Item {
-                id: installedTab
+
                 LibraryView {
-                    anchors.fill: parent
+                    id: installedTab
                     store: curse
                     model: curse.wowInstalledModel
                 }
-            }
-            Item {
-                id: libraryTab
+
                 LibraryView {
-                    anchors.fill: parent
+                    id: libraryTab
                     store: curse
                     model: curse.wowModel
                 }

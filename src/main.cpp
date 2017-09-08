@@ -3,6 +3,7 @@
 
 int main(int argc, char *argv[])
 {
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     WoccApplication app(argc, argv);
     CoreManager cores;
 
