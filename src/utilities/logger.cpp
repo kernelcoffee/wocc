@@ -56,7 +56,7 @@ void Logger::log(QtMsgType type, const QMessageLogContext &context, const QStrin
     QString message = Logger::instance()->_getLogPrefix()
             + logLevel_str[type]
             + ",\t" + context.file
-            + ",\t" + QString::number(context.line)
+            + ":" + QString::number(context.line)
             + ",\t" + context.function
             + ",\t" + msg
             ;
@@ -142,5 +142,5 @@ QString	Logger::_getLogFileName()
 
 QString	Logger::_getLogPrefix()
 {
-    return "<" + QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd-hh:mm:ss") + "> : ";
+    return "<" + QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd-hh:mm:ss") + ">: ";
 }
