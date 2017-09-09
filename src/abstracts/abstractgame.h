@@ -4,7 +4,7 @@
 #include <QObject>
 
 class AddOn;
-class AbstractWorker;
+class AbstractTask;
 
 class AbstractGame : public QObject
 {
@@ -14,8 +14,8 @@ class AbstractGame : public QObject
 public:
     AbstractGame(QObject* parent = 0);
 
-    virtual AbstractWorker* refresh();
-    virtual AbstractWorker* detect();
+    virtual AbstractTask* refresh();
+    virtual AbstractTask* detect();
 
     virtual QString location() const;
 

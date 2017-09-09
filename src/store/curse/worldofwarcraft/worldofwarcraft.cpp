@@ -1,5 +1,5 @@
 #include "worldofwarcraft.h"
-#include "addondetectjob.h"
+#include "addondetecttask.h"
 #include "store/curse/addon.h"
 
 #include <QSettings>
@@ -22,52 +22,45 @@ WorldOfWarcraft::WorldOfWarcraft(QObject* parent) :
     settings.endGroup();
 }
 
-AbstractWorker* WorldOfWarcraft::refresh()
+AbstractTask* WorldOfWarcraft::refresh()
 {
     // Refresh is done in the store class for this game.
     Q_UNREACHABLE();
     return nullptr;
 }
 
-AbstractWorker* WorldOfWarcraft::detect()
+AbstractTask* WorldOfWarcraft::detect()
 {
-    return nullptr;
-//    if (m_workerThread.isRunning()) {
-//        qDebug() << "job is already running";
-//        return nullptr;
-//    }
+    if (m_worker.isRunning()) {
+        qDebug() << "job is already running";
+        return nullptr;
+    }
 
-//    AddonDetectJob* worker = new AddonDetectJob(m_wowLibrary);
-//    connect(worker, &AddonDetectJob::succcess, [this](const QVector<Addon*> &result){
-//        setWowInstalledAddons(result);
+    AddonDetectTask* task = new AddonDetectTask(m_library);
+    connect(task, &AddonDetectTask::succcess, [this](const QVector<Curse::Addon*>& result) {
+        updateLibrary(result);
 //        saveInstalled();
-//        m_workerThread.quit();
-//        m_workerThread.wait();
-//        m_mutex.unlock();
-//    });
+        m_worker.quit();
+        m_worker.wait();
+        m_mutex.unlock();
+    });
 
-//    connect(worker, &AddonDetectJob::error, [this]() {
-//        m_mutex.unlock();
-//    });
+    connect(task, &AddonDetectTask::error, [this]() {
+        m_mutex.unlock();
+    });
 
 
-//    if (isAsync) {
-//        connect(&m_workerThread, &QThread::finished, worker, &QObject::deleteLater);
-//        m_mutex.lock();
-//        worker->moveToThread(&m_workerThread);
-//        m_workerThread.start();
-//        worker->run();
-//        return worker;
-//    }
-
-//    worker->run();
-//    worker->deleteLater();
-    //    return worker;
+    connect(&m_worker, &QThread::finished, task, &QObject::deleteLater);
+    m_mutex.lock();
+    task->moveToThread(&m_worker);
+    m_worker.start();
+    task->run();
+    return task;
 }
 
 void WorldOfWarcraft::install(Curse::Addon* addon)
 {
-    addon->printContent();
+    addon->print();
 }
 
 QString WorldOfWarcraft::location() const
@@ -75,7 +68,7 @@ QString WorldOfWarcraft::location() const
     return m_location;
 }
 
-void WorldOfWarcraft::setLibrary(const QVector<Addon*>& library)
+void WorldOfWarcraft::setLibrary(const QVector<Curse::Addon*>& library)
 {
     m_library = library;
     qDebug() << "Wow library updated with " << m_library.count() << "addons";
@@ -95,6 +88,13 @@ void WorldOfWarcraft::setLocation(const QString& location)
 
     m_location = location;
     emit locationChanged(m_location);
+}
+
+void WorldOfWarcraft::updateLibrary(const QVector<Curse::Addon*>& addons)
+{
+    for (auto addon : addons) {
+        addon->print();
+    }
 }
 
 //void Store::update(Addon* addon)
@@ -131,7 +131,7 @@ void WorldOfWarcraft::setLocation(const QString& location)
 //    }
 //    QByteArray data = loadFile.readAll();
 //    const QStringList &savedAddonsList = QString::fromLocal8Bit(data).split(';');
-//    const QVector<Addon*> &installedAddons = AddonDetectJob::getInstalledAddons(savedAddonsList, m_library);
+//    const QVector<Addon*> &installedAddons = AddonDetectTask::getInstalledAddons(savedAddonsList, m_library);
 //    setWowInstalledAddons(installedAddons);
 //    qDebug() << installedAddons.count() << "addons loaded";
 //    return true;

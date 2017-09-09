@@ -19,8 +19,8 @@ class WorldOfWarcraft : public AbstractGame
 public:
     explicit WorldOfWarcraft(QObject* parent = 0);
 
-    Q_INVOKABLE virtual AbstractWorker* refresh() override;
-    Q_INVOKABLE virtual AbstractWorker* detect() override;
+    Q_INVOKABLE virtual AbstractTask* refresh() override;
+    Q_INVOKABLE virtual AbstractTask* detect() override;
 
     Q_INVOKABLE void install(Curse::Addon* addon);
 
@@ -34,6 +34,7 @@ public slots:
     virtual void setLocation(const QString& location);
 
 private:
+    void updateLibrary(const QVector<Curse::Addon*>& addons);
     QVector<Addon*> m_library;
 
     QThread m_worker;

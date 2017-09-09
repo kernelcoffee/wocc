@@ -7,7 +7,7 @@ using namespace Curse;
 
 class CurseAddonModel;
 class WorldOfWarcraft;
-class AbstractWorker;
+class AbstractTask;
 
 class CurseStoreController : public QObject
 {
@@ -26,7 +26,7 @@ public:
 
     Curse::WorldOfWarcraft* worldOfWarcraft() const;
 
-    Q_INVOKABLE AbstractWorker* refresh();
+    Q_INVOKABLE AbstractTask* refresh();
 
 private:
     Curse::Store* m_store;

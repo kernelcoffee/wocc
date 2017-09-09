@@ -33,7 +33,7 @@ Curse::WorldOfWarcraft* CurseStoreController::worldOfWarcraft() const
     return m_store->worldOfWarcraft();
 }
 
-AbstractWorker* CurseStoreController::refresh()
+AbstractTask* CurseStoreController::refresh()
 {
     return m_store->refresh();
 }

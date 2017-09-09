@@ -11,9 +11,9 @@
 
 #include <QDebug>
 
-FileDownloader::FileDownloader(QNetworkAccessManager *manager, QObject *parent) :
-    QObject(parent)
-  , m_manager(manager)
+FileDownloader::FileDownloader(QNetworkAccessManager* manager, QObject* parent) :
+    AbstractTask(parent)
+    , m_manager(manager)
 {
     connect(m_manager, &QNetworkAccessManager::finished,
             this, &FileDownloader::onFinished);
@@ -27,11 +27,6 @@ QUrl FileDownloader::url() const
 QString FileDownloader::destination() const
 {
     return m_destination;
-}
-
-uint FileDownloader::progress() const
-{
-    return m_progress;
 }
 
 void FileDownloader::start()
@@ -78,16 +73,6 @@ void FileDownloader::setDestination(QString destination)
     emit destinationChanged(destination);
 }
 
-void FileDownloader::setProgress(uint progress)
-{
-    if (m_progress == progress) {
-        return;
-    }
-
-    m_progress = progress;
-    emit progressChanged(progress);
-}
-
 void FileDownloader::setSavedFileLocation(const QString& savedFileLocation)
 {
     if (m_saveFileLocation == savedFileLocation) {
@@ -103,13 +88,14 @@ void FileDownloader::setFileOverride(bool override)
     m_overrideSavedFile = override;
 }
 
-void FileDownloader::onFinished(QNetworkReply *reply)
+void FileDownloader::onFinished(QNetworkReply* reply)
 {
     if (!reply) {
         qDebug() << "reply is null";
         return;
     }
-    qDebug() << "Cache used : " << reply->attribute(QNetworkRequest::SourceIsFromCacheAttribute).toBool();
+    qDebug() << "Cache used : " << reply->attribute(
+                 QNetworkRequest::SourceIsFromCacheAttribute).toBool();
     QUrl url = reply->url();
     if (reply->error()) {
         qWarning() << QString("Download of %1 failed: %2").arg(url.toEncoded(), reply->errorString());

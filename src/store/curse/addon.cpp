@@ -18,7 +18,7 @@ void Addon::addCategory(int id, const QString& name, const QString& url)
     m_categories.append(Category({id, name, url}));
 }
 
-void Addon::printContent()
+void Addon::print()
 {
     qDebug() << m_name << m_shortName;
     for (auto file : m_files) {

@@ -6,12 +6,12 @@ AbstractGame::AbstractGame(QObject* parent) :
 
 }
 
-AbstractWorker* AbstractGame::refresh()
+AbstractTask* AbstractGame::refresh()
 {
     Q_UNREACHABLE();
 }
 
-AbstractWorker* AbstractGame::detect()
+AbstractTask* AbstractGame::detect()
 {
     Q_UNREACHABLE();
 }

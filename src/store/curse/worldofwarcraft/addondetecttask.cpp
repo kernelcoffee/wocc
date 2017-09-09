@@ -1,4 +1,4 @@
-#include "addondetectjob.h"
+#include "addondetecttask.h"
 #include "store/curse/addon.h"
 
 #include <QSettings>
@@ -11,19 +11,14 @@
 
 using namespace Curse;
 
-AddonDetectJob::AddonDetectJob(const QVector<Addon*>& library, QObject* parent) :
-    QObject(parent)
+AddonDetectTask::AddonDetectTask(const QVector<Addon*>& library, QObject* parent) :
+    AbstractTask(parent)
     , m_library(library)
 {
     qDebug() << m_library.count();
 }
 
-uint AddonDetectJob::progress() const
-{
-    return m_progress;
-}
-
-QStringList AddonDetectJob::getPossibleAddons(const QString& path, const QVector<Addon*>& library)
+QStringList AddonDetectTask::getPossibleAddons(const QString& path, const QVector<Addon*>& library)
 {
     QDir dir(QUrl(path).toLocalFile());
 
@@ -69,8 +64,8 @@ QStringList AddonDetectJob::getPossibleAddons(const QString& path, const QVector
     return possibleAddons;
 }
 
-QVector<Addon*> AddonDetectJob::getInstalledAddons(const QStringList& possibleAddons,
-                                                   const QVector<Addon*>& library)
+QVector<Addon*> AddonDetectTask::getInstalledAddons(const QStringList& possibleAddons,
+                                                    const QVector<Addon*>& library)
 {
     // We'll detect addon by matching the folders to what they contains.
     QVector<Addon*> badAddons;
@@ -141,7 +136,7 @@ QVector<Addon*> AddonDetectJob::getInstalledAddons(const QStringList& possibleAd
     return installedAddons;
 }
 
-QMap<QString, QString> AddonDetectJob::getInfosFromToc(const QString& path)
+QMap<QString, QString> AddonDetectTask::getInfosFromToc(const QString& path)
 {
     QDir dir(QUrl(path).toLocalFile());
     QFileInfoList entries = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files);
@@ -187,7 +182,7 @@ QMap<QString, QString> AddonDetectJob::getInfosFromToc(const QString& path)
 }
 
 // Not really optimized but it works.
-void AddonDetectJob::run()
+void AddonDetectTask::run()
 {
     QSettings settings;
 

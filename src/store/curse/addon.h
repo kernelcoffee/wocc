@@ -58,7 +58,7 @@ public:
     void addAuthor(const QString& name, const QString& url);
     void addCategory(int id, const QString& name, const QString& url);
 
-    void printContent();
+    void print();
 
     uint id() const;
     uint gameId() const;

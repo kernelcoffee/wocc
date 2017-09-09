@@ -7,8 +7,7 @@
 
 #include "abstracts/abstractgame.h"
 #include "abstracts/abstractstore.h"
-#include "abstracts/abstractjob.h"
-#include "abstracts/abstractworker.h"
+#include "abstracts/abstracttask.h"
 
 #include "cursestorecontroller.h"
 #include "curseaddonmodel.h"
@@ -45,8 +44,7 @@ void UiCore::initContext()
 
     qmlRegisterType<AbstractGame>("Wocc", 1, 0, "AbstractGame");
     qmlRegisterType<AbstractStore>("Wocc", 1, 0, "AbstractStore");
-    qmlRegisterType<AbstractJob>("Wocc", 1, 0, "AbstractJob");
-    qmlRegisterType<AbstractWorker>("Wocc", 1, 0, "AbstractWorker");
+    qmlRegisterType<AbstractTask>("Wocc", 1, 0, "AbstractTask");
 
     qmlRegisterType<CurseStoreController>("Wocc", 1, 0, "CurseStore");
     qmlRegisterType<Curse::WorldOfWarcraft>("Wocc", 1, 0, "WorldOfWarcraft");

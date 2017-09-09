@@ -1,9 +1,9 @@
 #ifndef DOWNLOADFILEJOB_H
 #define DOWNLOADFILEJOB_H
 
-#include "abstracts/abstractjob.h"
+#include "abstracts/abstracttask.h"
 namespace Curse {
-class DownloadFileJob : public AbstractJob
+class DownloadFileJob : public AbstractTask
 {
     Q_OBJECT
 public:

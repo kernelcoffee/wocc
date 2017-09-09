@@ -3,7 +3,7 @@
 using namespace Curse;
 
 DownloadFileJob::DownloadFileJob(QObject* parent) :
-    AbstractJob(parent)
+    AbstractTask(parent)
 {
 
 }

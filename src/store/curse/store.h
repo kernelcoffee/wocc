@@ -11,9 +11,9 @@
 
 class NetworkCore;
 class FileDownloader;
-class AddonDetectJob;
+class AddonDetectTask;
 class AbstractGame;
-class AbstractWorker;
+class AbstractTask;
 class Addon;
 
 namespace Curse {
@@ -45,7 +45,7 @@ public:
     WorldOfWarcraft* worldOfWarcraft();
 
 public slots:
-    AbstractWorker* refresh();
+    AbstractTask* refresh();
 
 private:
     void loadLibraries();

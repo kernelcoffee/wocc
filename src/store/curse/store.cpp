@@ -5,7 +5,7 @@
 #include "network/filedownloader.h"
 
 #include "worldofwarcraft/worldofwarcraft.h"
-#include "worldofwarcraft/addondetectjob.h"
+#include "worldofwarcraft/addondetecttask.h"
 
 #include "xmlparser.h"
 #include "downloadfilejob.h"
@@ -44,7 +44,7 @@ Curse::WorldOfWarcraft* Store::worldOfWarcraft()
 }
 
 
-AbstractWorker* Store::refresh()
+AbstractTask* Store::refresh()
 {
     FileDownloader* downloader =  m_network->createFileDownloader();
     downloader->setUrl(archive_url);

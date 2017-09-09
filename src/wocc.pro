@@ -32,10 +32,12 @@ CONFIG(console_mode) {
 HEADERS += \
     ui/uicore.h \
     ui/curseaddonmodel.h \
+    ui/cursestorecontroller.h \
 
 SOURCES += \
     ui/uicore.cpp \
     ui/curseaddonmodel.cpp \
+    ui/cursestorecontroller.cpp \
 }
 
 HEADERS += \
@@ -50,7 +52,6 @@ HEADERS += \
     console/consolecore.h \
     utilities/fileextractor.h \
     store/storecore.h \
-    ui/cursestorecontroller.h \
     abstracts/abstractaddon.h \
     abstracts/abstractgame.h \
     store/curse/xmlparser.h \
@@ -59,11 +60,10 @@ HEADERS += \
     store/curse/store.h \
     threads/threadcore.h \
     threads/worker.h \
-    abstracts/abstractjob.h \
     store/curse/downloadfilejob.h \
     abstracts/abstractstore.h \
-    store/curse/worldofwarcraft/addondetectjob.h \
-    abstracts/abstractworker.h
+    abstracts/abstracttask.h \
+    store/curse/worldofwarcraft/addondetecttask.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
@@ -75,7 +75,6 @@ SOURCES += main.cpp \
     console/consolecore.cpp \
     utilities/fileextractor.cpp \
     store/storecore.cpp \
-    ui/cursestorecontroller.cpp \
     abstracts/abstractaddon.cpp \
     abstracts/abstractgame.cpp \
     store/curse/xmlparser.cpp \
@@ -84,10 +83,9 @@ SOURCES += main.cpp \
     store/curse/store.cpp \
     threads/threadcore.cpp \
     threads/worker.cpp \
-    abstracts/abstractjob.cpp \
     store/curse/downloadfilejob.cpp \
     abstracts/abstractstore.cpp \
-    store/curse/worldofwarcraft/addondetectjob.cpp \
-    abstracts/abstractworker.cpp
+    abstracts/abstracttask.cpp \
+    store/curse/worldofwarcraft/addondetecttask.cpp
 
 DISTFILES += style.astylerc
