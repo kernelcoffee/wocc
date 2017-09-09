@@ -3,12 +3,6 @@
 
 #include "abstracts/abstractstore.h"
 
-#include <QObject>
-#include <QVector>
-#include <QDateTime>
-#include <QThread>
-#include <QMutex>
-
 class NetworkCore;
 class FileDownloader;
 class AddonDetectTask;
@@ -42,17 +36,17 @@ public:
     explicit Store(QObject* parent = nullptr);
     ~Store();
 
+
+
     WorldOfWarcraft* worldOfWarcraft();
+
 
 public slots:
     AbstractTask* refresh();
-
-private:
     void loadLibraries();
 
+private:
     WorldOfWarcraft* m_WorldOfWarcraft;
-
-    QDateTime m_lastRefresh;
 };
 
 }

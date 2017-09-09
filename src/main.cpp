@@ -11,6 +11,7 @@ int main(int argc, char* argv[])
 
     cores.init();
     cores.initSettings();
+    cores.print();
     cores.initArguments(parser);
     parser.process(app);
     cores.processArguments(parser);

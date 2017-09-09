@@ -10,19 +10,21 @@ class AbstractCore : public QObject
 public:
     explicit AbstractCore(QObject* parent = nullptr);
 
-    virtual void init() {}
+    virtual void init();
     // If we need some processing to be done right after the UI shows
-    virtual void initSettings() {}
+    virtual void initSettings();
     // If the core as arguments to take into account
-    virtual void initArguments(QCommandLineParser& /*parser*/) { }
+    virtual void initArguments(QCommandLineParser&);
     // process the arguments
-    virtual void processArguments(QCommandLineParser& /*parser*/) { }
+    virtual void processArguments(QCommandLineParser&);
+
+    virtual void print();
 
 public slots:
     // If the core as settings to be saved
-    virtual void delayedInit() {}
+    virtual void delayedInit();
     // called when the current app is going to exit
-    virtual void aboutToQuit() {}
+    virtual void aboutToQuit();
 };
 
 #endif // ABSTRACTCORE_H

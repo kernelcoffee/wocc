@@ -3,7 +3,6 @@
 AbstractTask::AbstractTask(QObject* parent) :
     QObject(parent)
 {
-
 }
 
 QString AbstractTask::name() const
@@ -19,6 +18,31 @@ uint AbstractTask::progress() const
 AbstractTask::Status AbstractTask::status() const
 {
     return m_status;
+}
+
+bool AbstractTask::isAutoDelete()
+{
+    return m_autoDelete;
+}
+
+void AbstractTask::start()
+{
+    Q_UNREACHABLE();
+}
+
+void AbstractTask::pause()
+{
+    Q_UNREACHABLE();
+}
+
+void AbstractTask::cancel()
+{
+    Q_UNREACHABLE();
+}
+
+bool AbstractTask::isUnique() const
+{
+    return m_isUnique;
 }
 
 void AbstractTask::setProgress(uint progress)
@@ -37,4 +61,22 @@ void AbstractTask::setStatus(AbstractTask::Status status)
 
     m_status = status;
     emit statusChanged(m_status);
+}
+
+void AbstractTask::setAutoDelete(bool autoDelete)
+{
+    if (m_autoDelete == autoDelete)
+        return;
+
+    m_autoDelete = autoDelete;
+    emit autoDeleteChanged(m_autoDelete);
+}
+
+void AbstractTask::setIsUnique(bool isUnique)
+{
+    if (m_isUnique == isUnique)
+        return;
+
+    m_isUnique = isUnique;
+    emit isUniqueChanged(m_isUnique);
 }

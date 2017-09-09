@@ -4,18 +4,27 @@
 #include "abstracts/abstractcore.h"
 
 class CoreManager;
-class Worker;
+class AbstractTask;
 
 class ThreadCore : public AbstractCore
 {
     Q_OBJECT
+
+    Q_PROPERTY(QList<AbstractTask*> tasks READ tasks NOTIFY tasksChanged)
 public:
     explicit ThreadCore(CoreManager* parent = nullptr);
 
-    Worker* getNewWorker();
+    void AddTask();
+    QList<AbstractTask*> tasks() const;
+
+public slots:
+    void addTask(AbstractTask* task);
+
+signals:
+    void tasksChanged(const QList<AbstractTask*>& tasks);
 
 private:
-    QList<Worker*> m_worker;
+    QList<AbstractTask*> m_tasks;
 };
 
 #endif // THREADCORE_H

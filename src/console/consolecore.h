@@ -19,16 +19,16 @@ class ConsoleCore : public AbstractCore
 public:
     explicit ConsoleCore(CoreManager* parent = nullptr);
 
-    void init();
-    void initArguments(QCommandLineParser& parser);
-    void processArguments(QCommandLineParser& parser);
+    virtual void init() override;
+    virtual void initArguments(QCommandLineParser& parser) override;
+    virtual void processArguments(QCommandLineParser& parser) override;
 
 signals:
     void noCommandToProcess();
     void databaseUpdated();
 
 public slots:
-    void delayedInit();
+    virtual void delayedInit() override;
 
 private:
     Q_DISABLE_COPY(ConsoleCore)

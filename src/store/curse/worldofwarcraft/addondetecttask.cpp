@@ -15,6 +15,7 @@ AddonDetectTask::AddonDetectTask(const QVector<Addon*>& library, QObject* parent
     AbstractTask(parent)
     , m_library(library)
 {
+    m_name = tr("Detect Addons");
     qDebug() << m_library.count();
 }
 

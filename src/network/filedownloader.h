@@ -29,7 +29,6 @@ signals:
     void urlChanged(const QUrl& url);
     void destinationChanged(const QString& destination);
     void savedFileLocationChanged(const QString& savedFileLocation);
-    void finished();
 
 public slots:
     void setUrl(const QUrl& url);

@@ -15,6 +15,7 @@ public:
     explicit storeCore(CoreManager* parent = nullptr);
 
     virtual void init() override;
+    virtual void delayedInit() override;
 
     Curse::Store* curse() const;
 private:

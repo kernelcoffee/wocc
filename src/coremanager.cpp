@@ -74,6 +74,13 @@ void CoreManager::processArguments(QCommandLineParser& parser)
     }
 }
 
+void CoreManager::print()
+{
+    for (auto core : m_cores) {
+        core->print();
+    }
+}
+
 bool CoreManager::consoleMode()
 {
     return m_consoleMode;

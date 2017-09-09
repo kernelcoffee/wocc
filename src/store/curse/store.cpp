@@ -10,6 +10,7 @@
 #include "xmlparser.h"
 #include "downloadfilejob.h"
 #include "utilities/fileextractor.h"
+#include "refreshlibrarytask.h"
 
 
 #include <QStandardPaths>
@@ -17,15 +18,11 @@
 #include <QDir>
 #include <QFile>
 #include <QDataStream>
+
 #include <QSettings>
-
-#include <algorithm>
-
 #include <QDebug>
 
 using namespace Curse;
-
-static constexpr char archive_url[] = "http://clientupdate.curse.com/feed/Complete.xml.bz2";
 
 Store::Store(QObject* parent) :
     AbstractStore(parent)
@@ -43,25 +40,17 @@ Curse::WorldOfWarcraft* Store::worldOfWarcraft()
     return m_WorldOfWarcraft;
 }
 
-
 AbstractTask* Store::refresh()
 {
-    FileDownloader* downloader =  m_network->createFileDownloader();
-    downloader->setUrl(archive_url);
-    downloader->setFileOverride(true);
-    downloader->setDestination(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
+    RefreshLibraryTask* task = new RefreshLibraryTask(m_network->createFileDownloader());
+    task->setAutoDelete(true);
+    task->setIsUnique(true);
 
-    connect(downloader, &FileDownloader::finished, [this, downloader]() {
-        QSettings settings;
-        settings.beginGroup("Curse");
-        settings.setValue("curseArchive", downloader->savedFileLocation());
-        settings.endGroup();
-        loadLibraries();
-        downloader->deleteLater();
-    });
+    connect(task, &RefreshLibraryTask::finished, this, &Store::loadLibraries);
 
-    downloader->start();
-    return nullptr;
+    task->start();
+
+    return task;
 }
 
 void Store::loadLibraries()
@@ -73,8 +62,12 @@ void Store::loadLibraries()
     QVector<Addon*> library = parser.XmlToAddonList(xmlOutput);
     QVector<Addon*> wowLibrary;
     for (Addon* addon : library) {
-        if (addon->gameId() == static_cast<uint>(Games::WorldOfWarcraft)) {
+        switch (addon->gameId()) {
+        case static_cast<uint>(Games::WorldOfWarcraft):
             wowLibrary << addon;
+            break;
+        default:
+            break;
         }
     }
 

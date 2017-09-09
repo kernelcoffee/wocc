@@ -7,10 +7,10 @@
 
 #include <QDebug>
 
-NetworkCore::NetworkCore(QObject *parent) :
+NetworkCore::NetworkCore(QObject* parent) :
     AbstractCore(parent)
-  , m_manager(new QNetworkAccessManager)
-  , m_cache(new QNetworkDiskCache)
+    , m_manager(new QNetworkAccessManager)
+    , m_cache(new QNetworkDiskCache)
 {
 }
 
@@ -18,6 +18,13 @@ void NetworkCore::init()
 {
     m_cache->setCacheDirectory(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
     m_manager->setCache(m_cache);
+}
+
+void NetworkCore::print()
+{
+    qDebug() << "Network Info";
+    qDebug() << "SSL Version" << QSslSocket::sslLibraryBuildVersionString();
+
 }
 
 FileDownloader* NetworkCore::createFileDownloader()

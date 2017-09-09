@@ -59,11 +59,11 @@ HEADERS += \
     store/curse/addon.h \
     store/curse/store.h \
     threads/threadcore.h \
-    threads/worker.h \
     store/curse/downloadfilejob.h \
     abstracts/abstractstore.h \
     abstracts/abstracttask.h \
-    store/curse/worldofwarcraft/addondetecttask.h
+    store/curse/worldofwarcraft/addondetecttask.h \
+    store/curse/refreshlibrarytask.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
@@ -82,10 +82,10 @@ SOURCES += main.cpp \
     store/curse/addon.cpp \
     store/curse/store.cpp \
     threads/threadcore.cpp \
-    threads/worker.cpp \
     store/curse/downloadfilejob.cpp \
     abstracts/abstractstore.cpp \
     abstracts/abstracttask.cpp \
-    store/curse/worldofwarcraft/addondetecttask.cpp
+    store/curse/worldofwarcraft/addondetecttask.cpp \
+    store/curse/refreshlibrarytask.cpp
 
 DISTFILES += style.astylerc

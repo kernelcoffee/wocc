@@ -13,7 +13,8 @@ class NetworkCore : public AbstractCore
 public:
     explicit NetworkCore(QObject* parent = nullptr);
 
-    void init();
+    virtual void init() override;
+    virtual void print() override;
 
     FileDownloader* createFileDownloader();
 private:

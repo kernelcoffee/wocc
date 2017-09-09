@@ -22,10 +22,11 @@ public:
     explicit CoreManager(QObject* parent = 0);
     ~CoreManager();
 
-    void init();
-    void initSettings();
-    void initArguments(QCommandLineParser& parser);
-    void processArguments(QCommandLineParser& parser);
+    void init() override;
+    void initSettings() override;
+    void initArguments(QCommandLineParser& parser) override;
+    void processArguments(QCommandLineParser& parser) override;
+    void print() override;
 
     bool consoleMode();
 
@@ -33,8 +34,8 @@ public:
     storeCore* stores() const;
 
 public slots:
-    void delayedInit();
-    void aboutToQuit();
+    virtual void delayedInit() override;
+    virtual void aboutToQuit() override;
     void setConsoleMode(bool consoleMode);
 
 private:

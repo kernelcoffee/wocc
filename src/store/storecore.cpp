@@ -15,6 +15,11 @@ void storeCore::init()
     m_curse->init(m_cores->network());
 }
 
+void storeCore::delayedInit()
+{
+    m_curse->refresh();
+}
+
 Curse::Store* storeCore::curse() const
 {
     return m_curse;
