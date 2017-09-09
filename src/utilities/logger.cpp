@@ -22,12 +22,13 @@
 #include <QtCore/QStandardPaths>
 #include <QDateTime>
 
-const static QString    DEFAULT_LOG_DIR = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/Kernelcoffee/ErgoMusic/logs";	///< Log directory
-const static QString    DEFAULT_LOG_FILE = "logFile";	///< Log file name
+const static QString    DEFAULT_LOG_DIR = QStandardPaths::writableLocation(
+                                              QStandardPaths::DataLocation) + "/Kernelcoffee/ErgoMusic/logs";  ///< Log directory
+const static QString    DEFAULT_LOG_FILE = "logFile";   ///< Log file name
 const static QString    DEFAULT_LOG_EXT = "log";
 const static bool       WRITE_IN_LOGFILE = true;
 
-static const QString	logLevel_str[] = {
+static const QString    logLevel_str[] = {
     "Debug",
     "Warning",
     "Critical",
@@ -36,9 +37,9 @@ static const QString	logLevel_str[] = {
     "System"
 };
 
-Logger::Logger(QObject *parent) :
+Logger::Logger(QObject* parent) :
     QObject(parent)
-  , _logFile(nullptr)
+    , _logFile(nullptr)
 {}
 
 Logger::~Logger()
@@ -46,20 +47,20 @@ Logger::~Logger()
     if (_logFile) {
         if (_logFile->isOpen())
             _logFile->close();
-         delete _logFile;
+        delete _logFile;
     }
 }
 
-void Logger::log(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+void Logger::log(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
     Logger* logger = Logger::instance();
     QString message = Logger::instance()->_getLogPrefix()
-            + logLevel_str[type]
-            + ",\t" + context.file
-            + ":" + QString::number(context.line)
-            + ",\t" + context.function
-            + ",\t" + msg
-            ;
+                      + logLevel_str[type]
+                      + ",\t" + context.file
+                      + ":" + QString::number(context.line)
+                      + ",\t" + context.function
+                      + ",\t" + msg
+                      ;
 
     if (logger->outputToStd() && logger->fullDebugOutput()) {
         logger->_outputToStd(type, message);
@@ -73,11 +74,11 @@ void Logger::log(QtMsgType type, const QMessageLogContext &context, const QStrin
     }
 }
 
-void Logger::notice(const QString &msg)
+void Logger::notice(const QString& msg)
 {
     QString message = Logger::instance()->_getLogPrefix()
-            + msg
-            + "\n";
+                      + msg
+                      + "\n";
 
     std::cout << message.toStdString();
     Logger::instance()->_write(message);
@@ -103,7 +104,7 @@ bool Logger::fullDebugOutput()
     return m_fullDebugOutput;
 }
 
-void Logger::_write(const QString &msg)
+void Logger::_write(const QString& msg)
 {
     if (!WRITE_IN_LOGFILE)
         return;
@@ -114,7 +115,7 @@ void Logger::_write(const QString &msg)
             dir.mkpath(DEFAULT_LOG_DIR);
         _logFile = new QFile(_getLogFileName());
         if (_logFile->isOpen() == false)
-        _logFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
+            _logFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
         _write(QStringLiteral("---- NEW SESSION ----\n"));
     }
 
@@ -135,12 +136,13 @@ void Logger::_outputToStd(QtMsgType type, const QString& msg)
     }
 }
 
-QString	Logger::_getLogFileName()
+QString Logger::_getLogFileName()
 {
-    return DEFAULT_LOG_DIR + "/" + DEFAULT_LOG_FILE + "_" + QDateTime::currentDateTime().toString("yyyyMMdd") + "." + DEFAULT_LOG_EXT;
+    return DEFAULT_LOG_DIR + "/" + DEFAULT_LOG_FILE + "_" +
+           QDateTime::currentDateTime().toString("yyyyMMdd") + "." + DEFAULT_LOG_EXT;
 }
 
-QString	Logger::_getLogPrefix()
+QString Logger::_getLogPrefix()
 {
     return "<" + QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd-hh:mm:ss") + ">: ";
 }

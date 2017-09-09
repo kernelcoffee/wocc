@@ -17,11 +17,11 @@ class ConsoleCore : public AbstractCore
 {
     Q_OBJECT
 public:
-    explicit ConsoleCore(CoreManager *parent = nullptr);
+    explicit ConsoleCore(CoreManager* parent = nullptr);
 
     void init();
-    void initArguments(QCommandLineParser &parser);
-    void processArguments(QCommandLineParser &parser);
+    void initArguments(QCommandLineParser& parser);
+    void processArguments(QCommandLineParser& parser);
 
 signals:
     void noCommandToProcess();

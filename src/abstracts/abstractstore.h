@@ -9,7 +9,7 @@ class AbstractStore : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractStore(QObject *parent = nullptr);
+    explicit AbstractStore(QObject* parent = nullptr);
 
     void init(NetworkCore* network);
 

@@ -4,7 +4,7 @@
 #include <QAbstractListModel>
 
 namespace Curse {
-    class Addon;
+class Addon;
 }
 
 class CurseAddonModel : public QAbstractListModel
@@ -21,11 +21,11 @@ public:
         VersionAvailable
     };
 
-    CurseAddonModel(QObject *parent = 0);
+    CurseAddonModel(QObject* parent = 0);
 
-    QVariant                data(const QModelIndex &index, int role) const override;
-    int                     rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    QHash<int, QByteArray>  roleNames() const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
 public slots:
     void setData(const QVector<Curse::Addon*>& data);

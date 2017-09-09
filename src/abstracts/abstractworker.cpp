@@ -1,6 +1,6 @@
 #include "abstractworker.h"
 
-AbstractWorker::AbstractWorker(QObject *parent) : QObject(parent)
+AbstractWorker::AbstractWorker(QObject* parent) : QObject(parent)
 {
 
 }

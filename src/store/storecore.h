@@ -12,7 +12,7 @@ class storeCore : public AbstractCore
 
     Q_OBJECT
 public:
-    explicit storeCore(CoreManager *parent = nullptr);
+    explicit storeCore(CoreManager* parent = nullptr);
 
     virtual void init() override;
 

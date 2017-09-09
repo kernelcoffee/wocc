@@ -7,7 +7,7 @@ class AbstractWorker : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractWorker(QObject *parent = nullptr);
+    explicit AbstractWorker(QObject* parent = nullptr);
 
 signals:
 

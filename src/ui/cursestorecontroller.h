@@ -19,7 +19,7 @@ class CurseStoreController : public QObject
 
 public:
     CurseStoreController() {}
-    explicit CurseStoreController(Curse::Store* store, QObject *parent = nullptr);
+    explicit CurseStoreController(Curse::Store* store, QObject* parent = nullptr);
 
     CurseAddonModel* wowModel() const;
     CurseAddonModel* wowInstalledModel() const;

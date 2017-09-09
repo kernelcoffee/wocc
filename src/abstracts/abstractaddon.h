@@ -10,7 +10,7 @@ class AbstractAddon : public QObject
     Q_PROPERTY(QString author READ author WRITE setAuthor NOTIFY authorChanged)
 
 public:
-    explicit AbstractAddon(QObject *parent = 0);
+    explicit AbstractAddon(QObject* parent = 0);
 
     QString name() const;
     QString author() const;
@@ -20,8 +20,8 @@ signals:
     void authorChanged(QString author);
 
 public slots:
-    void setName(const QString &name);
-    void setAuthor(const QString &author);
+    void setName(const QString& name);
+    void setAuthor(const QString& author);
 
 protected:
     QString m_name;

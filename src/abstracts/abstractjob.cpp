@@ -1,6 +1,6 @@
 #include "abstractjob.h"
 
-AbstractJob::AbstractJob(QObject *parent) :
+AbstractJob::AbstractJob(QObject* parent) :
     QObject(parent)
 {
 

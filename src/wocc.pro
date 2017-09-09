@@ -31,9 +31,11 @@ CONFIG(console_mode) {
 
 HEADERS += \
     ui/uicore.h \
+    ui/curseaddonmodel.h \
 
 SOURCES += \
     ui/uicore.cpp \
+    ui/curseaddonmodel.cpp \
 }
 
 HEADERS += \
@@ -61,7 +63,6 @@ HEADERS += \
     store/curse/downloadfilejob.h \
     abstracts/abstractstore.h \
     store/curse/worldofwarcraft/addondetectjob.h \
-    ui/curseaddonmodel.h \
     abstracts/abstractworker.h
 
 SOURCES += main.cpp \
@@ -87,5 +88,6 @@ SOURCES += main.cpp \
     store/curse/downloadfilejob.cpp \
     abstracts/abstractstore.cpp \
     store/curse/worldofwarcraft/addondetectjob.cpp \
-    ui/curseaddonmodel.cpp \
     abstracts/abstractworker.cpp
+
+DISTFILES += style.astylerc

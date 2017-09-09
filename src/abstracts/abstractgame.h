@@ -12,7 +12,7 @@ class AbstractGame : public QObject
 
     Q_OBJECT
 public:
-    AbstractGame(QObject *parent = 0);
+    AbstractGame(QObject* parent = 0);
 
     virtual AbstractWorker* refresh();
     virtual AbstractWorker* detect();
@@ -20,10 +20,10 @@ public:
     virtual QString location() const;
 
 signals:
-    void locationChanged(const QString& location);
+    void locationChanged(const QString&);
 
 public slots:
-    virtual void setLocation(const QString& location);
+    virtual void setLocation(const QString&);
 
 protected:
     QString m_location;

@@ -12,7 +12,7 @@ public:
         Running
     };
 
-    explicit Worker(QObject *parent = 0);
+    explicit Worker(QObject* parent = 0);
 
 signals:
 

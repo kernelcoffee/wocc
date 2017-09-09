@@ -11,9 +11,9 @@
 
 using namespace Curse;
 
-AddonDetectJob::AddonDetectJob(const QVector<Addon*> &library, QObject *parent) :
+AddonDetectJob::AddonDetectJob(const QVector<Addon*>& library, QObject* parent) :
     QObject(parent)
-  , m_library(library)
+    , m_library(library)
 {
     qDebug() << m_library.count();
 }
@@ -23,7 +23,7 @@ uint AddonDetectJob::progress() const
     return m_progress;
 }
 
-QStringList AddonDetectJob::getPossibleAddons(const QString &path, const QVector<Addon*>& library)
+QStringList AddonDetectJob::getPossibleAddons(const QString& path, const QVector<Addon*>& library)
 {
     QDir dir(QUrl(path).toLocalFile());
 
@@ -69,7 +69,8 @@ QStringList AddonDetectJob::getPossibleAddons(const QString &path, const QVector
     return possibleAddons;
 }
 
-QVector<Addon*> AddonDetectJob::getInstalledAddons(const QStringList& possibleAddons, const QVector<Addon*>& library)
+QVector<Addon*> AddonDetectJob::getInstalledAddons(const QStringList& possibleAddons,
+                                                   const QVector<Addon*>& library)
 {
     // We'll detect addon by matching the folders to what they contains.
     QVector<Addon*> badAddons;
@@ -77,15 +78,14 @@ QVector<Addon*> AddonDetectJob::getInstalledAddons(const QStringList& possibleAd
     QVector<Addon*> updatableAddons;
     QSettings settings;
 
-    const QString &addonPath = settings.value("wowDir").toString() + "/Interface/AddOns";
+    const QString& addonPath = settings.value("wowDir").toString() + "/Interface/AddOns";
 
     QDir dir(QUrl(addonPath).toLocalFile());
     QStringList entries = dir.entryList(QDir::NoDotAndDotDot | QDir::Dirs);
 
-    for (const QString &possibleAddon : possibleAddons) {
-
+    for (const QString& possibleAddon : possibleAddons) {
         // let's retrieve the AddOn using the shortname
-        auto itObj = std::find_if(library.begin(), library.end(), [=](Addon* addon){
+        auto itObj = std::find_if(library.begin(), library.end(), [ = ](Addon * addon) {
             return addon->shortName() == possibleAddon;
         });
 
@@ -119,9 +119,11 @@ QVector<Addon*> AddonDetectJob::getInstalledAddons(const QStringList& possibleAd
 
         if (matches) {
             addon->setIsInstalled(true);
-            auto tocInfos = getInfosFromToc(addonPath + "/" + addon->files().first().modules.first().folderName);
+            auto tocInfos = getInfosFromToc(addonPath + "/" +
+                                            addon->files().first().modules.first().folderName);
             //            qDebug() << addon->name() << tocInfos;
-            if (tocInfos.contains("X-Curse-Project-ID") && addon->shortName() == tocInfos["X-Curse-Project-ID"]) {
+            if (tocInfos.contains("X-Curse-Project-ID")
+                    && addon->shortName() == tocInfos["X-Curse-Project-ID"]) {
                 updatableAddons << addon;
                 qDebug() << addon->shortName() << "found to curse database" << tocInfos;
             } else {
@@ -139,12 +141,12 @@ QVector<Addon*> AddonDetectJob::getInstalledAddons(const QStringList& possibleAd
     return installedAddons;
 }
 
-QMap<QString, QString> AddonDetectJob::getInfosFromToc(const QString &path)
+QMap<QString, QString> AddonDetectJob::getInfosFromToc(const QString& path)
 {
     QDir dir(QUrl(path).toLocalFile());
     QFileInfoList entries = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files);
 
-    for (const QFileInfo &entry : entries) {
+    for (const QFileInfo& entry : entries) {
         if (entry.suffix() == "toc") {
             QFile file(entry.absoluteFilePath());
 
@@ -157,8 +159,10 @@ QMap<QString, QString> AddonDetectJob::getInfosFromToc(const QString &path)
             QTextStream inputStream(&file);
             QMap<QString, QRegularExpression> patternMap;
             patternMap["Version"] = QRegularExpression("^\\s*##\\s*Version:\\s*([^\\s]+)");
-            patternMap["X-Curse-Packaged-Version"] = QRegularExpression("^\\s*##\\s*X-Curse-Packaged-Version:\\s*([^\\s]+)");
-            patternMap["X-Curse-Project-ID"] = QRegularExpression("^\\s*##\\s*X-Curse-Project-ID:\\s*([^\\s]+)");
+            patternMap["X-Curse-Packaged-Version"] =
+                QRegularExpression("^\\s*##\\s*X-Curse-Packaged-Version:\\s*([^\\s]+)");
+            patternMap["X-Curse-Project-ID"] =
+                QRegularExpression("^\\s*##\\s*X-Curse-Project-ID:\\s*([^\\s]+)");
             patternMap["Dependencies"] = QRegularExpression("^\\s*##\\s*Dependencies:\\s*([^\\s]+)");
             patternMap["OptionalDeps"] = QRegularExpression("^\\s*##\\s*OptionalDeps:\\s*([^\\s]+)");
             patternMap["X-Child-Of"] = QRegularExpression("^\\s*##\\s*X-Child-Of:\\s*([^\\s]+)");
@@ -187,13 +191,13 @@ void AddonDetectJob::run()
 {
     QSettings settings;
 
-    const QString &addonDirPath = settings.value("wowDir").toString() + "/Interface/AddOns";
+    const QString& addonDirPath = settings.value("wowDir").toString() + "/Interface/AddOns";
 
-    const QStringList &possibleAddons = getPossibleAddons(addonDirPath, m_library);
+    const QStringList& possibleAddons = getPossibleAddons(addonDirPath, m_library);
 
     qDebug() << "Premiminary addon detection :" << possibleAddons.count();
 
-    const QVector<Addon*> &installedAddons = getInstalledAddons(possibleAddons, m_library);
+    const QVector<Addon*>& installedAddons = getInstalledAddons(possibleAddons, m_library);
 
     emit succcess(installedAddons);
 }

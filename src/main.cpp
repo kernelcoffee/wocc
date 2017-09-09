@@ -1,7 +1,7 @@
 #include "woccapplication.h"
 #include "coremanager.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     WoccApplication app(argc, argv);

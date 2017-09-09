@@ -2,10 +2,10 @@
 #include "coremanager.h"
 #include "store/curse/store.h"
 
-storeCore::storeCore(CoreManager *parent) :
+storeCore::storeCore(CoreManager* parent) :
     AbstractCore(parent)
-  , m_cores(parent)
-  , m_curse(new Curse::Store())
+    , m_cores(parent)
+    , m_curse(new Curse::Store())
 {
 
 }

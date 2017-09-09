@@ -3,7 +3,7 @@
 
 using namespace Curse;
 
-Addon::Addon(QObject *parent) :
+Addon::Addon(QObject* parent) :
     AbstractAddon(parent)
 {
 }
@@ -110,7 +110,7 @@ void Addon::setInstallCount(uint installCount)
     m_installCount = installCount;
 }
 
-void Addon::setWebsiteUrl(const QString &websiteUrl)
+void Addon::setWebsiteUrl(const QString& websiteUrl)
 {
     m_shortName = websiteUrl.section('/', -1);
     m_websiteUrl = QUrl(websiteUrl);
@@ -125,7 +125,7 @@ void Addon::setIsInstalled(bool isInstalled)
     emit isInstalledChanged(isInstalled);
 }
 
-void Addon::setVersionInstalled(const QString &versionInstalled)
+void Addon::setVersionInstalled(const QString& versionInstalled)
 {
     if (m_versionInstalled == versionInstalled) {
         return;
@@ -139,7 +139,7 @@ void Addon::addFile(const Addon::File& file)
     m_files << file;
 }
 
-void Addon::setSummary(const QString &summary)
+void Addon::setSummary(const QString& summary)
 {
     m_summary = summary;
 }

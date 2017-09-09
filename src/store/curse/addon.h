@@ -53,7 +53,7 @@ public:
         QList<Module> modules;
     };
 
-    explicit Addon(QObject *parent = nullptr);
+    explicit Addon(QObject* parent = nullptr);
 
     void addAuthor(const QString& name, const QString& url);
     void addCategory(int id, const QString& name, const QString& url);
@@ -76,18 +76,18 @@ public:
 
 
 public slots:
-    void addFile(const File &file);
+    void addFile(const File& file);
     void setId(uint id);
     void setGameId(uint gameId);
-    void setSummary(const QString &summary);
+    void setSummary(const QString& summary);
     void setInstallCount(uint installCount);
-    void setWebsiteUrl(const QString &websiteUrl);
+    void setWebsiteUrl(const QString& websiteUrl);
     void setIsInstalled(bool installed);
-    void setVersionInstalled(const QString &versionInstalled);
+    void setVersionInstalled(const QString& versionInstalled);
 
 signals:
     void isInstalledChanged(bool isInstalled);
-    void versionInstalledChanged(const QString &versionInstalled);
+    void versionInstalledChanged(const QString& versionInstalled);
     void updateAvailableChanged(bool updateAvailable);
 
 private:

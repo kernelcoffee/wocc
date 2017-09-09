@@ -10,7 +10,7 @@ class ThreadCore : public AbstractCore
 {
     Q_OBJECT
 public:
-    explicit ThreadCore(CoreManager *parent = nullptr);
+    explicit ThreadCore(CoreManager* parent = nullptr);
 
     Worker* getNewWorker();
 

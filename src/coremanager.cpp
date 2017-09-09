@@ -12,11 +12,11 @@
 
 #include <QDebug>
 
-CoreManager::CoreManager(QObject *parent) :
+CoreManager::CoreManager(QObject* parent) :
     AbstractCore(parent)
-  , m_network(new NetworkCore(this))
-  , m_threads(new ThreadCore(this))
-  , m_stores(new storeCore(this))
+    , m_network(new NetworkCore(this))
+    , m_threads(new ThreadCore(this))
+    , m_stores(new storeCore(this))
 {
     QTimer::singleShot(0, this, &CoreManager::delayedInit);
 }
@@ -37,7 +37,9 @@ void CoreManager::init()
 
 #ifndef console_mode
     m_cores <<  m_ui;
-    connect(m_console, &ConsoleCore::noCommandToProcess, [this](){ setConsoleMode(true); });
+    connect(m_console, &ConsoleCore::noCommandToProcess, [this]() {
+        setConsoleMode(true);
+    });
     connect(m_console, &ConsoleCore::noCommandToProcess, m_ui, &UiCore::startX, Qt::QueuedConnection);
 #endif
 
@@ -55,7 +57,7 @@ void CoreManager::initSettings()
     }
 }
 
-void CoreManager::initArguments(QCommandLineParser &parser)
+void CoreManager::initArguments(QCommandLineParser& parser)
 {
     parser.addHelpOption();
     parser.addVersionOption();
@@ -65,7 +67,7 @@ void CoreManager::initArguments(QCommandLineParser &parser)
     }
 }
 
-void CoreManager::processArguments(QCommandLineParser &parser)
+void CoreManager::processArguments(QCommandLineParser& parser)
 {
     for (auto core : m_cores) {
         core->processArguments(parser);
@@ -77,12 +79,12 @@ bool CoreManager::consoleMode()
     return m_consoleMode;
 }
 
-NetworkCore *CoreManager::network() const
+NetworkCore* CoreManager::network() const
 {
     return m_network;
 }
 
-storeCore *CoreManager::stores() const
+storeCore* CoreManager::stores() const
 {
     return m_stores;
 }

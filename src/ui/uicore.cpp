@@ -17,9 +17,9 @@
 #include <QDebug>
 #include <QQuickStyle>
 
-UiCore::UiCore(CoreManager *parent) :
+UiCore::UiCore(CoreManager* parent) :
     AbstractCore(parent)
-  , m_stores(parent->stores())
+    , m_stores(parent->stores())
 {
     QQuickStyle::setStyle("Material");
 }

@@ -9,7 +9,7 @@ class AbstractJob : public QObject
     Q_PROPERTY(QString name READ name CONSTANT)
 
 public:
-    explicit AbstractJob(QObject *parent = 0);
+    explicit AbstractJob(QObject* parent = 0);
 
     QString name() const;
 

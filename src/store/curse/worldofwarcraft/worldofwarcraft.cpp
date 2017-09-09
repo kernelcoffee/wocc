@@ -10,13 +10,14 @@ using namespace Curse;
 
 static constexpr char addOnPath[] = "";
 
-WorldOfWarcraft::WorldOfWarcraft(QObject *parent) :
+WorldOfWarcraft::WorldOfWarcraft(QObject* parent) :
     AbstractGame(parent)
 {
     QSettings settings;
 
     settings.beginGroup("WorldOfWarcraft");
-    m_location = settings.value("location", QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString();
+    m_location = settings.value("location",
+                                QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString();
     settings.endGroup();
 }
 
@@ -68,14 +69,14 @@ QString WorldOfWarcraft::location() const
     return m_location;
 }
 
-void WorldOfWarcraft::setLibrary(const QVector<Addon*> &library)
+void WorldOfWarcraft::setLibrary(const QVector<Addon*>& library)
 {
     m_library = library;
     qDebug() << "Wow library updated with " << m_library.count() << "addons";
     emit libraryUpdated(library);
 }
 
-void WorldOfWarcraft::setLocation(const QString &location)
+void WorldOfWarcraft::setLocation(const QString& location)
 {
     if (m_location == location)
         return;

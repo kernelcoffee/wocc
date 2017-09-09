@@ -16,9 +16,9 @@ class XmlParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit XmlParser(QObject *parent = 0);
+    explicit XmlParser(QObject* parent = 0);
 
-    QVector<Curse::Addon*> XmlToAddonList(const QString &xml) const;
+    QVector<Curse::Addon*> XmlToAddonList(const QString& xml) const;
 };
 
 }

@@ -39,7 +39,7 @@ public:
         Firefall = 456
     };
 
-    explicit Store(QObject *parent = nullptr);
+    explicit Store(QObject* parent = nullptr);
     ~Store();
 
     WorldOfWarcraft* worldOfWarcraft();

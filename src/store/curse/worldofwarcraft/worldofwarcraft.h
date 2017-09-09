@@ -16,7 +16,7 @@ class WorldOfWarcraft : public AbstractGame
 {
     Q_OBJECT
 public:
-    explicit WorldOfWarcraft(QObject *parent = 0);
+    explicit WorldOfWarcraft(QObject* parent = 0);
 
     Q_INVOKABLE virtual AbstractWorker* refresh() override;
     Q_INVOKABLE virtual AbstractWorker* detect() override;

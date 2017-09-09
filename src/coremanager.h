@@ -19,13 +19,13 @@ class CoreManager : public AbstractCore
 {
     Q_OBJECT
 public:
-    explicit CoreManager(QObject *parent = 0);
+    explicit CoreManager(QObject* parent = 0);
     ~CoreManager();
 
     void init();
     void initSettings();
-    void initArguments(QCommandLineParser &parser);
-    void processArguments(QCommandLineParser &parser);
+    void initArguments(QCommandLineParser& parser);
+    void processArguments(QCommandLineParser& parser);
 
     bool consoleMode();
 
@@ -45,13 +45,13 @@ private:
     bool m_consoleMode = false;
 
 #ifndef console_mode
-    UiCore *m_ui = nullptr;
+    UiCore* m_ui = nullptr;
 #endif
 
-    NetworkCore *m_network = nullptr;
-    ThreadCore *m_threads = nullptr;
-    ConsoleCore *m_console = nullptr;
-    storeCore *m_stores = nullptr;
+    NetworkCore* m_network = nullptr;
+    ThreadCore* m_threads = nullptr;
+    ConsoleCore* m_console = nullptr;
+    storeCore* m_stores = nullptr;
 };
 
 #endif // COREMANAGER_H

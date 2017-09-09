@@ -7,7 +7,7 @@ class DownloadFileJob : public AbstractJob
 {
     Q_OBJECT
 public:
-    explicit DownloadFileJob( QObject *parent = 0);
+    explicit DownloadFileJob( QObject* parent = 0);
 
     void run();
 

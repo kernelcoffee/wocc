@@ -27,9 +27,9 @@ using namespace Curse;
 
 static constexpr char archive_url[] = "http://clientupdate.curse.com/feed/Complete.xml.bz2";
 
-Store::Store(QObject *parent) :
+Store::Store(QObject* parent) :
     AbstractStore(parent)
-  , m_WorldOfWarcraft(new WorldOfWarcraft)
+    , m_WorldOfWarcraft(new WorldOfWarcraft)
 {
 }
 
@@ -46,12 +46,12 @@ Curse::WorldOfWarcraft* Store::worldOfWarcraft()
 
 AbstractWorker* Store::refresh()
 {
-    FileDownloader *downloader =  m_network->createFileDownloader();
+    FileDownloader* downloader =  m_network->createFileDownloader();
     downloader->setUrl(archive_url);
     downloader->setFileOverride(true);
     downloader->setDestination(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
 
-    connect(downloader, &FileDownloader::finished, [this, downloader](){
+    connect(downloader, &FileDownloader::finished, [this, downloader]() {
         QSettings settings;
         settings.beginGroup("Curse");
         settings.setValue("curseArchive", downloader->savedFileLocation());
@@ -72,7 +72,7 @@ void Store::loadLibraries()
 
     QVector<Addon*> library = parser.XmlToAddonList(xmlOutput);
     QVector<Addon*> wowLibrary;
-    for (Addon* addon: library) {
+    for (Addon* addon : library) {
         if (addon->gameId() == static_cast<uint>(Games::WorldOfWarcraft)) {
             wowLibrary << addon;
         }

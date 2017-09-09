@@ -6,12 +6,12 @@
 #include <QLoggingCategory>
 #include <QTime>
 
-WoccApplication::WoccApplication(int &argc, char *argv[]) :
-  #ifndef console_mode
+WoccApplication::WoccApplication(int& argc, char* argv[]) :
+#ifndef console_mode
     QApplication(argc, argv)
-  #else
+#else
     QCoreApplication(argc, argv)
-  #endif
+#endif
 {
 #ifndef QT_NO_DEBUG_OUTPUT
     // Qt debug output is disabled on some systems, this reenables it at the project level.

@@ -18,7 +18,7 @@ class WoccApplication : public QCoreApplication
 {
     Q_OBJECT
 public:
-    explicit WoccApplication(int &argc, char **argv);
+    explicit WoccApplication(int& argc, char** argv);
 };
 
 #endif // WOCCAPPLICATION_H

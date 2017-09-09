@@ -3,13 +3,13 @@
 #include <QProcess>
 #include <QDebug>
 
-FileExtractor::FileExtractor(QObject *parent) :
+FileExtractor::FileExtractor(QObject* parent) :
     QObject(parent)
 {
 
 }
 
-QString FileExtractor::bzip2FileToString(const QString &filePath)
+QString FileExtractor::bzip2FileToString(const QString& filePath)
 {
     QProcess process;
     process.start("bzip2", {"-dkc", filePath});

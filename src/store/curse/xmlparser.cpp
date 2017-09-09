@@ -6,7 +6,7 @@
 
 using namespace Curse;
 
-inline void parseAuthors(QXmlStreamReader &reader, Addon* addon)
+inline void parseAuthors(QXmlStreamReader& reader, Addon* addon)
 {
     reader.readNextStartElement();
     while (reader.isStartElement() && reader.name() == "CAddOnAuthor") {
@@ -20,7 +20,7 @@ inline void parseAuthors(QXmlStreamReader &reader, Addon* addon)
     }
 }
 
-inline void parseCategories(QXmlStreamReader &reader, Addon* addon)
+inline void parseCategories(QXmlStreamReader& reader, Addon* addon)
 {
     reader.readNextStartElement();
     while (reader.isStartElement() && reader.name() == "CAddOnCategory") {
@@ -36,7 +36,7 @@ inline void parseCategories(QXmlStreamReader &reader, Addon* addon)
     }
 }
 
-inline void parseCategorySection(QXmlStreamReader &reader, Addon* addon)
+inline void parseCategorySection(QXmlStreamReader& reader, Addon* addon)
 {
     Q_UNUSED(addon)
     // ExtraIncludePattern
@@ -71,7 +71,7 @@ inline void parseCategorySection(QXmlStreamReader &reader, Addon* addon)
     reader.readNextStartElement();
 }
 
-inline void parseLatestFiles(QXmlStreamReader &reader, Addon* addon)
+inline void parseLatestFiles(QXmlStreamReader& reader, Addon* addon)
 {
     Addon::File file;
 
@@ -198,16 +198,16 @@ inline void parseLatestFiles(QXmlStreamReader &reader, Addon* addon)
     addon->addFile(file);
 }
 
-XmlParser::XmlParser(QObject *parent) :
+XmlParser::XmlParser(QObject* parent) :
     QObject(parent)
 {
 
 }
 
-QVector<Addon *> XmlParser::XmlToAddonList(const QString &xml) const
+QVector<Addon*> XmlParser::XmlToAddonList(const QString& xml) const
 {
     QXmlStreamReader reader(xml);
-    QVector<Addon *> addonList;
+    QVector<Addon*> addonList;
 
     reader.readNextStartElement();
     reader.readNextStartElement();

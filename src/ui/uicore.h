@@ -13,7 +13,7 @@ class UiCore : public AbstractCore
 {
     Q_OBJECT
 public:
-    explicit UiCore(CoreManager *parent = 0);
+    explicit UiCore(CoreManager* parent = 0);
 
 public slots:
     void startX();

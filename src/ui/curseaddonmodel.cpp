@@ -2,7 +2,7 @@
 #include "store/curse/addon.h"
 #include <QDebug>
 
-CurseAddonModel::CurseAddonModel(QObject *parent) :
+CurseAddonModel::CurseAddonModel(QObject* parent) :
     QAbstractListModel(parent)
 {
 

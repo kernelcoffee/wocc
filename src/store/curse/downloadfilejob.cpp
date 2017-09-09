@@ -2,7 +2,7 @@
 
 using namespace Curse;
 
-DownloadFileJob::DownloadFileJob(QObject *parent) :
+DownloadFileJob::DownloadFileJob(QObject* parent) :
     AbstractJob(parent)
 {
 
