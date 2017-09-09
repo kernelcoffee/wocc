@@ -22,9 +22,9 @@ void Addon::printContent()
 {
     qDebug() << m_name << m_shortName;
     for (auto file : m_files) {
-        qDebug() << "Files" << file.name << file.downloadUrl;
+        qDebug() << "Url :" << file.name << file.downloadUrl;
         for (auto module : file.modules) {
-            qDebug() << module.folderName;
+            qDebug() << "dependency : " << module.folderName;
         }
         qDebug();
     }

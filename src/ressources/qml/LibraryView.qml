@@ -75,10 +75,10 @@ Controls1.TableView {
         role: ""
         title: "Action"
         delegate: Button {
-            text: qsTr("Update")
+            text: qsTr("Install")
             onClicked: {
                 console.log(currentRow)
-                store.update(currentRow);
+                store.worldOfWarcraft.install(store.wowModel.getAddon(currentRow));
             }
         }
     }

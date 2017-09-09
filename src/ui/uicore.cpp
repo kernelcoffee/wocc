@@ -1,7 +1,9 @@
 #include "uicore.h"
 #include "coremanager.h"
+
 #include "store/storecore.h"
 #include "store/curse/store.h"
+#include "store/curse/addon.h"
 
 #include "abstracts/abstractgame.h"
 #include "abstracts/abstractstore.h"
@@ -48,6 +50,7 @@ void UiCore::initContext()
 
     qmlRegisterType<CurseStoreController>("Wocc", 1, 0, "CurseStore");
     qmlRegisterType<Curse::WorldOfWarcraft>("Wocc", 1, 0, "WorldOfWarcraft");
+    qmlRegisterType<Curse::Addon>("Wocc", 1, 0, "CurseAddon");
     qRegisterMetaType<CurseAddonModel*>("CurseAddonModel*");
 
 

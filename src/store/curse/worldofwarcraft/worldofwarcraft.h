@@ -7,6 +7,7 @@
 #include <QThread>
 #include <QMutex>
 
+
 namespace Curse {
 
 class Addon;
@@ -20,6 +21,8 @@ public:
 
     Q_INVOKABLE virtual AbstractWorker* refresh() override;
     Q_INVOKABLE virtual AbstractWorker* detect() override;
+
+    Q_INVOKABLE void install(Curse::Addon* addon);
 
     virtual QString location() const override;
 

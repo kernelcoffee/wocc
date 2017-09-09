@@ -27,6 +27,8 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    Q_INVOKABLE Curse::Addon* getAddon(int row);
+
 public slots:
     void setData(const QVector<Curse::Addon*>& data);
 

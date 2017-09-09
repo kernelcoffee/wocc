@@ -1,5 +1,6 @@
 #include "worldofwarcraft.h"
 #include "addondetectjob.h"
+#include "store/curse/addon.h"
 
 #include <QSettings>
 #include <QStandardPaths>
@@ -62,6 +63,11 @@ AbstractWorker* WorldOfWarcraft::detect()
 //    worker->run();
 //    worker->deleteLater();
     //    return worker;
+}
+
+void WorldOfWarcraft::install(Curse::Addon* addon)
+{
+    addon->printContent();
 }
 
 QString WorldOfWarcraft::location() const

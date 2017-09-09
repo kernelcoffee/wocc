@@ -53,6 +53,11 @@ QHash<int, QByteArray> CurseAddonModel::roleNames() const
     };
 }
 
+Curse::Addon* CurseAddonModel::getAddon(int row)
+{
+    return m_data[row];
+}
+
 void CurseAddonModel::setData(const QVector<Curse::Addon*>& data)
 {
     qDebug() << "Update data" << data.count();
