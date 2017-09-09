@@ -1,9 +1,17 @@
 #include "uicore.h"
 #include "coremanager.h"
 #include "store/storecore.h"
-#include "curseaddonmodel.h"
+#include "store/curse/store.h"
+
+#include "abstracts/abstractgame.h"
+#include "abstracts/abstractstore.h"
+#include "abstracts/abstractjob.h"
+#include "abstracts/abstractworker.h"
 
 #include "cursestorecontroller.h"
+#include "curseaddonmodel.h"
+
+#include "store/curse/worldofwarcraft/worldofwarcraft.h"
 
 #include <QQmlContext>
 #include <QDebug>
@@ -29,12 +37,19 @@ void UiCore::startX()
 
 void UiCore::initContext()
 {
-    m_cstoreController = new CursestoreController(m_stores->curse());
+    m_cstoreController = new CurseStoreController(m_stores->curse());
 
     QQmlContext* context = m_engine.rootContext();
 
-    qmlRegisterType<CursestoreController>("Wocc", 1, 0, "CursestoreController");
+    qmlRegisterType<AbstractGame>("Wocc", 1, 0, "AbstractGame");
+    qmlRegisterType<AbstractStore>("Wocc", 1, 0, "AbstractStore");
+    qmlRegisterType<AbstractJob>("Wocc", 1, 0, "AbstractJob");
+    qmlRegisterType<AbstractWorker>("Wocc", 1, 0, "AbstractWorker");
+
+    qmlRegisterType<CurseStoreController>("Wocc", 1, 0, "CurseStore");
+    qmlRegisterType<Curse::WorldOfWarcraft>("Wocc", 1, 0, "WorldOfWarcraft");
     qRegisterMetaType<CurseAddonModel*>("CurseAddonModel*");
+
 
     context->setContextProperty("_cursestore", m_cstoreController);
 }

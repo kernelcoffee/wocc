@@ -61,7 +61,8 @@ HEADERS += \
     store/curse/downloadfilejob.h \
     abstracts/abstractstore.h \
     store/curse/worldofwarcraft/addondetectjob.h \
-    ui/curseaddonmodel.h
+    ui/curseaddonmodel.h \
+    abstracts/abstractworker.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
@@ -86,4 +87,5 @@ SOURCES += main.cpp \
     store/curse/downloadfilejob.cpp \
     abstracts/abstractstore.cpp \
     store/curse/worldofwarcraft/addondetectjob.cpp \
-    ui/curseaddonmodel.cpp
+    ui/curseaddonmodel.cpp \
+    abstracts/abstractworker.cpp

@@ -66,7 +66,7 @@ void ConsoleCore::update()
 {
     qDebug() << "update";
     QEventLoop loop;
-    Curse::WorldOfWarcraft* wow = m_stores->curse()->wow();
+    Curse::WorldOfWarcraft* wow = m_stores->curse()->worldOfWarcraft();
     connect(wow, &Curse::WorldOfWarcraft::libraryUpdated,
             &loop, &QEventLoop::quit);
     wow->refresh();

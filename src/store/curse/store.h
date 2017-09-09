@@ -12,14 +12,18 @@
 class NetworkCore;
 class FileDownloader;
 class AddonDetectJob;
+class AbstractGame;
+class AbstractWorker;
+class Addon;
 
 namespace Curse {
 
-class Addon;
 class WorldOfWarcraft;
 
 class Store : public AbstractStore
 {
+    Q_PROPERTY(WorldOfWarcraft* worldOfWarcraft READ worldOfWarcraft CONSTANT)
+
     Q_OBJECT
 public:
     enum class Games {
@@ -35,28 +39,18 @@ public:
         Firefall = 456
     };
 
-    explicit Store(NetworkCore* network, QObject *parent = nullptr);
+    explicit Store(QObject *parent = nullptr);
     ~Store();
 
-    WorldOfWarcraft* wow();
+    WorldOfWarcraft* worldOfWarcraft();
 
-//public slots:
-//    AddonDetectJob* detect();
-
-//    bool loadInstalled(bool isAsync = true);
-//    bool saveInstalled();
-
-
-private slots:
-    void refresh();
-//    void setWowInstalledAddons(const QVector<Addon*> &installedAddons);
+public slots:
+    AbstractWorker* refresh();
 
 private:
     void loadLibraries();
 
-    WorldOfWarcraft* m_wow;
-
-    QVector<Addon*> m_library;
+    WorldOfWarcraft* m_WorldOfWarcraft;
 
     QDateTime m_lastRefresh;
 };

@@ -8,7 +8,7 @@ import Wocc 1.0
 
 Controls1.TableView {
     id: listView
-    property CursestoreController store
+    property CurseStore store
     property alias model: listView.model
 
     rowDelegate:  Rectangle {

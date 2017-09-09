@@ -17,17 +17,18 @@ class WorldOfWarcraft : public AbstractGame
     Q_OBJECT
 public:
     explicit WorldOfWarcraft(QObject *parent = 0);
-    ~WorldOfWarcraft();
 
-    virtual void refresh() override;
-    virtual void detect() override;
+    Q_INVOKABLE virtual AbstractWorker* refresh() override;
+    Q_INVOKABLE virtual AbstractWorker* detect() override;
+
+    virtual QString location() const override;
 
 signals:
-    void refreshRequest();
-    void libraryUpdated(const QVector<Addon*> &library);
+    void libraryUpdated(const QVector<Addon*>& library);
 
 public slots:
-    void setLibrary(const QVector<Addon*> &library);
+    void setLibrary(const QVector<Addon*>& library);
+    virtual void setLocation(const QString& location);
 
 private:
     QVector<Addon*> m_library;

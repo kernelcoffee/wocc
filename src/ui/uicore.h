@@ -5,7 +5,7 @@
 #include <QQmlApplicationEngine>
 
 class CoreManager;
-class CursestoreController;
+class CurseStoreController;
 class storeCore;
 
 
@@ -24,7 +24,7 @@ private:
     QQmlApplicationEngine m_engine;
 
     storeCore* m_stores = nullptr;
-    CursestoreController* m_cstoreController = nullptr;
+    CurseStoreController* m_cstoreController = nullptr;
 };
 
 #endif // UICORE_H

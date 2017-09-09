@@ -8,7 +8,7 @@ import Wocc 1.0
 Item {
     id: homeTab
 
-    property CursestoreController store
+    property CurseStore store
 
     FileDialog {
         id: fileDialog
@@ -16,9 +16,9 @@ Item {
         selectExisting: false
         selectFolder: true
         selectMultiple: false
-        folder: store.wowDir
+        folder: store.worldOfWarcraft.location
         onAccepted: {
-            store.wowDir = folder
+            store.worldOfWarcraft.location = folder
         }
     }
 
@@ -26,7 +26,7 @@ Item {
         width: parent.width
         TextField {
             id: pathText
-            text: curse.wowDir
+            text: store.worldOfWarcraft.location
         }
         Button {
             text: "Select"
@@ -39,11 +39,13 @@ Item {
 
         Button {
             text: "Detect"
-            onClicked: curse.detect()
+            onClicked: store.worldOfWarcraft.detect()
         }
         Button {
             text: "Refresh"
-            onClicked: curse.refresh()
+            onClicked: {
+                store.refresh()
+            }
         }
     }
 }

@@ -1,52 +1,38 @@
 #ifndef CURSESTORECONTROLLER_H
 #define CURSESTORECONTROLLER_H
 
-#include <QObject>
+#include <store/curse/store.h>
 
-namespace Curse {
-class Store;
-}
+using namespace Curse;
 
 class CurseAddonModel;
+class WorldOfWarcraft;
+class AbstractWorker;
 
-class CursestoreController : public QObject
+class CurseStoreController : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString wowDir READ wowDir WRITE setWowDir NOTIFY wowDirChanged)
     Q_PROPERTY(CurseAddonModel* wowModel READ wowModel CONSTANT)
     Q_PROPERTY(CurseAddonModel* wowInstalledModel READ wowInstalledModel CONSTANT)
+    Q_PROPERTY(Curse::WorldOfWarcraft* worldOfWarcraft READ worldOfWarcraft CONSTANT)
+
 public:
-    enum class State {
-        Ready,
-        Refreshing,
-        Detecting
-    };
-
-    CursestoreController() {}
-    explicit CursestoreController(Curse::Store* store, QObject *parent = nullptr);
-
-    Q_INVOKABLE void refresh();
-    Q_INVOKABLE void detect();
-    Q_INVOKABLE void update(int index);
-
-    QString wowDir() const;
+    CurseStoreController() {}
+    explicit CurseStoreController(Curse::Store* store, QObject *parent = nullptr);
 
     CurseAddonModel* wowModel() const;
     CurseAddonModel* wowInstalledModel() const;
 
-public slots:
-    void setWowDir(const QString &wowDir);
+    Curse::WorldOfWarcraft* worldOfWarcraft() const;
 
-signals:
-    void wowDirChanged(const QString &wowDir);
+    Q_INVOKABLE AbstractWorker* refresh();
 
 private:
     Curse::Store* m_store;
     CurseAddonModel* m_wowModel;
     CurseAddonModel* m_wowInstalledModel;
-
-    QString m_wowDir;
+    Curse::WorldOfWarcraft* m_worldOfWarcraft;
 };
 
 #endif // CURSESTORECONTROLLER_H

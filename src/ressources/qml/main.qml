@@ -16,7 +16,7 @@ ApplicationWindow {
     minimumHeight: 600
     minimumWidth: 800
 
-    property CursestoreController curse: _cursestore
+    property CurseStore curse: _cursestore
 
     Settings {
         property alias x: root.x
