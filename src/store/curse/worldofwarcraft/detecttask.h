@@ -9,26 +9,28 @@
 
 namespace Curse {
 class Addon;
-}
 
-class AddonDetectTask : public AbstractTask
+class DetectTask : public AbstractTask
 {
     Q_OBJECT
 public:
-    explicit AddonDetectTask(const QVector<Curse::Addon*>& library, QObject* parent = nullptr);
+    explicit DetectTask(const QVector<Curse::Addon*>& library, QObject* parent = nullptr);
 
-    void run();
+    virtual void start() override;
 
     static QStringList getPossibleAddons(const QString& path, const QVector<Curse::Addon*>& library);
     static QVector<Curse::Addon*> getInstalledAddons(const QStringList& possibleAddons,
                                                      const QVector<Curse::Addon*>& library);
     static QMap<QString, QString> getInfosFromToc(const QString& tocPath);
 signals:
-    void error(const QString& errString);
+    void failed(const QString& errString);
     void succcess(const QVector<Curse::Addon*>& installAddons);
 
 private:
     QVector<Curse::Addon*> m_library;
+    QString m_path;
 };
+}
+
 
 #endif // ADDONDETECTJOB_H

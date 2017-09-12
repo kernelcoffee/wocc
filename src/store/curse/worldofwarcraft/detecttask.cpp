@@ -1,4 +1,4 @@
-#include "addondetecttask.h"
+#include "detecttask.h"
 #include "store/curse/addon.h"
 
 #include <QSettings>
@@ -11,15 +11,22 @@
 
 using namespace Curse;
 
-AddonDetectTask::AddonDetectTask(const QVector<Addon*>& library, QObject* parent) :
+DetectTask::DetectTask(const QVector<Addon*>& library, QObject* parent) :
     AbstractTask(parent)
     , m_library(library)
 {
     m_name = tr("Detect Addons");
+
+    QSettings settings;
+    settings.beginGroup("WorldOfWarcraft");
+    m_path = settings.value("location").toString() + "/Interface/AddOns";
+    settings.endGroup();
+
+
     qDebug() << m_library.count();
 }
 
-QStringList AddonDetectTask::getPossibleAddons(const QString& path, const QVector<Addon*>& library)
+QStringList DetectTask::getPossibleAddons(const QString& path, const QVector<Addon*>& library)
 {
     QDir dir(QUrl(path).toLocalFile());
 
@@ -65,8 +72,8 @@ QStringList AddonDetectTask::getPossibleAddons(const QString& path, const QVecto
     return possibleAddons;
 }
 
-QVector<Addon*> AddonDetectTask::getInstalledAddons(const QStringList& possibleAddons,
-                                                    const QVector<Addon*>& library)
+QVector<Addon*> DetectTask::getInstalledAddons(const QStringList& possibleAddons,
+                                               const QVector<Addon*>& library)
 {
     // We'll detect addon by matching the folders to what they contains.
     QVector<Addon*> badAddons;
@@ -137,7 +144,7 @@ QVector<Addon*> AddonDetectTask::getInstalledAddons(const QStringList& possibleA
     return installedAddons;
 }
 
-QMap<QString, QString> AddonDetectTask::getInfosFromToc(const QString& path)
+QMap<QString, QString> DetectTask::getInfosFromToc(const QString& path)
 {
     QDir dir(QUrl(path).toLocalFile());
     QFileInfoList entries = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files);
@@ -183,17 +190,16 @@ QMap<QString, QString> AddonDetectTask::getInfosFromToc(const QString& path)
 }
 
 // Not really optimized but it works.
-void AddonDetectTask::run()
+void DetectTask::start()
 {
-    QSettings settings;
+    setStatus(Running);
 
-    const QString& addonDirPath = settings.value("wowDir").toString() + "/Interface/AddOns";
-
-    const QStringList& possibleAddons = getPossibleAddons(addonDirPath, m_library);
+    const QStringList& possibleAddons = getPossibleAddons(m_path, m_library);
 
     qDebug() << "Premiminary addon detection :" << possibleAddons.count();
 
     const QVector<Addon*>& installedAddons = getInstalledAddons(possibleAddons, m_library);
 
     emit succcess(installedAddons);
+    setStatus(Success);
 }
