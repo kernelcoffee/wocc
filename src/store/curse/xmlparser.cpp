@@ -93,14 +93,15 @@ inline void parseLatestFiles(QXmlStreamReader& reader, Addon* addon)
         while (reader.isStartElement() && reader.name() == "CAddOnFileDependency") {
             // AddOnId
             reader.readNextStartElement();
-            // qDebug() << "AddOnId" << reader.name() << reader.tokenString();
+            int id = reader.readElementText().toInt();
+            //qDebug() << "AddOnId" << reader.name() << reader.tokenString() << id;
             // Type
             reader.readNextStartElement();
+            QString category = reader.readElementText();
+            //qDebug() << "Type" << reader.name() << reader.tokenString() << category;
             reader.readNextStartElement();
-            // qDebug() << "Type" << reader.name() << reader.tokenString();
             reader.readNextStartElement();
-            reader.readNextStartElement();
-            reader.readNextStartElement();
+            addon->addDependency(id, category);
         }
 
         // DownloadURL

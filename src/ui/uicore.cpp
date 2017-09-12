@@ -46,11 +46,12 @@ void UiCore::initContext()
     qmlRegisterType<AbstractStore>("Wocc", 1, 0, "AbstractStore");
     qmlRegisterType<AbstractTask>("Wocc", 1, 0, "AbstractTask");
 
-    qmlRegisterType<CurseStoreController>("Wocc", 1, 0, "CurseStore");
+    qmlRegisterType<CurseStoreController>("Wocc", 1, 0, "CurseController");
+    qmlRegisterType<Curse::Store>("Wocc", 1, 0, "CurseStore");
     qmlRegisterType<Curse::WorldOfWarcraft>("Wocc", 1, 0, "WorldOfWarcraft");
     qmlRegisterType<Curse::Addon>("Wocc", 1, 0, "CurseAddon");
     qRegisterMetaType<CurseAddonModel*>("CurseAddonModel*");
 
 
-    context->setContextProperty("_cursestore", m_cstoreController);
+    context->setContextProperty("_cursecontroller", m_cstoreController);
 }

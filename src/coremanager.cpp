@@ -33,14 +33,15 @@ void CoreManager::init()
     m_ui = new UiCore(this);
 #endif
 
-    m_cores  << m_network << m_stores  << m_console;
+    m_cores << m_network << m_stores << m_console << m_threads;
 
 #ifndef console_mode
     m_cores <<  m_ui;
     connect(m_console, &ConsoleCore::noCommandToProcess, [this]() {
         setConsoleMode(true);
     });
-    connect(m_console, &ConsoleCore::noCommandToProcess, m_ui, &UiCore::startX, Qt::QueuedConnection);
+    connect(m_console, &ConsoleCore::noCommandToProcess, m_ui,
+            &UiCore::startX, Qt::QueuedConnection);
 #endif
 
 
@@ -96,6 +97,11 @@ storeCore* CoreManager::stores() const
     return m_stores;
 }
 
+ThreadCore* CoreManager::threads() const
+{
+    return m_threads;
+}
+
 void CoreManager::delayedInit()
 {
     for (auto core : m_cores) {
@@ -105,7 +111,9 @@ void CoreManager::delayedInit()
 
 void CoreManager::aboutToQuit()
 {
+    qDebug() << "About to quit";
     for (auto core : m_cores) {
+        qDebug() << core;
         core->aboutToQuit();
     }
 }

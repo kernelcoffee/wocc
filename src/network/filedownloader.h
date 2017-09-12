@@ -23,7 +23,7 @@ public:
     QString savedFileLocation() const;
 
     void start();
-    void startSync();
+    void cancel();
 
 signals:
     void urlChanged(const QUrl& url);

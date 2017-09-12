@@ -62,8 +62,9 @@ HEADERS += \
     store/curse/downloadfilejob.h \
     abstracts/abstractstore.h \
     abstracts/abstracttask.h \
-    store/curse/worldofwarcraft/addondetecttask.h \
-    store/curse/refreshlibrarytask.h
+    store/curse/refreshlibrarytask.h \
+    store/curse/worldofwarcraft/installtask.h \
+    store/curse/worldofwarcraft/detecttask.h
 
 SOURCES += main.cpp \
     coremanager.cpp \
@@ -85,7 +86,8 @@ SOURCES += main.cpp \
     store/curse/downloadfilejob.cpp \
     abstracts/abstractstore.cpp \
     abstracts/abstracttask.cpp \
-    store/curse/worldofwarcraft/addondetecttask.cpp \
-    store/curse/refreshlibrarytask.cpp
+    store/curse/refreshlibrarytask.cpp \
+    store/curse/worldofwarcraft/installtask.cpp \
+    store/curse/worldofwarcraft/detecttask.cpp
 
 DISTFILES += style.astylerc

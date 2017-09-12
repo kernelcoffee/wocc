@@ -7,12 +7,11 @@ storeCore::storeCore(CoreManager* parent) :
     , m_cores(parent)
     , m_curse(new Curse::Store())
 {
-
 }
 
 void storeCore::init()
 {
-    m_curse->init(m_cores->network());
+    m_curse->init(m_cores->network(), m_cores->threads());
 }
 
 void storeCore::delayedInit()

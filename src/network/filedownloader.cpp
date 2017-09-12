@@ -44,6 +44,11 @@ void FileDownloader::start()
     });
 }
 
+void FileDownloader::cancel()
+{
+    qDebug() << "Cancel current download";
+}
+
 QString FileDownloader::savedFileLocation() const
 {
     return m_saveFileLocation;

@@ -8,7 +8,7 @@ import Wocc 1.0
 Item {
     id: homeTab
 
-    property CurseStore store
+    property CurseController store
 
     FileDialog {
         id: fileDialog

@@ -3,16 +3,20 @@
 
 #include "abstracts/abstractstore.h"
 
+#include <QHash>
+
 class NetworkCore;
+class ThreadCore;
+
 class FileDownloader;
-class AddonDetectTask;
+class DetectTask;
 class AbstractGame;
 class AbstractTask;
-class Addon;
 
 namespace Curse {
 
 class WorldOfWarcraft;
+class Addon;
 
 class Store : public AbstractStore
 {
@@ -21,34 +25,41 @@ class Store : public AbstractStore
     Q_OBJECT
 public:
     enum class Games {
-        WorldOfWarcraft = 1,
-        TheSecretWorld = 64,
-        RuneOfMagic = 335,
-        WorldOfTank = 423,
-        Ryft = 424,
-        MineCraft = 432,
-        Skyrim = 449,
-        WildStar = 454,
-        TheElderScrollOnline = 455,
-        Firefall = 456
+        WORLD_OF_WARCRAFT = 1,
+        THE_SECRET_WORLD = 64,
+        RUNE_OF_MAGIC = 335,
+        WORLD_OF_TANK = 423,
+        RYFT = 424,
+        MINECRAFT = 432,
+        SKYRIM = 449,
+        WILD_STAR = 454,
+        THE_ELDER_SCROLL_ONLINE = 455,
+        FIREBALL = 456
     };
+    Q_ENUM(Games)
 
     explicit Store(QObject* parent = nullptr);
     ~Store();
 
-
-
+    void init(NetworkCore* network, ThreadCore* threads);
     WorldOfWarcraft* worldOfWarcraft();
 
+    QVector<Curse::Addon*> getAddonDependencies(Addon* addon, Curse::Store::Games game);
 
 public slots:
     AbstractTask* refresh();
-    void loadLibraries();
+
+private slots:
+    void sortLibrary(const QVector<Curse::Addon*> library);
 
 private:
-    WorldOfWarcraft* m_WorldOfWarcraft;
-};
+    NetworkCore* m_network;
+    ThreadCore* m_threads;
 
+    WorldOfWarcraft* m_WorldOfWarcraft;
+    QHash<int, Addon*> m_cache;
+};
 }
+Q_DECLARE_METATYPE(Curse::Store::Games)
 
 #endif // STORE_H

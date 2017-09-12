@@ -32,6 +32,7 @@ public:
 
     NetworkCore* network() const;
     storeCore* stores() const;
+    ThreadCore* threads() const;
 
 public slots:
     virtual void delayedInit() override;

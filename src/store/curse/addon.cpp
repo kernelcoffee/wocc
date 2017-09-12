@@ -13,9 +13,19 @@ void Addon::addAuthor(const QString& name, const QString& url)
     m_authors.append(Author({name, url}));
 }
 
-void Addon::addCategory(int id, const QString& name, const QString& url)
+void Addon::addCategory(uint id, const QString& name, const QString& url)
 {
     m_categories.append(Category({id, name, url}));
+}
+
+void Addon::addDependency(uint id, const QString& category)
+{
+    for (auto dep : m_dependencies) {
+        if (dep.id == id) {
+            return;
+        }
+    }
+    m_dependencies.append(Dependency({id, category}));
 }
 
 void Addon::print()
@@ -24,10 +34,12 @@ void Addon::print()
     for (auto file : m_files) {
         qDebug() << "Url :" << file.name << file.downloadUrl;
         for (auto module : file.modules) {
-            qDebug() << "dependency : " << module.folderName;
+            qDebug() << "modules : " << module.folderName;
         }
         qDebug();
     }
+    for (auto dependency : m_dependencies)
+        qDebug() << dependency.id;
 }
 
 uint Addon::id() const
@@ -68,6 +80,11 @@ QUrl Addon::folderPath() const
 bool Addon::updateAvailable() const
 {
     return m_updateAvailable;
+}
+
+QList<Addon::Dependency> Addon::dependencies() const
+{
+    return m_dependencies;
 }
 
 QString Addon::summary() const

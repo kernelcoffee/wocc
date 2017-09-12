@@ -15,6 +15,7 @@ class CurseStoreController : public QObject
 
     Q_PROPERTY(CurseAddonModel* wowModel READ wowModel CONSTANT)
     Q_PROPERTY(CurseAddonModel* wowInstalledModel READ wowInstalledModel CONSTANT)
+    Q_PROPERTY(CurseAddonModel* dependencyModel READ dependencyModel NOTIFY dependencyModelChanged)
     Q_PROPERTY(Curse::WorldOfWarcraft* worldOfWarcraft READ worldOfWarcraft CONSTANT)
 
 public:
@@ -23,16 +24,22 @@ public:
 
     CurseAddonModel* wowModel() const;
     CurseAddonModel* wowInstalledModel() const;
+    CurseAddonModel* dependencyModel();
 
     Curse::WorldOfWarcraft* worldOfWarcraft() const;
 
     Q_INVOKABLE AbstractTask* refresh();
+    Q_INVOKABLE void setDependencyModel(Curse::Addon* addon, int game);
+
+signals:
+    void dependencyModelChanged(CurseAddonModel* model);
 
 private:
-    Curse::Store* m_store;
-    CurseAddonModel* m_wowModel;
-    CurseAddonModel* m_wowInstalledModel;
-    Curse::WorldOfWarcraft* m_worldOfWarcraft;
+    Curse::Store* m_store = nullptr;
+    CurseAddonModel* m_wowModel = nullptr;
+    CurseAddonModel* m_wowInstalledModel = nullptr;
+    CurseAddonModel* m_dependencyModel = nullptr;
+    Curse::WorldOfWarcraft* m_worldOfWarcraft = nullptr;
 };
 
 #endif // CURSESTORECONTROLLER_H

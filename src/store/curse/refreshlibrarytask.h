@@ -5,6 +5,10 @@
 
 class FileDownloader;
 
+namespace Curse {
+
+class Addon;
+
 class RefreshLibraryTask : public AbstractTask
 {
     Q_OBJECT
@@ -13,11 +17,16 @@ public:
     ~RefreshLibraryTask();
 
     virtual void start() override;
+    virtual void cancel() override;
+
+signals:
+    void finished(const QVector<Curse::Addon*>& library);
 
 private:
-    void onFinished();
+    void onDownloadFinished();
 
     FileDownloader* m_downloader;
 };
 
+}
 #endif // REFRESHLIBRARYTASK_H

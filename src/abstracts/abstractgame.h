@@ -3,7 +3,6 @@
 
 #include <QObject>
 
-class AddOn;
 class AbstractTask;
 
 class AbstractGame : public QObject

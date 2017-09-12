@@ -7,11 +7,13 @@
 #include <QThread>
 #include <QMutex>
 
+class ThreadCore;
+class NetworkCore;
+class DownloadFile;
 
 namespace Curse {
 
 class Addon;
-class DownloadFile;
 
 class WorldOfWarcraft : public AbstractGame
 {
@@ -19,12 +21,16 @@ class WorldOfWarcraft : public AbstractGame
 public:
     explicit WorldOfWarcraft(QObject* parent = 0);
 
+    void init(NetworkCore* network, ThreadCore* threads);
+
     Q_INVOKABLE virtual AbstractTask* refresh() override;
     Q_INVOKABLE virtual AbstractTask* detect() override;
 
     Q_INVOKABLE void install(Curse::Addon* addon);
-
+    Q_INVOKABLE Addon* getAddonById(uint id);
     virtual QString location() const override;
+
+    QVector<Addon*> library() const;
 
 signals:
     void libraryUpdated(const QVector<Addon*>& library);
@@ -35,6 +41,9 @@ public slots:
 
 private:
     void updateLibrary(const QVector<Curse::Addon*>& addons);
+
+    ThreadCore* m_threads;
+    NetworkCore* m_network;
     QVector<Addon*> m_library;
 
     QThread m_worker;

@@ -9,6 +9,9 @@ int main(int argc, char* argv[])
 
     QCommandLineParser parser;
 
+    QObject::connect(&app, &WoccApplication::aboutToQuit,
+                     &cores, &CoreManager::aboutToQuit);
+
     cores.init();
     cores.initSettings();
     cores.print();

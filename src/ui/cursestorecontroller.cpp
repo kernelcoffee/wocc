@@ -13,6 +13,7 @@ CurseStoreController::CurseStoreController(Curse::Store* store, QObject* parent)
     , m_store(store)
     , m_wowModel(new CurseAddonModel)
     , m_wowInstalledModel(new CurseAddonModel)
+    , m_dependencyModel(new CurseAddonModel)
 {
     connect(m_store->worldOfWarcraft(), &Curse::WorldOfWarcraft::libraryUpdated,
             m_wowModel, &CurseAddonModel::setData);
@@ -36,4 +37,19 @@ Curse::WorldOfWarcraft* CurseStoreController::worldOfWarcraft() const
 AbstractTask* CurseStoreController::refresh()
 {
     return m_store->refresh();
+}
+
+void CurseStoreController::setDependencyModel(Addon* addon, int game)
+{
+    if (addon == nullptr) {
+        return;
+    }
+
+    m_dependencyModel->setData(m_store->getAddonDependencies(addon, static_cast<Store::Games>(game)));
+    emit dependencyModelChanged(m_dependencyModel);
+}
+
+CurseAddonModel* CurseStoreController::dependencyModel()
+{
+    return m_dependencyModel;
 }

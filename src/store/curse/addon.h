@@ -27,10 +27,11 @@ class Addon : public AbstractAddon
     Q_PROPERTY(QString versionAvailable READ versionAvailable CONSTANT)
     Q_PROPERTY(QUrl folderPath READ folderPath CONSTANT)
     Q_PROPERTY(bool updateAvailable READ updateAvailable NOTIFY updateAvailableChanged)
+    Q_PROPERTY(QList<Dependency> dependencies READ dependencies CONSTANT)
 
 public:
     struct Category {
-        int id;
+        uint id;
         QString name;
         QString url;
     };
@@ -53,10 +54,16 @@ public:
         QList<Module> modules;
     };
 
+    struct Dependency {
+        uint id;
+        QString category;
+    };
+
     explicit Addon(QObject* parent = nullptr);
 
     void addAuthor(const QString& name, const QString& url);
-    void addCategory(int id, const QString& name, const QString& url);
+    void addCategory(uint id, const QString& name, const QString& url);
+    void addDependency(uint id, const QString& category);
 
     void print();
 
@@ -73,7 +80,7 @@ public:
     QString versionAvailable() const;
     QUrl folderPath() const;
     bool updateAvailable() const;
-
+    QList<Dependency> dependencies() const;
 
 public slots:
     void addFile(const File& file);
@@ -107,6 +114,7 @@ private:
     QString m_versionAvailable;
     QUrl m_folderPath;
     bool m_updateAvailable;
+    QList<Dependency> m_dependencies;
 };
 
 }

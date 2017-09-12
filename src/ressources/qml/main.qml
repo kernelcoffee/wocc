@@ -16,7 +16,7 @@ ApplicationWindow {
     minimumHeight: 600
     minimumWidth: 800
 
-    property CurseStore curse: _cursestore
+    property CurseController curse: _cursecontroller
 
     Settings {
         property alias x: root.x
@@ -56,13 +56,13 @@ ApplicationWindow {
 
                 LibraryView {
                     id: installedTab
-                    store: curse
+                    controller: curse
                     model: curse.wowInstalledModel
                 }
 
                 LibraryView {
                     id: libraryTab
-                    store: curse
+                    controller: curse
                     model: curse.wowModel
                 }
             }

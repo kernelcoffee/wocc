@@ -6,8 +6,3 @@ AbstractStore::AbstractStore(QObject* parent) :
 {
 
 }
-
-void AbstractStore::init(NetworkCore* network)
-{
-    m_network = network;
-}

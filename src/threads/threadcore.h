@@ -5,6 +5,7 @@
 
 class CoreManager;
 class AbstractTask;
+class QThread;
 
 class ThreadCore : public AbstractCore
 {
@@ -14,17 +15,18 @@ class ThreadCore : public AbstractCore
 public:
     explicit ThreadCore(CoreManager* parent = nullptr);
 
-    void AddTask();
     QList<AbstractTask*> tasks() const;
 
 public slots:
-    void addTask(AbstractTask* task);
+    bool addTask(AbstractTask* task);
+    virtual void aboutToQuit() override;
 
 signals:
     void tasksChanged(const QList<AbstractTask*>& tasks);
 
 private:
     QList<AbstractTask*> m_tasks;
+    QList<QThread*> m_pool;
 };
 
 #endif // THREADCORE_H

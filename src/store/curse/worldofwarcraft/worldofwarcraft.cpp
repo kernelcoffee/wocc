@@ -1,6 +1,10 @@
 #include "worldofwarcraft.h"
-#include "addondetecttask.h"
 #include "store/curse/addon.h"
+#include "threads/threadcore.h"
+#include "network/networkcore.h"
+
+#include "detecttask.h"
+#include "installtask.h"
 
 #include <QSettings>
 #include <QStandardPaths>
@@ -22,6 +26,12 @@ WorldOfWarcraft::WorldOfWarcraft(QObject* parent) :
     settings.endGroup();
 }
 
+void WorldOfWarcraft::init(NetworkCore* network, ThreadCore* threads)
+{
+    m_network = network;
+    m_threads = threads;
+}
+
 AbstractTask* WorldOfWarcraft::refresh()
 {
     // Refresh is done in the store class for this game.
@@ -36,36 +46,40 @@ AbstractTask* WorldOfWarcraft::detect()
         return nullptr;
     }
 
-    AddonDetectTask* task = new AddonDetectTask(m_library);
-    connect(task, &AddonDetectTask::succcess, [this](const QVector<Curse::Addon*>& result) {
-        updateLibrary(result);
-//        saveInstalled();
-        m_worker.quit();
-        m_worker.wait();
-        m_mutex.unlock();
-    });
-
-    connect(task, &AddonDetectTask::error, [this]() {
-        m_mutex.unlock();
-    });
-
-
-    connect(&m_worker, &QThread::finished, task, &QObject::deleteLater);
-    m_mutex.lock();
-    task->moveToThread(&m_worker);
-    m_worker.start();
-    task->run();
+    DetectTask* task = new DetectTask(m_library);
+    m_threads->addTask(task);
+    connect(task, &DetectTask::succcess, this, &WorldOfWarcraft::updateLibrary);
+    task->start();
     return task;
 }
 
 void WorldOfWarcraft::install(Curse::Addon* addon)
 {
     addon->print();
+    InstallTask* task = new InstallTask(addon, m_network->createFileDownloader());
+    m_threads->addTask(task);
+    task->start();
+}
+
+Addon* WorldOfWarcraft::getAddonById(uint id)
+{
+    for (Addon* addon : m_library) {
+        if (addon->id() == id) {
+            qDebug() << "Addon found : " << addon->shortName();
+        }
+    }
+    qDebug() << "Addon not found";
+    return nullptr;
 }
 
 QString WorldOfWarcraft::location() const
 {
     return m_location;
+}
+
+QVector<Addon*> WorldOfWarcraft::library() const
+{
+    return m_library;
 }
 
 void WorldOfWarcraft::setLibrary(const QVector<Curse::Addon*>& library)
@@ -131,7 +145,7 @@ void WorldOfWarcraft::updateLibrary(const QVector<Curse::Addon*>& addons)
 //    }
 //    QByteArray data = loadFile.readAll();
 //    const QStringList &savedAddonsList = QString::fromLocal8Bit(data).split(';');
-//    const QVector<Addon*> &installedAddons = AddonDetectTask::getInstalledAddons(savedAddonsList, m_library);
+//    const QVector<Addon*> &installedAddons = DetectTask::getInstalledAddons(savedAddonsList, m_library);
 //    setWowInstalledAddons(installedAddons);
 //    qDebug() << installedAddons.count() << "addons loaded";
 //    return true;
