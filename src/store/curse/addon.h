@@ -29,6 +29,9 @@ class Addon : public AbstractAddon
     Q_PROPERTY(bool updateAvailable READ updateAvailable NOTIFY updateAvailableChanged)
     Q_PROPERTY(QList<Dependency> dependencies READ dependencies CONSTANT)
 
+    Q_PROPERTY(QVector<Addon*> dependencyAddons READ dependencyAddons WRITE setDependencyAddons NOTIFY
+               dependencyAddonsChanged)
+
 public:
     struct Category {
         uint id;
@@ -64,6 +67,7 @@ public:
     void addAuthor(const QString& name, const QString& url);
     void addCategory(uint id, const QString& name, const QString& url);
     void addDependency(uint id, const QString& category);
+    void setDependencyAddons(const QVector<Addon*>& dependencies);
 
     void print();
 
@@ -81,6 +85,7 @@ public:
     QUrl folderPath() const;
     bool updateAvailable() const;
     QList<Dependency> dependencies() const;
+    QVector<Addon*> dependencyAddons() const;
 
 public slots:
     void addFile(const File& file);
@@ -96,6 +101,7 @@ signals:
     void isInstalledChanged(bool isInstalled);
     void versionInstalledChanged(const QString& versionInstalled);
     void updateAvailableChanged(bool updateAvailable);
+    void dependencyAddonsChanged(QVector<Addon*> dependencies);
 
 private:
     uint m_id;
@@ -115,6 +121,7 @@ private:
     QUrl m_folderPath;
     bool m_updateAvailable;
     QList<Dependency> m_dependencies;
+    QVector<Addon*> m_dependencyAddons;
 };
 
 }

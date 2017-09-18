@@ -47,18 +47,22 @@ AbstractTask* WorldOfWarcraft::detect()
     }
 
     DetectTask* task = new DetectTask(m_library);
-    m_threads->addTask(task);
     connect(task, &DetectTask::succcess, this, &WorldOfWarcraft::updateLibrary);
-    task->start();
+
+    m_threads->addTask(task);
     return task;
 }
 
 void WorldOfWarcraft::install(Curse::Addon* addon)
 {
+    QVector<Addon*> installList;
+
     addon->print();
-    InstallTask* task = new InstallTask(addon, m_network->createFileDownloader());
-    m_threads->addTask(task);
-    task->start();
+    for (Addon* add : addon->dependencyAddons()) {
+        if (!add->isInstalled() || add->updateAvailable()) {
+            m_threads->addTask(new InstallTask(addon, m_network->createFileDownloader()));
+        }
+    }
 }
 
 Addon* WorldOfWarcraft::getAddonById(uint id)

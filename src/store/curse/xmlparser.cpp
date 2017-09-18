@@ -97,7 +97,7 @@ inline void parseLatestFiles(QXmlStreamReader& reader, Addon* addon)
             //qDebug() << "AddOnId" << reader.name() << reader.tokenString() << id;
             // Type
             reader.readNextStartElement();
-            QString category = reader.readElementText();
+            QString category = reader.readElementText().toUtf8();
             //qDebug() << "Type" << reader.name() << reader.tokenString() << category;
             reader.readNextStartElement();
             reader.readNextStartElement();
@@ -301,7 +301,7 @@ QVector<Addon*> XmlParser::XmlToAddonList(const QString& xml) const
 
         // Name
         //qDebug() << "Name" << reader.name() << reader.tokenString();
-        addon->setName(reader.readElementText());
+        addon->setName(reader.readElementText().toHtmlEscaped().trimmed().toLocal8Bit());
         reader.readNextStartElement();
 
         // PackageType

@@ -46,6 +46,7 @@ void FileDownloader::start()
 
 void FileDownloader::cancel()
 {
+    setStatus(Canceled);
     qDebug() << "Cancel current download";
 }
 

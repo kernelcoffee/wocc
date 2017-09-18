@@ -29,7 +29,7 @@ public:
     Curse::WorldOfWarcraft* worldOfWarcraft() const;
 
     Q_INVOKABLE AbstractTask* refresh();
-    Q_INVOKABLE void setDependencyModel(Curse::Addon* addon, int game);
+    Q_INVOKABLE void setDependencyModel(Curse::Addon* addon);
 
 signals:
     void dependencyModelChanged(CurseAddonModel* model);

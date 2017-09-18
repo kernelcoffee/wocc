@@ -25,8 +25,13 @@ signals:
     void tasksChanged(const QList<AbstractTask*>& tasks);
 
 private:
+    void processNextTask();
+    void processTask();
     QList<AbstractTask*> m_tasks;
     QList<QThread*> m_pool;
+
+    AbstractTask* m_queuedTask;
+    QThread* m_queuedThead;
 };
 
 #endif // THREADCORE_H

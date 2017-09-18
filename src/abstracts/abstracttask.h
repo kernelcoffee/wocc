@@ -38,7 +38,7 @@ public:
 
 signals:
     void progressChanged(uint progress);
-    void statusChanged(Status status);
+    void statusChanged(AbstractTask::Status status);
     void autoDeleteChanged(bool isAutoDelete);
     void isUniqueChanged(bool isUnique);
 
@@ -48,7 +48,7 @@ signals:
 
 public slots:
     void setProgress(uint progress);
-    void setStatus(Status status);
+    void setStatus(AbstractTask::Status status);
     void setAutoDelete(bool autoDelete);
 
     void setIsUnique(bool isUnique);

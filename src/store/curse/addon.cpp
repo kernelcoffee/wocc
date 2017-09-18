@@ -28,6 +28,13 @@ void Addon::addDependency(uint id, const QString& category)
     m_dependencies.append(Dependency({id, category}));
 }
 
+void Addon::setDependencyAddons(const QVector<Addon*>& dependencies)
+{
+    m_dependencyAddons = dependencies;
+
+    emit dependencyAddonsChanged(m_dependencyAddons);
+}
+
 void Addon::print()
 {
     qDebug() << m_name << m_shortName;
@@ -54,6 +61,7 @@ uint Addon::gameId() const
 
 QString Addon::shortName() const
 {
+    qDebug() << m_shortName.toLocal8Bit();
     return m_shortName;
 }
 
@@ -85,6 +93,11 @@ bool Addon::updateAvailable() const
 QList<Addon::Dependency> Addon::dependencies() const
 {
     return m_dependencies;
+}
+
+QVector<Addon*> Addon::dependencyAddons() const
+{
+    return m_dependencyAddons;
 }
 
 QString Addon::summary() const

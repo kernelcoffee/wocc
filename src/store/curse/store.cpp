@@ -42,36 +42,9 @@ Curse::WorldOfWarcraft* Store::worldOfWarcraft()
     return m_WorldOfWarcraft;
 }
 
-QVector<Addon*> Store::getAddonDependencies(Addon* addon, Curse::Store::Games game)
+QVector<Addon*> Store::getAddonDependencies(Addon* addon)
 {
-    QVector<Addon*> dependencies;
-    QVector<Addon*> library;
-
-    switch (game) {
-    case Games::WORLD_OF_WARCRAFT:
-        library = m_WorldOfWarcraft->library();
-        break;
-    default:
-        Q_UNIMPLEMENTED();
-        break;
-    }
-
-    for (auto dep : addon->dependencies()) {
-        if (m_cache.contains(dep.id)) {
-            dependencies << m_cache[dep.id];
-        } else {
-            for (Addon* lAddon : library) {
-                if (dep.id == lAddon->id()) {
-                    m_cache[dep.id] = lAddon;
-                    dependencies << lAddon;
-                    continue;
-                }
-            }
-        }
-    }
-
-    return dependencies;
-
+    return addon->dependencyAddons();
 }
 
 AbstractTask* Store::refresh()
@@ -82,9 +55,6 @@ AbstractTask* Store::refresh()
 
     connect(task, &RefreshLibraryTask::finished, this, &Store::sortLibrary);
     m_threads->addTask(task);
-
-    task->start();
-
     return task;
 }
 

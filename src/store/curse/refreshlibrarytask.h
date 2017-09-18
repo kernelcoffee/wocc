@@ -3,6 +3,9 @@
 
 #include "abstracts/abstracttask.h"
 
+#include <QVector>
+#include <QHash>
+
 class FileDownloader;
 
 namespace Curse {
@@ -24,8 +27,11 @@ signals:
 
 private:
     void onDownloadFinished();
+    void linkDependencies(Addon* addon);
 
     FileDownloader* m_downloader;
+    QVector<Curse::Addon*> m_library;
+    QHash<int, Addon*> m_cache;
 };
 
 }

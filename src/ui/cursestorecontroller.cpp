@@ -39,13 +39,13 @@ AbstractTask* CurseStoreController::refresh()
     return m_store->refresh();
 }
 
-void CurseStoreController::setDependencyModel(Addon* addon, int game)
+void CurseStoreController::setDependencyModel(Addon* addon)
 {
     if (addon == nullptr) {
         return;
     }
 
-    m_dependencyModel->setData(m_store->getAddonDependencies(addon, static_cast<Store::Games>(game)));
+    m_dependencyModel->setData(m_store->getAddonDependencies(addon));
     emit dependencyModelChanged(m_dependencyModel);
 }
 

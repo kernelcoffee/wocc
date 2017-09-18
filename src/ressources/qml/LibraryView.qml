@@ -69,18 +69,7 @@ Item {
                 color: "black"
             }
         }
-        Controls1.TableViewColumn {
-            role: ""
-            title: "Action"
-            delegate: Button {
-                text: qsTr("Install")
-                onClicked: {
-                    console.log(listView.currentRow)
-                    controller.worldOfWarcraft.install(controller.wowModel.getAddon(listView.currentRow));
-                }
-            }
-        }
-        }
+    }
 
     Pane {
         id: detailsPanel
@@ -89,6 +78,14 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
+
+        opacity: refreshTimer.running ? 0 : 1
+        Material.elevation: 1
+
+
+        property CurseAddon addon
+
+        onAddonChanged: controller.setDependencyModel(addon)
 
         Connections {
             target: listView
@@ -100,17 +97,11 @@ Item {
             interval: 100
 
             onTriggered: {
-                detailsPanel.addon = controller.wowModel.getAddon(listView.currentRow)
+                if (listView.currentRow >= 0) {
+                    detailsPanel.addon = controller.wowModel.getAddon(listView.currentRow)
+                }
             }
-
         }
-
-        property CurseAddon addon
-        onAddonChanged: controller.setDependencyModel(addon, CurseStore.WORLD_OF_WARCRAFT)
-
-        Material.elevation: 1
-
-        opacity: refreshTimer.running ? 0 : 1
 
         Column {
             id: addonDetailsLayout
@@ -150,6 +141,13 @@ Item {
                     text: name
                 }
             }
+            Button {
+                text: qsTr("Install")
+                onClicked: {
+                    controller.worldOfWarcraft.install(controller.wowModel.getAddon(listView.currentRow));
+                }
+            }
         }
     }
+
 }

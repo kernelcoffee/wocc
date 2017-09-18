@@ -21,6 +21,10 @@ RefreshLibraryTask::RefreshLibraryTask(FileDownloader* downloader, QObject* pare
     , m_downloader(downloader)
 {
     m_name = tr("Refresh Library");
+
+    setIsUnique(true);
+    setAutoDelete(true);
+
     m_downloader->setUrl(ARCHIVE_URL);
     m_downloader->setFileOverride(true);
     m_downloader->setDestination(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
@@ -41,10 +45,12 @@ void RefreshLibraryTask::start()
 
 void RefreshLibraryTask::cancel()
 {
+    setStatus(Canceled);
     qDebug() << "cancelling refresh library";
     if (m_downloader != nullptr) {
         m_downloader->cancel();
     }
+    emit cancelled();
 }
 
 void RefreshLibraryTask::onDownloadFinished()
@@ -60,10 +66,43 @@ void RefreshLibraryTask::onDownloadFinished()
     XmlParser parser;
 
     QString xmlOutput = FileExtractor::bzip2FileToString(settings.value("curseArchive").toString());
-    QVector<Curse::Addon*> library = parser.XmlToAddonList(xmlOutput);
+    m_library = parser.XmlToAddonList(xmlOutput);
 
-    emit finished(library);
-    delete m_downloader;
-    m_downloader = nullptr;
+    for (auto addon : m_library) {
+        linkDependencies(addon);
+    }
+
+    emit finished(m_library);
     setStatus(Success);
+}
+
+void RefreshLibraryTask::linkDependencies(Addon* addon)
+{
+    if (addon->dependencies().count() <= 0 || !addon->dependencyAddons().isEmpty()) {
+        return;
+    }
+
+    qDebug() << "Getting " << addon->dependencies().count() << " dependencies for " <<
+             addon->shortName();
+
+    QVector<Addon*> dependencies;
+
+    for (auto dep : addon->dependencies()) {
+        if (m_cache.contains(dep.id)) {
+            qDebug() << "From cache " << m_cache[dep.id]->shortName() << " from " << addon->shortName();
+            dependencies << m_cache[dep.id];
+        } else {
+            for (Addon* lAddon : m_library) {
+                if (dep.id == lAddon->id()) {
+                    qDebug() << "new dependency" << lAddon->shortName() << " from " << addon->shortName();
+                    m_cache[dep.id] = lAddon;
+                    dependencies << lAddon;
+                    linkDependencies(lAddon);
+                    continue;
+                }
+            }
+        }
+    }
+
+    addon->setDependencyAddons(dependencies);
 }

@@ -3,6 +3,8 @@
 
 #include "abstracts/abstracttask.h"
 
+#include <QUrl>
+
 class FileDownloader;
 
 namespace Curse {
@@ -14,13 +16,17 @@ class InstallTask : public AbstractTask
     Q_OBJECT
 public:
     explicit InstallTask(Addon* addon, FileDownloader* downloader, QObject* parent = nullptr);
+    ~InstallTask();
 
     virtual void start() override;
     virtual void cancel() override;
 
 private:
-    Addon* m_addon;
-    FileDownloader* m_downloader;
+    void onDownloadFinished();
+
+    QUrl m_dest;
+    Addon* m_addon = nullptr;
+    FileDownloader* m_downloader = nullptr;
 };
 
 }

@@ -23,8 +23,9 @@ void NetworkCore::init()
 void NetworkCore::print()
 {
     qDebug() << "Network Info";
-    qDebug() << "SSL Version" << QSslSocket::sslLibraryBuildVersionString();
-
+    qDebug() << "SSL version" << QSslSocket::sslLibraryVersionString();
+    qDebug() << "SSL build Version" << QSslSocket::sslLibraryBuildVersionString();
+    qDebug() << "SSL supported" << QSslSocket::supportsSsl();
 }
 
 FileDownloader* NetworkCore::createFileDownloader()

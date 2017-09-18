@@ -44,7 +44,7 @@ public:
     void init(NetworkCore* network, ThreadCore* threads);
     WorldOfWarcraft* worldOfWarcraft();
 
-    QVector<Curse::Addon*> getAddonDependencies(Addon* addon, Curse::Store::Games game);
+    QVector<Curse::Addon*> getAddonDependencies(Addon* addon);
 
 public slots:
     AbstractTask* refresh();
@@ -57,7 +57,6 @@ private:
     ThreadCore* m_threads;
 
     WorldOfWarcraft* m_WorldOfWarcraft;
-    QHash<int, Addon*> m_cache;
 };
 }
 Q_DECLARE_METATYPE(Curse::Store::Games)
