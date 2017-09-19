@@ -17,11 +17,12 @@ InstallTask::InstallTask(Addon* addon, FileDownloader* downloader, QObject* pare
 {
     m_name = tr("Install Addon %1").arg(addon->name());
 
+    setAutoDelete(true);
+
     QSettings settings;
     settings.beginGroup("WorldOfWarcraft");
     m_dest = QUrl(settings.value("location").toString() + "/Interface/AddOns/");
     settings.endGroup();
-
 
     m_downloader->setUrl(addon->files().first().downloadUrl.trimmed());
     m_downloader->setFileOverride(true);

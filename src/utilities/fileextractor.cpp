@@ -2,6 +2,7 @@
 
 #include <QProcess>
 #include <QDebug>
+#include <quazip5/JlCompress.h>
 
 FileExtractor::FileExtractor(QObject* parent) :
     QObject(parent)
@@ -27,14 +28,7 @@ QString FileExtractor::bzip2FileToString(const QString& filePath)
 
 bool FileExtractor::unzip(const QString& filePath, const QString& destination)
 {
-    QProcess process;
-    process.start("unzip", {filePath, "-dvu", destination});
-    if (!process.waitForStarted()) {
-        return false;
-    }
-    if (!process.waitForFinished()) {
-        return false;
-    }
+    JlCompress::extractDir(filePath, destination);
 
     qDebug() << filePath << "unzip to" << destination;
     return true;

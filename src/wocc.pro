@@ -9,6 +9,8 @@ lessThan(QT_VERSION, 5.7.0) {
 TEMPLATE = app
 TARGET = wocc
 
+LIBS += -lz -lquazip5
+
 CONFIG(console_mode) {
     QT -= gui
 
