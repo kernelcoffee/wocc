@@ -55,14 +55,19 @@ AbstractTask* WorldOfWarcraft::detect()
 
 void WorldOfWarcraft::install(Curse::Addon* addon)
 {
-    QVector<Addon*> installList;
+    if (addon->isInstalled()) {
+        qDebug() << addon->name() << "Already installed";
+    }
 
-    addon->print();
-    for (Addon* add : addon->dependencyAddons()) {
-        if (!add->isInstalled() || add->updateAvailable()) {
-            m_threads->addTask(new InstallTask(addon, m_network->createFileDownloader()));
+    for (const Addon::Dependency& dep : addon->dependencies()) {
+        if (dep.addon == nullptr) {
+            continue;
+        }
+        if (dep.category == "required") {
+            install(dep.addon);
         }
     }
+    m_threads->addTask(new InstallTask(addon, m_network->createFileDownloader()));
 }
 
 Addon* WorldOfWarcraft::getAddonById(uint id)
@@ -114,31 +119,6 @@ void WorldOfWarcraft::updateLibrary(const QVector<Curse::Addon*>& addons)
         addon->print();
     }
 }
-
-//void Store::update(Addon* addon)
-//{
-//    qDebug() << addon->name();
-//    install(addon);
-//}
-
-//void Store::install(Addon* addon)
-//{
-//    qDebug() << addon->name();
-//    qDebug() << addon->files().first().downloadUrl;
-//    auto downloader = m_network->createFileDownloader();
-//    downloader->setUrl(addon->files().first().downloadUrl);
-//    downloader->setFileOverride(true);
-//    downloader->setDestination(QStandardPaths::writableLocation(QStandardPaths::TempLocation));
-
-//    connect(downloader, &FileDownloader::finished, [this, downloader](){
-//        QSettings settings;
-//        QString dest = QUrl(settings.value("wowDir").toString() + "/Interface/AddOns").toLocalFile();
-//        FileExtractor::unzip(downloader->savedFileLocation(), dest);
-//        downloader->deleteLater();
-//        detect();
-//    });
-//    downloader->start();
-//}
 
 //bool Store::loadInstalled(bool isAsync)
 //{

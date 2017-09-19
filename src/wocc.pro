@@ -1,6 +1,6 @@
 QT += core network
 
-CONFIG += c++11
+CONFIG += c++14
 
 lessThan(QT_VERSION, 5.7.0) {
     error("requires at least Qt 5.7")

@@ -45,8 +45,8 @@ void CurseStoreController::setDependencyModel(Addon* addon)
         return;
     }
 
-    m_dependencyModel->setData(m_store->getAddonDependencies(addon));
-    emit dependencyModelChanged(m_dependencyModel);
+//    m_dependencyModel->setData(m_store->getAddonDependencies(addon));
+//    emit dependencyModelChanged(m_dependencyModel);
 }
 
 CurseAddonModel* CurseStoreController::dependencyModel()

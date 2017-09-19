@@ -22,6 +22,13 @@ QVariant CurseAddonModel::data(const QModelIndex& index, int role) const
         if (addon->authors().count() > 0)
             return addon->authors().first().name;
         break;
+    case Categories: {
+        QStringList result;
+        for (auto cat : addon->categories()) {
+            result.append(cat.name);
+        }
+        return result.join(", ");
+    }
     case Installed:
         return addon->isInstalled();
     case InstallCount:
@@ -58,6 +65,7 @@ Curse::Addon* CurseAddonModel::getAddon(int row)
     if (row < 0 || row > m_data.count()) {
         return nullptr;
     }
+    qDebug() << row;
     return m_data[row];
 }
 

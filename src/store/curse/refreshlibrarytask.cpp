@@ -78,31 +78,31 @@ void RefreshLibraryTask::onDownloadFinished()
 
 void RefreshLibraryTask::linkDependencies(Addon* addon)
 {
-    if (addon->dependencies().count() <= 0 || !addon->dependencyAddons().isEmpty()) {
+    if (addon->dependencies().count() <= 0) {
         return;
     }
 
-    qDebug() << "Getting " << addon->dependencies().count() << " dependencies for " <<
-             addon->shortName();
+//    qDebug() << "Getting " << addon->dependencies().count() << " dependencies for " <<
+//             addon->shortName();
 
-    QVector<Addon*> dependencies;
-
-    for (auto dep : addon->dependencies()) {
-        if (m_cache.contains(dep.id)) {
-            qDebug() << "From cache " << m_cache[dep.id]->shortName() << " from " << addon->shortName();
-            dependencies << m_cache[dep.id];
+    for (int i = 0; i < addon->dependencies().count(); i++) {
+        if (m_cache.contains(addon->dependencies()[i].id)) {
+            addon->setDependencyAddon(i, m_cache[addon->dependencies()[i].id]);
+//            addon->dependencies()[i].addon = m_cache[addon->dependencies()[i].id];
         } else {
             for (Addon* lAddon : m_library) {
-                if (dep.id == lAddon->id()) {
-                    qDebug() << "new dependency" << lAddon->shortName() << " from " << addon->shortName();
-                    m_cache[dep.id] = lAddon;
-                    dependencies << lAddon;
+                if (addon->dependencies()[i].id == lAddon->id()) {
+//                    qDebug() << "new dependency" << lAddon->shortName() << " from " << addon->shortName();
+                    m_cache[addon->dependencies()[i].id] = lAddon;
+                    addon->setDependencyAddon(i, lAddon);
+                    if (addon->dependencies()[i].addon == nullptr) {
+                        qDebug() << "Dep is null" << lAddon;
+                        return;
+                    }
                     linkDependencies(lAddon);
                     continue;
                 }
             }
         }
     }
-
-    addon->setDependencyAddons(dependencies);
 }

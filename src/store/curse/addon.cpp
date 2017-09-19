@@ -25,28 +25,32 @@ void Addon::addDependency(uint id, const QString& category)
             return;
         }
     }
-    m_dependencies.append(Dependency({id, category}));
+    m_dependencies.append(Dependency({id, category, nullptr}));
 }
 
-void Addon::setDependencyAddons(const QVector<Addon*>& dependencies)
+void Addon::setDependencyAddon(int index, Addon* addon)
 {
-    m_dependencyAddons = dependencies;
-
-    emit dependencyAddonsChanged(m_dependencyAddons);
+    m_dependencies[index].addon = addon;
 }
 
 void Addon::print()
 {
-    qDebug() << m_name << m_shortName;
-    for (auto file : m_files) {
-        qDebug() << "Url :" << file.name << file.downloadUrl;
-        for (auto module : file.modules) {
+    qDebug() << m_name << m_shortName << m_dependencies.count();
+    for (auto dep : m_dependencies) {
+        qDebug() << "Url :" << dep.id << file.downloadUrl;
+        for (auto module : file.dependency) {
             qDebug() << "modules : " << module.folderName;
         }
         qDebug();
     }
-    for (auto dependency : m_dependencies)
-        qDebug() << dependency.id;
+
+    for (auto dep : m_dependencies) {
+        if (dep.addon) {
+            qDebug() << dep.id << dep.addon->name() << dep.addon->isInstalled();
+        } else {
+            qDebug() << dep.id << "Addon is null";
+        }
+    }
 }
 
 uint Addon::id() const
@@ -90,14 +94,14 @@ bool Addon::updateAvailable() const
     return m_updateAvailable;
 }
 
-QList<Addon::Dependency> Addon::dependencies() const
+QVector<Addon::Dependency> Addon::dependencies() const
 {
     return m_dependencies;
 }
 
-QVector<Addon*> Addon::dependencyAddons() const
+QList<Addon::Category> Addon::categories() const
 {
-    return m_dependencyAddons;
+    return m_categories;
 }
 
 QString Addon::summary() const

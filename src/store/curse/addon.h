@@ -27,10 +27,8 @@ class Addon : public AbstractAddon
     Q_PROPERTY(QString versionAvailable READ versionAvailable CONSTANT)
     Q_PROPERTY(QUrl folderPath READ folderPath CONSTANT)
     Q_PROPERTY(bool updateAvailable READ updateAvailable NOTIFY updateAvailableChanged)
-    Q_PROPERTY(QList<Dependency> dependencies READ dependencies CONSTANT)
-
-    Q_PROPERTY(QVector<Addon*> dependencyAddons READ dependencyAddons WRITE setDependencyAddons NOTIFY
-               dependencyAddonsChanged)
+    Q_PROPERTY(QVector<Dependency> dependencies READ dependencies CONSTANT)
+    Q_PROPERTY(QList<Category> categories READ categories CONSTANT)
 
 public:
     struct Category {
@@ -60,6 +58,7 @@ public:
     struct Dependency {
         uint id;
         QString category;
+        Addon* addon;
     };
 
     explicit Addon(QObject* parent = nullptr);
@@ -67,7 +66,7 @@ public:
     void addAuthor(const QString& name, const QString& url);
     void addCategory(uint id, const QString& name, const QString& url);
     void addDependency(uint id, const QString& category);
-    void setDependencyAddons(const QVector<Addon*>& dependencies);
+    void setDependencyAddon(int index, Addon* addon);
 
     void print();
 
@@ -84,8 +83,8 @@ public:
     QString versionAvailable() const;
     QUrl folderPath() const;
     bool updateAvailable() const;
-    QList<Dependency> dependencies() const;
-    QVector<Addon*> dependencyAddons() const;
+    QVector<Dependency> dependencies() const;
+    QList<Category> categories() const;
 
 public slots:
     void addFile(const File& file);
@@ -101,7 +100,6 @@ signals:
     void isInstalledChanged(bool isInstalled);
     void versionInstalledChanged(const QString& versionInstalled);
     void updateAvailableChanged(bool updateAvailable);
-    void dependencyAddonsChanged(QVector<Addon*> dependencies);
 
 private:
     uint m_id;
@@ -120,8 +118,7 @@ private:
     QString m_versionAvailable;
     QUrl m_folderPath;
     bool m_updateAvailable;
-    QList<Dependency> m_dependencies;
-    QVector<Addon*> m_dependencyAddons;
+    QVector<Dependency> m_dependencies;
 };
 
 }

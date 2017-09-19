@@ -42,9 +42,9 @@ Curse::WorldOfWarcraft* Store::worldOfWarcraft()
     return m_WorldOfWarcraft;
 }
 
-QVector<Addon*> Store::getAddonDependencies(Addon* addon)
+QVector<Addon::Dependency> Store::getAddonDependencies(Addon* addon)
 {
-    return addon->dependencyAddons();
+    return addon->dependencies();
 }
 
 AbstractTask* Store::refresh()

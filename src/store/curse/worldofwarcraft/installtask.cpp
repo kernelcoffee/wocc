@@ -23,7 +23,7 @@ InstallTask::InstallTask(Addon* addon, FileDownloader* downloader, QObject* pare
     settings.endGroup();
 
 
-    m_downloader->setUrl(addon->files().first().downloadUrl);
+    m_downloader->setUrl(addon->files().first().downloadUrl.trimmed());
     m_downloader->setFileOverride(true);
     m_downloader->setDestination(QStandardPaths::writableLocation(QStandardPaths::TempLocation));
     connect(m_downloader, &FileDownloader::finished, this, &InstallTask::onDownloadFinished);
@@ -49,12 +49,10 @@ void InstallTask::onDownloadFinished()
 {
     qDebug() << "File downloaded, now installing";
 
-
     const QString& file = m_downloader->savedFileLocation();
     const QDir& dest(m_dest.toLocalFile());
 
     qDebug() << dest.absolutePath();
-    return;
 
     FileExtractor::unzip(file, dest.absolutePath());
     m_addon->setIsInstalled(true);

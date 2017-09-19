@@ -2,6 +2,7 @@
 #define CURSEADDONMODEL_H
 
 #include <QAbstractListModel>
+#include "store/curse/addon.h"
 
 namespace Curse {
 class Addon;

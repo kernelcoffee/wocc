@@ -28,7 +28,7 @@ QString FileExtractor::bzip2FileToString(const QString& filePath)
 bool FileExtractor::unzip(const QString& filePath, const QString& destination)
 {
     QProcess process;
-    process.start("unzip", {filePath, "-du", destination});
+    process.start("unzip", {filePath, "-dvu", destination});
     if (!process.waitForStarted()) {
         return false;
     }

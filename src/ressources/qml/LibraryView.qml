@@ -51,6 +51,7 @@ Item {
             delegate: Label {
                 text: styleData.value
                 color: "black"
+                elide: Text.ElideRight
             }
         }
         Controls1.TableViewColumn {
@@ -59,6 +60,7 @@ Item {
             delegate: Label {
                 text: styleData.value
                 color: "black"
+                elide: Text.ElideRight
             }
         }
         Controls1.TableViewColumn {

@@ -2,6 +2,7 @@
 #define STORE_H
 
 #include "abstracts/abstractstore.h"
+#include "addon.h"
 
 #include <QHash>
 
@@ -16,7 +17,6 @@ class AbstractTask;
 namespace Curse {
 
 class WorldOfWarcraft;
-class Addon;
 
 class Store : public AbstractStore
 {
@@ -44,7 +44,7 @@ public:
     void init(NetworkCore* network, ThreadCore* threads);
     WorldOfWarcraft* worldOfWarcraft();
 
-    QVector<Curse::Addon*> getAddonDependencies(Addon* addon);
+    QVector<Curse::Addon::Dependency> getAddonDependencies(Addon* addon);
 
 public slots:
     AbstractTask* refresh();
