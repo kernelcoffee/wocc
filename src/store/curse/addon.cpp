@@ -36,13 +36,6 @@ void Addon::setDependencyAddon(int index, Addon* addon)
 void Addon::print()
 {
     qDebug() << m_name << m_shortName << m_dependencies.count();
-    for (auto dep : m_dependencies) {
-        qDebug() << "Url :" << dep.id << file.downloadUrl;
-        for (auto module : file.dependency) {
-            qDebug() << "modules : " << module.folderName;
-        }
-        qDebug();
-    }
 
     for (auto dep : m_dependencies) {
         if (dep.addon) {

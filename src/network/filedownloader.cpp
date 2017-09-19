@@ -41,8 +41,10 @@ void FileDownloader::start()
                          QNetworkRequest::NoLessSafeRedirectPolicy);
     m_reply = m_manager->get(request);
     connect(m_reply, &QNetworkReply::downloadProgress, [this](qint64 bytesReceived, qint64 bytesTotal) {
-        qDebug() << bytesReceived << bytesTotal << 100 * bytesReceived / bytesTotal;
-        setProgress(100 * bytesReceived / bytesTotal);
+        if (bytesTotal > 0) {
+            qDebug() << bytesReceived << bytesTotal << 100 * bytesReceived / bytesTotal;
+            setProgress(100 * bytesReceived / bytesTotal);
+        }
     });
 }
 
